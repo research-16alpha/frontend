@@ -75,29 +75,6 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
   };
 
   // Mock reviews data
-  const mockReviews = [
-    {
-      id: 1,
-      author: 'Sarah M.',
-      rating: 5,
-      date: '2 weeks ago',
-      comment: 'Absolutely love this! The quality is outstanding and fits perfectly.',
-    },
-    {
-      id: 2,
-      author: 'James K.',
-      rating: 4,
-      date: '1 month ago',
-      comment: 'Great product, exactly as described. Fast shipping too.',
-    },
-    {
-      id: 3,
-      author: 'Emily R.',
-      rating: 5,
-      date: '1 month ago',
-      comment: 'Exceeded my expectations. Will definitely buy again!',
-    },
-  ];
 
   return (
     <motion.div
@@ -288,7 +265,8 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
                 <div>
                   <div className="text-sm text-gray-500 mb-2">{product.category}</div>
                   <h2 className="text-3xl mb-3">{product.name}</h2>
-                  <div className="flex items-center gap-3 mb-4">
+                  {/* block for review ratings */}
+                  {/* <div className="flex items-center gap-3 mb-4">
                     <div className="flex items-center gap-1">
                       {[...Array(5)].map((_, i) => (
                         <Star
@@ -301,7 +279,7 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
                     </div>
                     <span className="text-sm">{product.rating}</span>
                     <span className="text-sm text-gray-500">({product.reviews} reviews)</span>
-                  </div>
+                  </div> */}
                   <div className="flex items-center gap-3 mb-4">
                     {product.discountedPrice && product.originalPrice ? (
                       <>
@@ -435,7 +413,7 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
             </div>
 
             {/* Reviews Section */}
-            <div className="border-t px-6 md:px-8 py-8 bg-gray-50">
+            {/* <div className="border-t px-6 md:px-8 py-8 bg-gray-50">
               <h3 className="mb-6">Customer Reviews</h3>
               <div className="space-y-6">
                 {mockReviews.map((review) => (
@@ -465,7 +443,7 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
                   </div>
                 ))}
               </div>
-            </div>
+            </div> */}
           </motion.div>
         )}
       </motion.div>

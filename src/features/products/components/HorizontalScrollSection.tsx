@@ -1,33 +1,32 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ImageWithFallback } from '../../../shared/components/figma/ImageWithFallback';
-import { ChevronLeft, ChevronRight, X, Star, ShoppingCart, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { fetchTopDeals } from '../services/productsService';
 import { transformProducts, FrontendProduct } from '../utils/productTransform';
-import { useApp } from '../../bag/contexts/AppContext';
-import { toast } from 'sonner';
+import { ProductCardExpanding } from './ProductCardExpanding';
 
-interface ScrollProduct {
+interface Product {
   id: string;
   name: string;
-  price: string;
-  discountedPrice?: string;
-  originalPrice?: string;
-  image: string;
-  images?: string[];
-  description?: string;
+  price: number;
+  discountedPrice?: number;
+  originalPrice?: number;
+  category: string;
+  images: string[];
+  description: string;
+  rating: number;
+  reviews: number;
+  sizes: string[];
+  colors: string[];
+  product_link?: string;
   brand_name?: string;
-  rating?: number;
-  reviews?: number;
-  sizes?: string[];
-  colors?: string[];
-  category?: string;
+  product_gender?: string;
 }
 
 export function HorizontalScrollSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [products, setProducts] = useState<ScrollProduct[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,18 +40,19 @@ export function HorizontalScrollSection() {
         setProducts(transformed.map(p => ({
           id: String(p.id),
           name: p.name,
-          price: `$${p.originalPrice || p.price}`,
-          discountedPrice: p.discountedPrice ? `$${p.discountedPrice}` : undefined,
-          originalPrice: p.originalPrice ? `$${p.originalPrice}` : undefined,
-          image: p.image,
-          images: p.images || [p.image],
-          category: p.category,
-          description: p.description,
-          brand_name: p.brand_name,
+          price: p.originalPrice || p.price,
+          discountedPrice: p.discountedPrice,
+          originalPrice: p.originalPrice,
+          category: p.category || 'Uncategorized',
+          images: p.images && p.images.length > 0 ? p.images : [p.image],
+          description: p.description || '',
           rating: p.rating || 4.5,
           reviews: p.reviews || 0,
-          sizes: p.sizes || ['S', 'M', 'L'],
-          colors: p.colors || ['Black', 'White'],
+          sizes: p.sizes && p.sizes.length > 0 ? p.sizes : ['S', 'M', 'L'],
+          colors: p.colors && p.colors.length > 0 ? p.colors : ['Black', 'White'],
+          product_link: p.product_link,
+          brand_name: p.brand_name,
+          product_gender: p.product_gender,
         })));
         setError(null);
       } catch (err) {
@@ -101,10 +101,13 @@ export function HorizontalScrollSection() {
                 className="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
                 onClick={(e) => e.stopPropagation()}
               >
-                <ScrollProductExpanded
-                  product={products.find(p => p.id === expandedId)!}
-                  onClose={() => setExpandedId(null)}
-                />
+                {products.find(p => p.id === expandedId) && (
+                  <ProductCardExpanding
+                    product={products.find(p => p.id === expandedId)!}
+                    isExpanded={true}
+                    onClick={() => setExpandedId(null)}
+                  />
+                )}
               </motion.div>
             </motion.div>
           )}
@@ -137,12 +140,14 @@ export function HorizontalScrollSection() {
             ) : error ? (
               <div className="text-center text-red-500 py-8">{error}</div>
             ) : (
-              products.map((product, index) => (
-                <ScrollProductCard
-                  key={product.id}
-                  product={product}
-                  onClick={() => handleProductClick(product.id)}
-                />
+              products.map((product) => (
+                <div key={product.id} className="flex-shrink-0 w-[280px] md:w-[320px]">
+                  <ProductCardExpanding
+                    product={product}
+                    isExpanded={false}
+                    onClick={() => handleProductClick(product.id)}
+                  />
+                </div>
               ))
             )}
           </div>
@@ -156,262 +161,5 @@ export function HorizontalScrollSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-interface ScrollProductCardProps {
-  product: ScrollProduct;
-  onClick: () => void;
-}
-
-function ScrollProductCard({ product, onClick }: ScrollProductCardProps) {
-  const [isHovered, setIsHovered] = useState(false);
-  const { toggleFavorite, favorites } = useApp();
-
-  const isFavorite = favorites.includes(product.id);
-
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    toggleFavorite(product.id);
-    toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites');
-  };
-
-  return (
-    <div
-      className="flex-shrink-0 w-[280px] md:w-[320px] group/item cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
-    >
-      <div className="aspect-[3/4] bg-gray-100 mb-3 overflow-hidden border border-gray-200 relative">
-        <ImageWithFallback
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover group-hover/item:scale-105 transition-transform duration-300"
-        />
-        
-        {/* Quick Actions on Hover */}
-        <AnimatePresence>
-          {isHovered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-3 left-3 right-3 flex gap-2"
-            >
-              <button className="flex-1 bg-white text-black py-2 px-3 text-sm hover:bg-gray-100 transition-colors">
-                Quick View
-              </button>
-              <button
-                onClick={handleToggleFavorite}
-                className={`bg-white p-2 hover:bg-gray-100 transition-colors ${
-                  isFavorite ? 'text-red-500' : ''
-                }`}
-              >
-                <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500' : ''}`} />
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      <p className="text-sm mb-1">{product.name}</p>
-      <div className="flex items-center gap-2">
-        {product.discountedPrice ? (
-          <>
-            <p className="text-sm">{product.discountedPrice}</p>
-            <p className="text-sm text-gray-400 line-through">{product.originalPrice}</p>
-          </>
-        ) : (
-          <p className="text-sm text-gray-600">{product.price}</p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-interface ScrollProductExpandedProps {
-  product: ScrollProduct;
-  onClose: () => void;
-}
-
-function ScrollProductExpanded({ product, onClose }: ScrollProductExpandedProps) {
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || 'M');
-  const [selectedColor, setSelectedColor] = useState(product.colors?.[0] || 'Black');
-  const { addToBag, toggleFavorite, favorites, user } = useApp();
-  const [isAddingToBag, setIsAddingToBag] = useState(false);
-
-  const isFavorite = favorites.includes(product.id);
-
-  const handleAddToBag = async () => {
-    if (!user?._id) {
-      toast.error('Please log in to add items to your bag');
-      return;
-    }
-
-    setIsAddingToBag(true);
-    try {
-      await addToBag({
-        id: product.id,
-        name: product.name,
-        price: parseFloat(product.discountedPrice?.replace('$', '') || product.price.replace('$', '')),
-        image: product.image,
-        size: selectedSize,
-        color: selectedColor,
-      });
-      toast.success('Added to bag!');
-    } catch (error) {
-      toast.error('Failed to add to bag. Please try again.');
-      console.error('Error adding to bag:', error);
-    } finally {
-      setIsAddingToBag(false);
-    }
-  };
-
-  const handleToggleFavorite = () => {
-    toggleFavorite(product.id);
-    toast.success(isFavorite ? 'Removed from favorites' : 'Added to favorites');
-  };
-
-  return (
-    <div className="relative">
-      {/* Close Button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors"
-      >
-        <X className="w-5 h-5" />
-      </button>
-
-      <div className="grid md:grid-cols-2 gap-6 p-6">
-        {/* Left: Images */}
-        <div className="space-y-3">
-          <div className="aspect-square bg-gray-50 overflow-hidden">
-            <ImageWithFallback
-              src={product.image}
-              alt={product.name}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          {product.images && product.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
-              {product.images.map((image, index) => (
-                <div key={index} className="aspect-square bg-gray-50 overflow-hidden cursor-pointer border-2 border-transparent hover:border-black transition-colors">
-                  <ImageWithFallback
-                    src={image}
-                    alt={`${product.name} view ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Right: Details */}
-        <div className="space-y-4">
-          <div>
-            {product.category && <div className="text-xs text-gray-500 mb-1 uppercase tracking-wider">{product.category}</div>}
-            <h2 className="text-2xl mb-2">{product.name}</h2>
-            {product.rating && (
-              <div className="flex items-center gap-2 mb-3">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 ${
-                        i < Math.floor(product.rating!) ? 'fill-black' : 'fill-gray-200'
-                      }`}
-                    />
-                  ))}
-                </div>
-                <span className="text-sm">{product.rating}</span>
-                {product.reviews && <span className="text-sm text-gray-500">({product.reviews} reviews)</span>}
-              </div>
-            )}
-            <div className="flex items-center gap-2 mb-3">
-              {product.discountedPrice ? (
-                <>
-                  <div className="text-2xl">{product.discountedPrice}</div>
-                  <div className="text-xl text-gray-400 line-through">{product.originalPrice}</div>
-                </>
-              ) : (
-                <div className="text-2xl">{product.price}</div>
-              )}
-            </div>
-            {(product.description || product.brand_name) && (
-              <p className="text-sm text-gray-600 leading-relaxed">
-                {product.brand_name && <span className="font-medium">{product.brand_name}</span>}
-                {product.brand_name && product.description && <span className="mx-1">•</span>}
-                {product.description && <span>{product.description}</span>}
-              </p>
-            )}
-          </div>
-
-          {/* Size Selection */}
-          {product.sizes && product.sizes.length > 0 && (
-            <div>
-              <div className="text-sm mb-2">Size: {selectedSize}</div>
-              <div className="flex flex-wrap gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`px-3 py-1.5 border text-sm transition-colors ${
-                      selectedSize === size
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 hover:border-gray-900'
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Color Selection */}
-          {product.colors && product.colors.length > 0 && (
-            <div>
-              <div className="text-sm mb-2">Color: {selectedColor}</div>
-              <div className="flex flex-wrap gap-2">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`px-3 py-1.5 border text-sm transition-colors ${
-                      selectedColor === color
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 hover:border-gray-900'
-                    }`}
-                  >
-                    {color}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Add to Cart Buttons */}
-          <div className="flex gap-3 pt-3">
-            <button
-              className="flex-1 bg-black text-white py-3 px-4 hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
-                    onClick={handleAddToBag}
-                    disabled={isAddingToBag}
-            >
-              <ShoppingCart className="w-4 h-4" />
-              Add to Bag
-            </button>
-            <button
-              className={`border-2 p-3 hover:bg-gray-50 transition-colors ${
-                isFavorite ? 'border-red-500 text-red-500' : 'border-black'
-              }`}
-              onClick={handleToggleFavorite}
-            >
-              <Heart className={`w-4 h-4 ${isFavorite ? 'fill-red-500' : ''}`} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }
