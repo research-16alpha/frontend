@@ -1,7 +1,10 @@
 import * as React from "react";
 import { ShoppingBag, User, Menu } from "lucide-react";
 import { useApp } from "../../features/bag/contexts/AppContext";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "./ui/sheet";
+import { ImageWithFallback } from "./figma/ImageWithFallback";
+
+const logoImage = new URL("../assets/logo.jpeg", import.meta.url).href;
 
 interface NavbarProps {
   onFeaturedClick: () => void;
@@ -50,7 +53,7 @@ export function Navbar({
 
   return (
     <>
-      <nav className="border-b border-gray-200 bg-white sticky top-0 z-50 shadow-sm">
+      <nav className="border-b border-gray-200 bg-white sticky top-0 shadow-sm">
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-3 md:py-4">
           <div className="flex items-center justify-between">
             {/* Mobile Menu Button - Visible below lg breakpoint */}
@@ -66,12 +69,18 @@ export function Navbar({
             </button>
 
             {/* Logo */}
-            <button 
+            <button
               onClick={onLogoClick}
-              className="text-xl md:text-2xl tracking-tight hover:opacity-70 transition-opacity flex-1 lg:flex-initial text-center lg:text-left"
+              className="flex items-center gap-2 text-xl md:text-2xl tracking-tight hover:opacity-70 transition-opacity flex-1 lg:flex-initial text-center lg:text-left"
             >
-              halfsy
+              <ImageWithFallback
+                src={logoImage}
+                alt="Halfsy logo"
+                className="w-8 h-8 object-contain"
+              />
+              <span className="font-semibold">halfsy</span>
             </button>
+
             
             {/* Navigation Items - Hidden on mobile */}
             <div className="hidden lg:flex items-center gap-6 xl:gap-8">
@@ -147,50 +156,63 @@ export function Navbar({
 
       {/* Mobile Menu Modal */}
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent side="left" className="w-80 sm:w-96">
+        <SheetContent side="left" className="bg-white w-[320px]">
+
           <SheetHeader>
-            <SheetTitle className="text-left">Menu</SheetTitle>
+            <SheetTitle className="text-sm text-gray-700 uppercase tracking-wide">Menu</SheetTitle>
+            <SheetDescription className="sr-only">
+            </SheetDescription>
           </SheetHeader>
-          <div className="flex flex-col gap-4 mt-8">
+
+          <div className="flex flex-col gap-6 mt-8 px-6">
+          
+
             <button
               onClick={() => handleNavClick(() => onProductsClick?.())}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              // className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               Shop All
             </button>
             <button
               onClick={() => handleNavClick(onNewArrivalsClick || (() => {}))}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black
+           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               New
             </button>
             <button
               onClick={() => handleNavClick(() => onCategoryClick?.('women'))}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black
+           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               Women
             </button>
             <button
               onClick={() => handleNavClick(() => onCategoryClick?.('men'))}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black
+           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               Men
             </button>
             <button
               onClick={() => handleNavClick(() => onCategoryClick?.('accessories'))}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black
+           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               Accessories
             </button>
             <button
               onClick={() => handleNavClick(onPreOwnedClick || (() => {}))}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black
+           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               Pre-Owned
             </button>
             <button
               onClick={() => handleNavClick(onAboutClick || (() => {}))}
-              className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
+              className="w-full text-left text-sm text-gray-700 hover:text-black
+           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
             >
               About
             </button>

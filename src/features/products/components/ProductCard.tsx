@@ -51,11 +51,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <div
-      className="group cursor-pointer"
+      className="group cursor-pointer h-full flex flex-col"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square mb-4 overflow-hidden bg-gray-50 rounded-lg">
+      <div className="relative aspect-[3/4] mb-4 overflow-hidden bg-gray-50 rounded-lg">
         <img
           src={product.image}
           alt={product.name}
@@ -75,17 +75,27 @@ export function ProductCard({ product }: ProductCardProps) {
         </button>
       </div>
 
-      <div className="space-y-1">
+      <div className="flex flex-col flex-1 space-y-1">
         <p className="text-xs text-gray-500">{product.category}</p>
-        <h3 className="text-sm">{product.name}</h3>
-        {(product.description || product.brand_name) && (
-          <div className="text-xs text-gray-600">
-            {product.brand_name && <span className="font-medium">{product.brand_name}</span>}
-            {product.brand_name && product.description && <span className="mx-1">•</span>}
-            {product.description && <span>{product.description}</span>}
+        <h3 className="text-sm line-clamp-2">{product.name}</h3>
+        {(product.brand_name || product.description) && (
+          <div className="flex flex-col gap-0.5 text-xs text-gray-600">
+            {product.brand_name && (
+              <span className="font-medium uppercase tracking-wide text-gray-800">
+                {product.brand_name}
+              </span>
+            )}
+
+            {product.description && (
+              <span className="line-clamp-2">
+                {product.description
+                  .toLowerCase()
+                  .replace(/\b\w/g, (char) => char.toUpperCase())}
+              </span>
+            )}
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-auto">
           {product.discountedPrice ? (
             <>
               <p className="text-sm">${product.discountedPrice}</p>

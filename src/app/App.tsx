@@ -46,7 +46,7 @@ function AppWithNavigation() {
   }, [user, currentPage, navigateToHome]);
 
   const handleCategoryClick = (category: string) => {
-    if (category === 'men' || category === 'women') {
+    if (category === 'men' || category === 'women' || category === 'pre-owned') {
       navigateToProducts(category);
     } else {
       // For other categories like 'accessories' or 'sale', navigate to products without gender filter

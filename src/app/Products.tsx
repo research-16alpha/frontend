@@ -290,7 +290,7 @@ export function Products() {
             </div>
 
             {loading && page === 1 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="animate-pulse">
                     <div className="bg-gray-200 aspect-[3/4] mb-3"></div>
@@ -306,7 +306,8 @@ export function Products() {
             ) : (
               <>
                 {/* Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+
                   {displayProducts.map((product) => (
                     <ProductCardExpanding
                       key={product.id}

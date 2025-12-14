@@ -118,7 +118,9 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
         {!isExpanded && (
           <div className="cursor-pointer" onClick={onClick}>
             {/* Image Container with Hover Transition */}
-            <div className="relative aspect-[3/4] overflow-hidden bg-gray-50">
+            <div className="relative aspect-[3/4] overflow-hidden bg-gray-50 rounded-lg 
+  transition-shadow 
+  group-hover:shadow-md">
               <motion.div
                 className="absolute inset-0"
                 initial={{ opacity: 1 }}
@@ -171,27 +173,73 @@ export function ProductCardExpanding({ product, isExpanded, onClick }: ProductCa
               </AnimatePresence>
             </div>
 
+            <div className="flex flex-col flex-1 gap-1 min-h-[88px]">
+
             {/* Product Info */}
-            <div className="p-4">
-              <div className="text-xs text-gray-500 mb-1">{product.category}</div>
-              <h3 className="mb-2">{product.name}</h3>
-              <div className="flex items-center gap-2 mb-2">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 fill-black" />
-                  <span className="text-sm">{product.rating}</span>
-                </div>
-                <span className="text-sm text-gray-500">({product.reviews})</span>
-              </div>
-              <div className="flex items-center gap-2">
-                {product.discountedPrice && product.originalPrice ? (
-                  <>
-                    <div className="text-xl">${product.discountedPrice}</div>
-                    <div className="text-lg text-gray-400 line-through">${product.originalPrice}</div>
-                  </>
-                ) : (
-                  <div className="text-xl">${product.price}</div>
-                )}
-              </div>
+            <div className="p-4 flex flex-col h-full">
+              {/* Brand */}
+              {product.brand_name && (
+                <span className="
+                  text-xs 
+                  font-semibold 
+                  tracking-wider 
+                  uppercase 
+                  text-gray-900
+                ">
+                  {product.brand_name}
+                </span>
+              )}
+
+
+              {/* Description */}
+              {product.description && (
+                <span className="
+                  text-sm 
+                  text-gray-700 
+                  leading-snug 
+                  line-clamp-2
+                ">
+                  {product.description
+                    .toLowerCase()
+                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                </span>
+              )}
+
+
+              {/* Category */}
+              {product.category && (
+                <span className="
+                  text-[10px] 
+                  uppercase 
+                  tracking-wide 
+                  text-gray-400
+                ">
+                  {product.category
+                    .toLowerCase()
+                    .replace(/\b\w/g, (c) => c.toUpperCase())} 
+                </span>
+              )}
+
+
+              {/* Price */}
+              <div className="flex items-center gap-2 mt-auto">
+              {product.discountedPrice ? (
+                <>
+                  <span className="text-sm font-medium text-red-600">
+                    ${product.discountedPrice}
+                  </span>
+                  <span className="text-xs text-gray-400 line-through">
+                    ${product.price}
+                  </span>
+                </>
+              ) : (
+                <span className="text-sm font-medium text-gray-900">
+                  ${product.price}
+                </span>
+              )}
+            </div>
+
+            </div>
             </div>
           </div>
         )}
