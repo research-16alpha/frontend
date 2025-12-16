@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar } from '../../../shared/components/Navbar';
 import { Footer } from '../../../shared/components/Footer';
 import { useApp } from '../../bag/contexts/AppContext';
@@ -16,19 +16,72 @@ import {
   X,
 } from 'lucide-react';
 import { ImageWithFallback } from '../../../shared/components/figma/ImageWithFallback';
+import { fetchProductById } from '../../products/services/productsService';
+import { FrontendProduct, transformProduct } from '../../products/utils/productTransform';
 
 type Tab = 'orders' | 'favorites' | 'profile' | 'addresses' | 'payment' | 'settings';
 
 export function Account() {
-  const { user, logout, orders, favorites, updateProfile } = useApp();
+  const { user, logout, orders, favorites, updateProfile, toggleFavorite } = useApp();
   const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout } = useNavigation();
   const [activeTab, setActiveTab] = useState<Tab>('orders');
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState(user);
+  const [favoriteProducts, setFavoriteProducts] = useState<FrontendProduct[]>([]);
+  const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
 
   if (!user) {
     return null;
   }
+
+  // Check if navigation requested opening the Favorites tab specifically
+  useEffect(() => {
+    try {
+      const initialTab = localStorage.getItem('accountInitialTab');
+      if (initialTab === 'favorites') {
+        setActiveTab('favorites');
+        localStorage.removeItem('accountInitialTab');
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const loadFavoriteProducts = async () => {
+      if (!favorites || favorites.length === 0) {
+        setFavoriteProducts([]);
+        setIsLoadingFavorites(false);
+        return;
+      }
+
+      setIsLoadingFavorites(true);
+      const products: FrontendProduct[] = [];
+
+      for (const id of favorites) {
+        try {
+          const data = await fetchProductById(id);
+          const transformed = transformProduct(data);
+          products.push(transformed);
+        } catch (error) {
+          console.error(`Failed to load favorite product ${id}:`, error);
+        }
+      }
+
+      if (!cancelled) {
+        setFavoriteProducts(products);
+        setIsLoadingFavorites(false);
+      }
+    };
+
+    loadFavoriteProducts();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [favorites]);
 
   const handleSaveProfile = () => {
     if (editedProfile) {
@@ -62,7 +115,7 @@ export function Account() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar 
         onFeaturedClick={() => {}} 
         onProductsClick={navigateToProducts}
@@ -75,7 +128,7 @@ export function Account() {
         }}
       />
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 flex-1 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
@@ -209,7 +262,11 @@ export function Account() {
               {activeTab === 'favorites' && (
                 <div>
                   <h2 className="text-2xl mb-6">My Favorites</h2>
-                  {favorites.length === 0 ? (
+                  {isLoadingFavorites ? (
+                    <div className="text-center py-12 text-gray-500">
+                      Loading your favorites...
+                    </div>
+                  ) : favoriteProducts.length === 0 ? (
                     <div className="text-center py-12">
                       <Heart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
                       <p className="text-gray-500">No favorites yet</p>
@@ -219,12 +276,52 @@ export function Account() {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {favorites.map((id) => (
+                      {favoriteProducts.map((product) => (
                         <div
-                          key={id}
-                          className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                          key={product.id}
+                          className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow flex flex-col gap-3"
                         >
-                          <div className="text-center">Product ID: {id}</div>
+                          <div className="aspect-[3/4] bg-gray-50 rounded-lg overflow-hidden">
+                            <ImageWithFallback
+                              src={product.image}
+                              alt={product.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1 space-y-1">
+                            {product.brand_name && (
+                              <div className="text-[11px] uppercase tracking-wide text-gray-500">
+                                {product.brand_name}
+                              </div>
+                            )}
+                            <div className="text-sm font-medium text-gray-800 line-clamp-2">
+                              {product.name}
+                            </div>
+                            <div className="text-xs text-gray-500 line-clamp-2">
+                              {product.description || 'No description available.'}
+                            </div>
+                            <div className="text-sm font-semibold">
+                              {product.discountedPrice ? (
+                                <>
+                                  <span className="text-red-600">
+                                    ${product.discountedPrice.toFixed(2)}
+                                  </span>
+                                  <span className="ml-2 text-xs line-through text-gray-400">
+                                    ${product.price.toFixed(2)}
+                                  </span>
+                                </>
+                              ) : (
+                                <span>${product.price.toFixed(2)}</span>
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => toggleFavorite(product.id)}
+                            className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm transition-colors"
+                          >
+                            <Heart className="w-4 h-4 text-red-500" />
+                            Remove
+                          </button>
                         </div>
                       ))}
                     </div>

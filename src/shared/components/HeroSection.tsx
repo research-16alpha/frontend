@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { fetchTopDeals } from '../../features/products/services/productsService';
-import { transformProducts } from '../../features/products/utils/productTransform';
-
-interface SaleProduct {
-  name: string;
-  price: number;
-  discountedPrice?: number;
-  originalPrice?: number;
-  image: string;
-  brand_name?: string;
-  description?: string;
-  category: string;
-}
+import {
+  transformProducts,
+  type FrontendProduct,
+} from '../../features/products/utils/productTransform';
+import { ProductCard } from '../../features/products/components/ProductCard';
 
 export function HeroSection() {
-  const [saleProducts, setSaleProducts] = useState<SaleProduct[]>([]);
+  const [saleProducts, setSaleProducts] = useState<FrontendProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,16 +18,7 @@ export function HeroSection() {
         const data = await fetchTopDeals(10);
         const backendProducts = Array.isArray(data) ? data : (data.products || []);
         const transformed = transformProducts(backendProducts);
-        setSaleProducts(transformed.map(p => ({
-          name: p.name,
-          price: p.price,
-          discountedPrice: p.discountedPrice,
-          originalPrice: p.originalPrice,
-          image: p.image,
-          brand_name: p.brand_name,
-          description: p.description,
-          category: p.category,
-        })));
+        setSaleProducts(transformed);
       } catch (err) {
         console.error('Error loading products:', err);
         // Keep empty array on error
@@ -76,44 +60,42 @@ export function HeroSection() {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
-            {saleProducts.map((product, index) => (
-            <div key={index} className="group cursor-pointer bg-white border border-gray-200 overflow-hidden transition-all hover:shadow-lg">
-              <div className="aspect-[3/4] overflow-hidden bg-gray-50">
-                <ImageWithFallback
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <div className="p-4 space-y-1">
-                {product.brand_name && (
-                  <div className="text-xs font-semibold uppercase tracking-wider">
-                    {product.brand_name}
-                  </div>
-                )}
-                <div className="text-sm text-gray-700 line-clamp-2">
-                  {product.description || product.name}
+            {saleProducts.map(product => {
+              const images =
+                (product.images && product.images.length > 0
+                  ? product.images
+                  : product.image
+                  ? [product.image]
+                  : []) as string[];
+
+              const mappedProduct = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    discountedPrice: product.discountedPrice,
+                    originalPrice: product.originalPrice,
+                    category: product.category,
+                    images,
+                    description: product.description || product.name,
+                    sizes:
+                      product.sizes && product.sizes.length > 0
+                        ? product.sizes
+                        : ['One Size'],
+                    colors:
+                      product.colors && product.colors.length > 0
+                        ? product.colors
+                        : ['Default'],
+                    product_link: product.product_link,
+                    brand_name: product.brand_name,
+                    product_gender: product.product_gender,
+                  };
+
+              return (
+                <div key={product.id}>
+                  <ProductCard product={mappedProduct} />
                 </div>
-                <div className="text-[10px] uppercase text-gray-400">
-                  {product.category}
-                </div>
-                <div className="mt-2">
-                  {product.discountedPrice && product.originalPrice ? (
-                    <>
-                      <span className="text-red-600 font-medium">
-                        ${product.discountedPrice}
-                      </span>
-                      <span className="ml-2 text-xs line-through text-gray-400">
-                        ${product.originalPrice}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="font-medium">${product.price}</span>
-                  )}
-                </div>
-              </div>
-            </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
