@@ -1,14 +1,17 @@
+import React, { useState, useEffect } from 'react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
-import { useState, useEffect } from 'react';
 import { fetchTopDeals } from '../../features/products/services/productsService';
 import { transformProducts } from '../../features/products/utils/productTransform';
 
 interface SaleProduct {
   name: string;
-  price: string;
-  discountedPrice?: string;
-  originalPrice?: string;
+  price: number;
+  discountedPrice?: number;
+  originalPrice?: number;
   image: string;
+  brand_name?: string;
+  description?: string;
+  category: string;
 }
 
 export function HeroSection() {
@@ -24,10 +27,13 @@ export function HeroSection() {
         const transformed = transformProducts(backendProducts);
         setSaleProducts(transformed.map(p => ({
           name: p.name,
-          price: `$${p.discountedPrice || p.price}`,
-          discountedPrice: p.discountedPrice ? `$${p.discountedPrice}` : undefined,
-          originalPrice: p.originalPrice ? `$${p.originalPrice}` : undefined,
+          price: p.price,
+          discountedPrice: p.discountedPrice,
+          originalPrice: p.originalPrice,
           image: p.image,
+          brand_name: p.brand_name,
+          description: p.description,
+          category: p.category,
         })));
       } catch (err) {
         console.error('Error loading products:', err);
@@ -57,34 +63,54 @@ export function HeroSection() {
         {loading ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
             {[...Array(10)].map((_, i) => (
-              <div key={i} className="animate-pulse">
-                <div className="aspect-square bg-gray-200 mb-2"></div>
-                <div className="h-3 bg-gray-200 rounded w-3/4 mb-1"></div>
-                <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+              <div key={i} className="animate-pulse bg-white border border-gray-200 overflow-hidden">
+                <div className="aspect-[3/4] bg-gray-200"></div>
+                <div className="p-4 space-y-1">
+                  <div className="h-3 bg-gray-200 rounded w-1/2 mb-1"></div>
+                  <div className="h-3 bg-gray-200 rounded w-3/4 mb-1"></div>
+                  <div className="h-2 bg-gray-200 rounded w-1/3 mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
             {saleProducts.map((product, index) => (
-            <div key={index} className="group cursor-pointer">
-              <div className="aspect-square overflow-hidden bg-white mb-2">
+            <div key={index} className="group cursor-pointer bg-white border border-gray-200 overflow-hidden transition-all hover:shadow-lg">
+              <div className="aspect-[3/4] overflow-hidden bg-gray-50">
                 <ImageWithFallback
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <p className="text-xs text-gray-600 mb-0.5">{product.name}</p>
-              <div className="flex items-center gap-1.5">
-                {product.discountedPrice && product.originalPrice ? (
-                  <>
-                    <p className="text-xs">{product.discountedPrice}</p>
-                    <p className="text-xs text-gray-400 line-through">{product.originalPrice}</p>
-                  </>
-                ) : (
-                  <p className="text-xs">{product.price}</p>
+              <div className="p-4 space-y-1">
+                {product.brand_name && (
+                  <div className="text-xs font-semibold uppercase tracking-wider">
+                    {product.brand_name}
+                  </div>
                 )}
+                <div className="text-sm text-gray-700 line-clamp-2">
+                  {product.description || product.name}
+                </div>
+                <div className="text-[10px] uppercase text-gray-400">
+                  {product.category}
+                </div>
+                <div className="mt-2">
+                  {product.discountedPrice && product.originalPrice ? (
+                    <>
+                      <span className="text-red-600 font-medium">
+                        ${product.discountedPrice}
+                      </span>
+                      <span className="ml-2 text-xs line-through text-gray-400">
+                        ${product.originalPrice}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="font-medium">${product.price}</span>
+                  )}
+                </div>
               </div>
             </div>
             ))}

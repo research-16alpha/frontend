@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
-import { ProductCardExpanding } from './ProductCardExpanding';
+import { ProductCard } from './ProductCard';
 
 interface Product {
   id: string;
@@ -22,12 +21,6 @@ interface Product {
 }
 
 export function FeaturedSection() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
-
-  const handleProductClick = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
   return (
     <section className="w-full bg-[#f4d58d] py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
@@ -53,45 +46,14 @@ export function FeaturedSection() {
           {/* Right Images Grid */}
           <div className="w-full lg:w-2/3 grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
             {featuredImages.map((item) => (
-              <ProductCardExpanding
+              <ProductCard
                 key={item.id}
                 product={item}
-                isExpanded={false}
-                onClick={() => handleProductClick(item.id)}
               />
             ))}
           </div>
         </div>
       </div>
-
-      {/* Expanded Card Modal */}
-      <AnimatePresence>
-        {expandedId !== null && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-            onClick={() => setExpandedId(null)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {featuredImages.find(p => p.id === expandedId) && (
-                <ProductCardExpanding
-                  product={featuredImages.find(p => p.id === expandedId)!}
-                  isExpanded={true}
-                  onClick={() => setExpandedId(null)}
-                />
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

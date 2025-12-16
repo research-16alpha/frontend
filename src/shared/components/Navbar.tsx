@@ -53,7 +53,7 @@ export function Navbar({
 
   return (
     <>
-      <nav className="border-b border-gray-200 bg-white sticky top-0 shadow-sm">
+      <nav className={`border-b border-gray-200 bg-white sticky top-0 shadow-sm z-50 ${mobileMenuOpen ? 'hidden lg:block' : 'block'}`}>
         <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-3 md:py-4">
           <div className="flex items-center justify-between">
             {/* Mobile Menu Button - Visible below lg breakpoint */}
@@ -61,7 +61,7 @@ export function Navbar({
               onClick={() => {
                 setMobileMenuOpen(true);
               }}
-              className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 z-10"
+              className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65]"
               aria-label="Open menu"
               type="button"
             >
@@ -156,15 +156,17 @@ export function Navbar({
 
       {/* Mobile Menu Modal */}
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent side="left" className="bg-white w-[320px]">
+        <SheetContent side="left" className="bg-white w-[320px] z-[100]">
 
           <SheetHeader>
-            <SheetTitle className="text-sm text-gray-700 uppercase tracking-wide">Menu</SheetTitle>
+            <SheetTitle className="text-sm text-gray-700 uppercase tracking-wide">
+            Menu
+            </SheetTitle>
             <SheetDescription className="sr-only">
             </SheetDescription>
           </SheetHeader>
 
-          <div className="flex flex-col gap-6 mt-8 px-6">
+          <div className="flex flex-col gap-6 mt-8 px-6 relative z-[66]">
           
 
             <button

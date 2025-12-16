@@ -3,7 +3,7 @@ import { AnnouncementBanner } from '../shared/components/AnnouncementBanner';
 import { Navbar } from '../shared/components/Navbar';
 import { AISearchBar } from '../shared/components/AISearchBar';
 import { Footer } from '../shared/components/Footer';
-import { ProductCardExpanding } from '../features/products/components/ProductCardExpanding';
+import { ProductCard } from '../features/products/components/ProductCard';
 import { CategoryFilter, CategoryGroup } from '../features/products/components/CategoryFilter';
 import { SortBy, SortOption } from '../features/products/components/SortBy';
 import { fetchProducts, fetchProductsByGender } from '../features/products/services/productsService';
@@ -22,7 +22,6 @@ export function Products() {
     }
   };
   
-  const [expandedId, setExpandedId] = React.useState<string | null>(null);
   const [products, setProducts] = React.useState<FrontendProduct[]>([]);
   const [filteredProducts, setFilteredProducts] = React.useState<FrontendProduct[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -185,10 +184,6 @@ export function Products() {
     loadProducts();
   }, [page, productsGender]);
 
-  const handleProductClick = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
   const handleFilterChange = (filters: Record<string, string[]>) => {
     setSelectedFilters(filters);
   };
@@ -309,15 +304,13 @@ export function Products() {
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
 
                   {displayProducts.map((product) => (
-                    <ProductCardExpanding
+                    <ProductCard
                       key={product.id}
                       product={{
                         ...product,
                         images: product.images || [product.image],
                         originalPrice: product.originalPrice,
                       }}
-                      isExpanded={expandedId === product.id}
-                      onClick={() => handleProductClick(product.id)}
                     />
                   ))}
                 </div>

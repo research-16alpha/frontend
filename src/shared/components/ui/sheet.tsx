@@ -57,7 +57,7 @@ const SheetContent = React.forwardRef<
   }
 >(({ className, children, side = "right", ...props }, ref) => (
   <SheetPortal>
-    <SheetOverlay />
+    {/* <SheetOverlay className="fixed inset-0 bg-black/40 z-[99]" /> */}
     <SheetPrimitive.Content
       ref={ref}
       data-slot="sheet-content"

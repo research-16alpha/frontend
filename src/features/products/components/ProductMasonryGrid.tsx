@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { fetchProducts } from '../services/productsService';
 import { transformProducts, FrontendProduct } from '../utils/productTransform';
-import { ProductCardExpanding } from './ProductCardExpanding';
+import { ProductCard } from './ProductCard';
 
 interface Product {
   id: string;
@@ -23,7 +23,6 @@ interface Product {
 }
 
 export function ProductMasonryGrid() {
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,10 +62,6 @@ export function ProductMasonryGrid() {
     loadProducts();
   }, []);
 
-  const handleProductClick = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
   return (
     <section className="w-full bg-white py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
@@ -87,11 +82,9 @@ export function ProductMasonryGrid() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 auto-rows-auto">
             {products.map((product) => (
-              <ProductCardExpanding
+              <ProductCard
                 key={product.id}
                 product={product}
-                isExpanded={expandedId === product.id}
-                onClick={() => handleProductClick(product.id)}
               />
             ))}
           </div>

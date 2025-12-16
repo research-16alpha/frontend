@@ -1,9 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
 import { fetchTopDeals } from '../services/productsService';
 import { transformProducts, FrontendProduct } from '../utils/productTransform';
-import { ProductCardExpanding } from './ProductCardExpanding';
+import { ProductCard } from './ProductCard';
 
 interface Product {
   id: string;
@@ -25,7 +24,6 @@ interface Product {
 
 export function HorizontalScrollSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,43 +73,10 @@ export function HorizontalScrollSection() {
     }
   };
 
-  const handleProductClick = (id: string) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
   return (
     <section className="w-full bg-white py-8 md:py-12 relative">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <h2 className="text-xl md:text-2xl mb-6 uppercase tracking-tight">New This Week</h2>
-        
-        {/* Expanded Card Overlay */}
-        <AnimatePresence>
-          {expandedId !== null && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-              onClick={() => setExpandedId(null)}
-            >
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="bg-white max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {products.find(p => p.id === expandedId) && (
-                  <ProductCardExpanding
-                    product={products.find(p => p.id === expandedId)!}
-                    isExpanded={true}
-                    onClick={() => setExpandedId(null)}
-                  />
-                )}
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
         
         {/* Scroll Container */}
         <div className="relative group">
@@ -142,10 +107,8 @@ export function HorizontalScrollSection() {
             ) : (
               products.map((product) => (
                 <div key={product.id} className="flex-shrink-0 w-[280px] md:w-[320px]">
-                  <ProductCardExpanding
+                  <ProductCard
                     product={product}
-                    isExpanded={false}
-                    onClick={() => handleProductClick(product.id)}
                   />
                 </div>
               ))
