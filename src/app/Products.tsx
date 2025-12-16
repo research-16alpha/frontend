@@ -12,7 +12,7 @@ import { useNavigation } from '../shared/contexts/NavigationContext';
 
 export function Products() {
   console.log('Products');
-  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, productsGender } = useNavigation();
+  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToProduct, productsGender } = useNavigation();
   
   const handleCategoryClick = (category: string) => {
     if (category === 'men' || category === 'women') {
@@ -31,6 +31,7 @@ export function Products() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
   const [sortBy, setSortBy] = React.useState<string>('featured');
   const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
+  
 
   // Category filter data
   const categoryData: CategoryGroup[] = React.useMemo(() => {
@@ -192,6 +193,11 @@ export function Products() {
     setSortBy(value);
   };
 
+  // Handle product card click - navigate to product page
+  const handleProductClick = (product: FrontendProduct) => {
+    navigateToProduct(product.id);
+  };
+
   const displayProducts = filteredProducts.length > 0 ? filteredProducts : products;
   const pageTitle = productsGender 
     ? `All ${productsGender.charAt(0).toUpperCase() + productsGender.slice(1)}`
@@ -311,6 +317,7 @@ export function Products() {
                         images: product.images || [product.image],
                         originalPrice: product.originalPrice,
                       }}
+                      onClick={() => handleProductClick(product)}
                     />
                   ))}
                 </div>

@@ -180,7 +180,7 @@ export function Navbar({
 
       {/* Mobile Menu Modal */}
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent side="left" className="bg-white w-[320px] z-[100]">
+        <SheetContent side="left" className="bg-white w-[320px] z-[110]">
 
           <SheetHeader>
             <SheetTitle className="text-sm text-gray-700 uppercase tracking-wide">

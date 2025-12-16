@@ -5,9 +5,11 @@ import {
   transformProducts,
   type FrontendProduct,
 } from '../../features/products/utils/productTransform';
+import { useNavigation } from '../../shared/contexts/NavigationContext';
 import { ProductCard } from '../../features/products/components/ProductCard';
 
 export function HeroSection() {
+  const { navigateToProduct } = useNavigation();
   const [saleProducts, setSaleProducts] = useState<FrontendProduct[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -92,7 +94,10 @@ export function HeroSection() {
 
               return (
                 <div key={product.id}>
-                  <ProductCard product={mappedProduct} />
+                  <ProductCard 
+                    product={mappedProduct}
+                    onClick={() => navigateToProduct(mappedProduct.id)}
+                  />
                 </div>
               );
             })}

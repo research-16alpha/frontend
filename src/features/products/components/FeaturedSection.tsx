@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from './ProductCard';
+import { useNavigation } from '../../../shared/contexts/NavigationContext';
 
 interface Product {
   id: string;
@@ -21,6 +22,8 @@ interface Product {
 }
 
 export function FeaturedSection() {
+  const { navigateToProduct } = useNavigation();
+  
   return (
     <section className="w-full bg-[#f4d58d] py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
@@ -49,6 +52,7 @@ export function FeaturedSection() {
               <ProductCard
                 key={item.id}
                 product={item}
+                onClick={() => navigateToProduct(item.id)}
               />
             ))}
           </div>

@@ -10,6 +10,7 @@ import { EditorialSection } from '../shared/components/EditorialSection';
 import { Footer } from '../shared/components/Footer';
 import { Products } from './Products';
 import { Account } from '../features/auth/pages/Account';
+import { ProductItem } from './ProductItem';
 import { BagSidebar } from '../features/bag/components/BagSidebar';
 import { AuthModal } from '../features/auth/components/AuthModal';
 import { AppProvider, useApp } from '../features/bag/contexts/AppContext';
@@ -18,7 +19,7 @@ import { Toaster } from 'sonner';
 import { About } from './About';
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product'>('home');
 
   return (
     <NavigationProvider 
@@ -53,6 +54,11 @@ function AppWithNavigation() {
       navigateToProducts();
     }
   };
+
+  // If on product item page, render that instead
+  if (currentPage === 'product') {
+    return <ProductItem />;
+  }
 
   // If on products page, render that instead
   if (currentPage === 'products') {
