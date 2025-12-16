@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { fetchProducts } from '../services/productsService';
 import { transformProducts, FrontendProduct } from '../utils/productTransform';
 import { ProductCard } from './ProductCard';
+import { useNavigation } from '../../../shared/contexts/NavigationContext';
 
 interface Product {
   id: string;
@@ -23,6 +24,7 @@ interface Product {
 }
 
 export function ProductMasonryGrid() {
+  const { navigateToProduct } = useNavigation();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,6 +87,7 @@ export function ProductMasonryGrid() {
               <ProductCard
                 key={product.id}
                 product={product}
+                onClick={() => navigateToProduct(product.id)}
               />
             ))}
           </div>

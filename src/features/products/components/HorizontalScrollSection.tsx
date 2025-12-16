@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { fetchTopDeals } from '../services/productsService';
 import { transformProducts, FrontendProduct } from '../utils/productTransform';
 import { ProductCard } from './ProductCard';
+import { useNavigation } from '../../../shared/contexts/NavigationContext';
 
 interface Product {
   id: string;
@@ -23,6 +24,7 @@ interface Product {
 }
 
 export function HorizontalScrollSection() {
+  const { navigateToProduct } = useNavigation();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -109,6 +111,7 @@ export function HorizontalScrollSection() {
                 <div key={product.id} className="flex-shrink-0 w-[280px] md:w-[320px]">
                   <ProductCard
                     product={product}
+                    onClick={() => navigateToProduct(product.id)}
                   />
                 </div>
               ))

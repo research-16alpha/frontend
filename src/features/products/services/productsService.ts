@@ -53,3 +53,12 @@ export async function fetchProductsByGender(
   if (!res.ok) throw new Error("Failed to load products by gender");
   return res.json();
 }
+
+export async function fetchProductsByBrand(brand: string, page: number = 1, limit: number = 20) {
+  const skip = (page - 1) * limit;
+  const res = await fetch(
+    `${API_BASE}/api/products/brand/${encodeURIComponent(brand)}?limit=${limit}&skip=${skip}`
+  );
+  if (!res.ok) throw new Error("Failed to load products by brand");
+  return res.json();
+}
