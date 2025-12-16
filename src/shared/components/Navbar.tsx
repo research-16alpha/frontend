@@ -1,7 +1,7 @@
 import * as React from "react";
-import { ShoppingBag, User, Menu, Heart } from "lucide-react";
+import { ShoppingBag, User, Menu, Heart, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useApp } from "../../features/bag/contexts/AppContext";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "./ui/sheet";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 const logoImage = new URL("../assets/logo.jpeg", import.meta.url).href;
@@ -179,72 +179,88 @@ export function Navbar({
       </nav>
 
       {/* Mobile Menu Modal */}
-      <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-        <SheetContent side="left" className="bg-white w-[320px] z-[110]">
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/50 z-50"
+            />
 
-          <SheetHeader>
-            <SheetTitle className="text-sm text-gray-700 uppercase tracking-wide">
-            Menu
-            </SheetTitle>
-            <SheetDescription className="sr-only">
-            </SheetDescription>
-          </SheetHeader>
+            {/* Sidebar */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+              className="fixed left-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b">
+                <h2 className="text-sm text-gray-700 uppercase tracking-wide">
+                  Menu
+                </h2>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-          <div className="flex flex-col gap-6 mt-8 px-6 relative z-[66]">
-          
-
-            <button
-              onClick={() => handleNavClick(() => onProductsClick?.())}
-              // className="text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-2 border-b border-gray-100"
-              className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              Shop All
-            </button>
-            <button
-              onClick={() => handleNavClick(onNewArrivalsClick || (() => {}))}
-              className="w-full text-left text-sm text-gray-700 hover:text-black
-           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              New
-            </button>
-            <button
-              onClick={() => handleNavClick(() => onCategoryClick?.('women'))}
-              className="w-full text-left text-sm text-gray-700 hover:text-black
-           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              Women
-            </button>
-            <button
-              onClick={() => handleNavClick(() => onCategoryClick?.('men'))}
-              className="w-full text-left text-sm text-gray-700 hover:text-black
-           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              Men
-            </button>
-            <button
-              onClick={() => handleNavClick(() => onCategoryClick?.('accessories'))}
-              className="w-full text-left text-sm text-gray-700 hover:text-black
-           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              Accessories
-            </button>
-            <button
-              onClick={() => handleNavClick(onPreOwnedClick || (() => {}))}
-              className="w-full text-left text-sm text-gray-700 hover:text-black
-           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              Pre-Owned
-            </button>
-            <button
-              onClick={() => handleNavClick(onAboutClick || (() => {}))}
-              className="w-full text-left text-sm text-gray-700 hover:text-black
-           transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
-            >
-              About
-            </button>
-          </div>
-        </SheetContent>
-      </Sheet>
+              {/* Menu Items */}
+              <div className="flex flex-col gap-6 mt-8 px-6 flex-1 overflow-y-auto pb-6">
+                <button
+                  onClick={() => handleNavClick(() => onProductsClick?.())}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  Shop All
+                </button>
+                <button
+                  onClick={() => handleNavClick(onNewArrivalsClick || (() => {}))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  New
+                </button>
+                <button
+                  onClick={() => handleNavClick(() => onCategoryClick?.('women'))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  Women
+                </button>
+                <button
+                  onClick={() => handleNavClick(() => onCategoryClick?.('men'))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  Men
+                </button>
+                <button
+                  onClick={() => handleNavClick(() => onCategoryClick?.('accessories'))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  Accessories
+                </button>
+                <button
+                  onClick={() => handleNavClick(onPreOwnedClick || (() => {}))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  Pre-Owned
+                </button>
+                <button
+                  onClick={() => handleNavClick(onAboutClick || (() => {}))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  About
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </>
   );
 }
