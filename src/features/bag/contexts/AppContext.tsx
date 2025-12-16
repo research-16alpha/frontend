@@ -49,7 +49,7 @@ interface AppContextType {
   addToBag: (item: Omit<BagItem, 'quantity'>) => Promise<void>;
   removeFromBag: (id: string, size: string, color: string) => void;
   updateBagQuantity: (id: string, size: string, color: string, quantity: number) => void;
-  toggleFavorite: (productId: string) => void;
+  toggleFavorite: (productId: string) => Promise<void>;
   setIsCartOpen: (open: boolean) => void;
   setIsAuthModalOpen: (open: boolean) => void;
   login: (email: string, password: string) => void;
@@ -253,25 +253,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
     );
 
     // Sync with backend if user is logged in
-    if (user?._id) {
-      try {
-        if (isCurrentlyFavorite) {
-          await removeFromFavorites(user._id, productId);
-        } else {
-          await addToFavorites(user._id, productId);
-        }
-        // Refresh favorites from backend to ensure sync
-        const updatedFavorites = await getFavorites(user._id);
-        setFavorites(updatedFavorites);
-      } catch (error) {
-        console.error('Failed to sync favorite with backend:', error);
-        // Revert local state on error
-        setFavorites((prev) =>
-          isCurrentlyFavorite
-            ? [...prev, productId]
-            : prev.filter((id) => id !== productId)
-        );
+    if (!user?._id) {
+      return;
+    }
+
+    try {
+      if (isCurrentlyFavorite) {
+        await removeFromFavorites(user._id, productId);
+      } else {
+        await addToFavorites(user._id, productId);
       }
+      // Refresh favorites from backend to ensure sync
+      const updatedFavorites = await getFavorites(user._id);
+      setFavorites(updatedFavorites);
+    } catch (error) {
+      console.error('Failed to sync favorite with backend:', error);
+      // Revert local state on error
+      setFavorites((prev) =>
+        isCurrentlyFavorite
+          ? [...prev, productId]
+          : prev.filter((id) => id !== productId)
+      );
     }
   };
 

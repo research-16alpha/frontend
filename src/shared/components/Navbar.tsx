@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ShoppingBag, User, Menu } from "lucide-react";
+import { ShoppingBag, User, Menu, Heart } from "lucide-react";
 import { useApp } from "../../features/bag/contexts/AppContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "./ui/sheet";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
@@ -33,6 +33,23 @@ export function Navbar({
   const handleUserClick = () => {
     if (user) {
       // User is logged in, navigate to account page
+      if (onAccountClick) {
+        onAccountClick();
+      }
+    } else {
+      // User is not logged in, show auth modal
+      setIsAuthModalOpen(true);
+    }
+  };
+
+  const handleFavoritesClick = () => {
+    if (user) {
+      // Remember to open Favorites tab when landing on Account
+      try {
+        localStorage.setItem('accountInitialTab', 'favorites');
+      } catch {
+        // Ignore storage errors
+      }
       if (onAccountClick) {
         onAccountClick();
       }
@@ -136,6 +153,13 @@ export function Navbar({
                 aria-label="Account"
               >
                 <User className="w-5 h-5" />
+              </button>
+              <button
+                onClick={handleFavoritesClick}
+                className="p-2 hover:bg-gray-50 rounded-full transition-colors"
+                aria-label="Favorites"
+              >
+                <Heart className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setIsCartOpen(true)}
