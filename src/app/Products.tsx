@@ -198,7 +198,7 @@ export function Products() {
     : 'All Products';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <AnnouncementBanner />
       <Navbar 
         onFeaturedClick={() => {}} 
@@ -215,7 +215,7 @@ export function Products() {
       <AISearchBar />
       
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full">
         <div className="text-xs text-gray-600">
           <button onClick={navigateToHome} className="hover:underline">Home</button>
           <span className="mx-2">/</span>
@@ -223,7 +223,7 @@ export function Products() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 flex-1 w-full">
         {/* Page Title */}
         <div className="mb-6">
           <h2 className="mb-2 text-2xl md:text-3xl">{pageTitle}</h2>

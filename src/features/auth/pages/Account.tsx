@@ -24,6 +24,15 @@ type Tab = 'orders' | 'favorites' | 'profile' | 'addresses' | 'payment' | 'setti
 export function Account() {
   const { user, logout, orders, favorites, updateProfile, toggleFavorite } = useApp();
   const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout } = useNavigation();
+  
+  const handleCategoryClick = (category: string) => {
+    if (category === 'men' || category === 'women' || category === 'pre-owned') {
+      navigateToProducts(category);
+    } else {
+      // For other categories like 'accessories' or 'sale', navigate to products without gender filter
+      navigateToProducts();
+    }
+  };
   const [activeTab, setActiveTab] = useState<Tab>('orders');
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState(user);
@@ -122,6 +131,7 @@ export function Account() {
         onLogoClick={navigateToHome}
         onAccountClick={navigateToAccount}
         onAboutClick={navigateToAbout}
+        onCategoryClick={handleCategoryClick}
         onPreOwnedClick={() => {
           // Navigate to products page - can be customized to filter for pre-owned items
           navigateToProducts();
@@ -172,9 +182,12 @@ export function Account() {
                   onClick={async () => {
                     try {
                       await logout();
-                      // Navigation will be handled by App.tsx useEffect
+                      // Redirect to home page after logout
+                      navigateToHome();
                     } catch (error) {
                       console.error('Logout failed:', error);
+                      // Still redirect even if logout fails
+                      navigateToHome();
                     }
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
