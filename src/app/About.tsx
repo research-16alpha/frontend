@@ -38,7 +38,7 @@ export function About({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <Navbar 
         onFeaturedClick={() => {}} 
         onProductsClick={onNavigateProducts}
@@ -55,7 +55,7 @@ export function About({
         }}
       />
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-12 flex-1 w-full">
         {/* About Section */}
         <div className="mb-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">About Us</h1>

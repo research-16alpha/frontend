@@ -77,7 +77,7 @@ function AppWithNavigation() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <AnnouncementBanner />
       <Navbar 
         onFeaturedClick={() => {}}
@@ -93,7 +93,7 @@ function AppWithNavigation() {
       />
       <AISearchBar />
       
-      <main>
+      <main className="flex-1">
         <HeroSection />
         <HorizontalScrollSection />
         <FeaturedSection />
