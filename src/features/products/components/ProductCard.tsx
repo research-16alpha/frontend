@@ -90,17 +90,10 @@ export function ProductCard({
   return (
     <>
       {/* ================= CARD ================= */}
-      {/* <div
-        className={`relative ${
-          isModalOpen ? 'col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-4' : ''
-        }`}
-      > */}
+
       <div className="relative">
 
         <div
-          // className={`bg-white border border-gray-200 overflow-hidden transition-all ${
-          //   isModalOpen ? 'shadow-2xl' : 'hover:shadow-lg'
-          // }`}
           
   className="bg-white border border-gray-200 overflow-hidden transition-shadow hover:shadow-lg"
 
@@ -183,58 +176,55 @@ export function ProductCard({
       </div>
 
       {/* ========== MOBILE MODAL ========== */}
-      <AnimatePresence>
-  {isModalOpen && (
-    <motion.div
-      className="
-        fixed inset-0
-        bg-black/40
-        flex items-stretch md:items-center justify-center
-      "
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.15, ease: 'easeOut' }}
-      onClick={() => setIsModalOpen(false)}
-    >
-      <motion.div
-        className="
-          bg-white
-    w-full
-    md:w-[70vw]
-    max-w-[70vw]
-    h-[100dvh]
-    md:h-[60vh]
-    max-h-[60vh]
-    overflow-y-auto
-    md:rounded-xl
-        "
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.98 }}
-        transition={{
-          duration: 0.18,
-          ease: [0.4, 0, 0.2, 1],
-        }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <ExpandedContent
-          product={product}
-          onClose={() => setIsModalOpen(false)}
-          selectedSize={selectedSize}
-          setSelectedSize={setSelectedSize}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-          handleAddToBag={handleAddToBag}
-          handleToggleFavorite={handleToggleFavorite}
-          isFavorite={isFavorite}
-          isAddingToBag={isAddingToBag}
-        />
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-
+      {typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+            <motion.div
+              className="
+                fixed inset-0 z-[60]
+                bg-black/40
+                flex items-center justify-center
+              "
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
+              onClick={() => setIsModalOpen(false)}
+            >
+              <motion.div
+                className="
+                  bg-white
+                  w-[50vw]
+                  max-w-[50vw]
+                  h-[50vh]
+                  max-h-[50vh]
+                  overflow-y-auto
+                  rounded-xl
+                "
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.18, ease: [0.4, 0, 0.2, 1] }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExpandedContent
+                  product={product}
+                  onClose={() => setIsModalOpen(false)}
+                  selectedSize={selectedSize}
+                  setSelectedSize={setSelectedSize}
+                  selectedColor={selectedColor}
+                  setSelectedColor={setSelectedColor}
+                  handleAddToBag={handleAddToBag}
+                  handleToggleFavorite={handleToggleFavorite}
+                  isFavorite={isFavorite}
+                  isAddingToBag={isAddingToBag}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
 
     </>
@@ -256,15 +246,13 @@ function ExpandedContent({
   isAddingToBag,
 }: any) {
   return (
-    <div className="relative p-6 md:p-8">
+    <div className="relative p-6">
       <button
         onClick={onClose}
         className="
   absolute
   top-4
   right-4
-  md:top-6
-  md:right-6
   p-2
   bg-white/90
   backdrop-blur
