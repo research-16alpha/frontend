@@ -199,3 +199,18 @@ html {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+
+@layer utilities {
+  .luxury-halo {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.45),
+      0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .luxury-halo-hover:hover {
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.6),
+      0 14px 36px rgba(0, 0, 0, 0.55);
+  }
+}

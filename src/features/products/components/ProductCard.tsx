@@ -99,19 +99,51 @@ export function ProductCard({
                   exit={{ opacity: 0, y: 10 }}
                   className="absolute bottom-4 left-4 right-4 flex gap-2"
                 >
-                  <button className="flex-1 bg-white/95 backdrop-blur-xl py-2 shadow-[0_30px_80px_rgba(0,0,0,0.25)] rounded">
+
+                  <button
+                    className="
+                      flex-1
+                      py-2
+                      rounded-md
+
+                      bg-black
+                      text-white
+
+                      shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_12px_30px_rgba(0,0,0,0.45)]
+
+                      transition-all duration-200 ease-out
+                      hover:bg-neutral-900
+                      hover:shadow-[0_0_0_1px_rgba(255,255,255,0.5),0_18px_40px_rgba(0,0,0,0.55)]
+                    "
+                  >
                     Quick View
                   </button>
+
                   <button
                     onClick={handleToggleFavorite}
-                    className="bg-white/95 backdrop-blur-xl p-2 shadow-[0_30px_80px_rgba(0,0,0,0.25)] rounded"
+                    className="
+                      p-2
+                      rounded-md
+
+                      bg-black
+
+                      shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_12px_30px_rgba(0,0,0,0.45)]
+
+                      transition-all duration-200 ease-out
+                      hover:bg-neutral-900
+                      hover:shadow-[0_0_0_1px_rgba(255,255,255,0.5),0_18px_40px_rgba(0,0,0,0.55)]
+                    "
                   >
                     <Heart
-                      className={`w-5 h-5 ${
-                        isFavorite ? 'fill-red-500 text-red-500' : ''
+                      className={`w-5 h-5 transition-colors duration-200 ${
+                        isFavorite
+                          ? 'fill-red-500 text-red-500'
+                          : 'text-white'
                       }`}
                     />
                   </button>
+
+
                 </motion.div>
               )}
             </AnimatePresence>
@@ -325,7 +357,7 @@ function ExpandedContent({
         <button
           onClick={handleAddToBag}
           disabled={isAddingToBag}
-          className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-neutral-900/90 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
+          className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
         >
           <ShoppingCart className="w-4 h-4" />
           Add to Bag
@@ -333,7 +365,7 @@ function ExpandedContent({
 
         <button
           onClick={handleToggleFavorite}
-          className="px-5 bg-white/95 backdrop-blur-xl rounded-xl hover:bg-white transition-all duration-200 flex items-center justify-center shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
+          className="px-5 bg-white/95 backdrop-blur-xl rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center justify-center shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
         >
           <Heart
             className={`w-5 h-5 transition-colors duration-200 ${
