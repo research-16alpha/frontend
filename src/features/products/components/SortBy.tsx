@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
 
 export interface SortOption {
   label: string;
@@ -36,11 +35,9 @@ export function SortBy({
     <div className={`relative inline-block ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-4 py-2 border border-gray-300 bg-white hover:bg-gray-50 transition-colors text-sm"
+        className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full"
       >
-        <span className="uppercase tracking-wide text-xs">{label}:</span>
-        <span>{selectedOption?.label}</span>
-        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        {label}
       </button>
 
       {isOpen && (
@@ -49,18 +46,20 @@ export function SortBy({
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-300 shadow-lg z-50 min-w-[200px]">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-                className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
-                  option.value === selectedValue ? 'bg-gray-50' : ''
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
+          <div className="absolute top-full right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 min-w-[200px] p-4">
+            <div className="space-y-2">
+              {options.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => handleSelect(option.value)}
+                  className={`w-full text-left text-sm font-light text-gray-500 hover:text-gray-600 transition-colors ${
+                    option.value === selectedValue ? 'text-gray-700' : ''
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
           </div>
         </>
       )}

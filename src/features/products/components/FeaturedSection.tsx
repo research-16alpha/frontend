@@ -52,11 +52,12 @@ export function FeaturedSection() {
           {/* Right Images Grid */}
           <div className="w-full lg:w-2/3 grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
             {featuredImages.map((item) => (
-              <ProductCard
-                key={item.id}
-                product={item}
-                onClick={() => navigateToProduct(item.id)}
-              />
+              <div key={item.id} className="h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px]">
+                <ProductCard
+                  product={item}
+                  onClick={() => navigateToProduct(item.id)}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -74,7 +75,7 @@ const featuredImages: Product[] = [
       "https://images.unsplash.com/photo-1633821879282-0c4e91f96232?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600"
     ],
     category: "Art & Fashion",
-    description: "Curated editorial pieces that blend art and fashion. Each item tells a unique story.",
+    description: "Curated editorial pieces blending art and fashion. Each item tells a unique story.",
     price: 280,
     discountedPrice: 224,
     originalPrice: 280,

@@ -42,7 +42,7 @@ export function AnnouncementBanner() {
       setTimeout(() => {
         setIndex(prev => (prev + 1) % sentences.length);
         setVisible(true); // enter
-      }, 400);
+      }, 700);
     }, 3000);
 
     return () => clearInterval(interval);
@@ -55,27 +55,28 @@ export function AnnouncementBanner() {
         /* ===== DESKTOP / LARGE VIEWPORTS: MARQUEE ===== */
         <div className="flex relative overflow-x-hidden">
           <div className="animate-marquee py-2 whitespace-nowrap">
-            <span className="mx-4 text-xs md:text-sm">
+            <span className="mx-4 text-xs md:text-sm lg:text-sm">
               {textContent}
             </span>
           </div>
           <div className="absolute top-0 animate-marquee2 py-2 whitespace-nowrap">
-            <span className="mx-4 text-xs md:text-sm">
+            <span className="mx-4 text-xs md:text-sm lg:text-sm">
               {textContent}
             </span>
           </div>
         </div>
       ) : (
         /* ===== MOBILE + TABLET: SENTENCE TRANSITION ===== */
-        <div className="relative h-8 py-2 flex items-center justify-center overflow-hidden">
+        <div className="relative h-8 py-4 flex items-center justify-center overflow-hidden">
           <div
             key={index}
             className={`
               absolute whitespace-nowrap
-              text-xs md:text-sm
-              transition-all duration-400 ease-in-out
-              ${visible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'}
+              text-sm md:text-sm
+              transition-all duration-700 ease-in-out
+              ${visible ? 'left-1/2 -translate-x-1/2 opacity-100' : 'left-full translate-x-0 opacity-0'}
             `}
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', overflowWrap: 'normal' }}
           >
             {sentences[index]}
           </div>

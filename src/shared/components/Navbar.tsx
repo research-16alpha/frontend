@@ -83,7 +83,7 @@ export function Navbar({
                 onClick={() => {
                   setMobileMenuOpen(true);
                 }}
-                className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65] cursor-pointer"
+                className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65] cursor-pointer flex items-center justify-center"
                 aria-label="Open menu"
                 type="button"
               >
@@ -106,50 +106,56 @@ export function Navbar({
             {/* Navigation Items - Hidden on mobile */}
             <div className="hidden lg:flex items-center gap-6 xl:gap-8">
               <button
+                onClick={onLogoClick}
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+              >
+                Home
+              </button>
+              <button
                 onClick={() => onProductsClick?.()}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 Shop All
               </button>
               <button
                 onClick={() => onCuratedClick?.()}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 Curated
               </button>
               <button 
                 onClick={onNewArrivalsClick || (() => {})}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 New
               </button>
               <button
                 onClick={() => (onCategoryClick ? onCategoryClick('women') : undefined)}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 Women
               </button>
               <button
                 onClick={() => (onCategoryClick ? onCategoryClick('men') : undefined)}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 Men
               </button>
               <button
                 onClick={() => (onCategoryClick ? onCategoryClick('accessories') : undefined)}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 Accessories
               </button>
               <button
                 onClick={onPreOwnedClick || (() => {})}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 Pre-Owned
               </button>
               <button
                 onClick={onAboutClick || (() => {})}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
               >
                 About
               </button>
@@ -159,21 +165,21 @@ export function Navbar({
             <div className="flex items-center gap-3 md:gap-4">
               <button 
                 onClick={handleUserClick}
-                className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer"
+                className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer flex items-center justify-center"
                 aria-label="Account"
               >
                 <User className="w-5 h-5" />
               </button>
               <button
                 onClick={handleFavoritesClick}
-                className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer"
+                className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer flex items-center justify-center"
                 aria-label="Favorites"
               >
                 <Heart className="w-5 h-5" />
               </button>
               <button 
                 onClick={() => setIsCartOpen(true)}
-                className="p-2 hover:bg-gray-50 rounded-full transition-colors relative cursor-pointer"
+                className="p-2 hover:bg-gray-50 rounded-full transition-colors relative cursor-pointer flex items-center justify-center"
                 aria-label="Bag"
               >
                 <ShoppingBag className="w-5 h-5" />
@@ -224,6 +230,12 @@ export function Navbar({
 
               {/* Menu Items */}
               <div className="flex flex-col mt-8 px-6 flex-1 overflow-y-auto pb-6">
+                <button
+                  onClick={() => handleNavClick(onLogoClick || (() => {}))}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                >
+                  Home
+                </button>
                 <button
                   onClick={() => handleNavClick(() => onProductsClick?.())}
                   className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"

@@ -93,7 +93,7 @@ export function HeroSection() {
                   };
 
               return (
-                <div key={product.id}>
+                <div key={product.id} className="h-full">
                   <ProductCard 
                     product={mappedProduct}
                     onClick={() => navigateToProduct(mappedProduct.id)}
