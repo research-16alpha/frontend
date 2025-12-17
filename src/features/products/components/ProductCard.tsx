@@ -93,13 +93,14 @@ export function ProductCard({
 
             <AnimatePresence>
               {isHovered && (
+                /* ===== HOVERED PRODUCT CARD CONTROLS ===== */
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
                   className="absolute bottom-4 left-4 right-4 flex gap-2"
                 >
-
+                  {/* Quick View Button */}
                   <button
                     className="
                       flex-1
@@ -119,6 +120,7 @@ export function ProductCard({
                     Quick View
                   </button>
 
+                  {/* Favorite Button */}
                   <button
                     onClick={handleToggleFavorite}
                     className="
@@ -151,11 +153,11 @@ export function ProductCard({
 
           <div className="p-4 space-y-1">
             {product.brand_name && (
-              <div className="text-xs font-semibold uppercase tracking-wider">
+              <div className="text-sm font-semibold  uppercase tracking-wider">
                 {product.brand_name}
               </div>
             )}
-            <div className="text-sm text-gray-700 line-clamp-2">
+            <div className="text-xs text-gray-700 line-clamp-2">
               {capitalizeWords(product.description)}
             </div>
             <div className="text-[10px] uppercase text-gray-400">
@@ -164,14 +166,14 @@ export function ProductCard({
 
             <div className="mt-2">
               {product.discountedPrice ? (
-                <>
-                  <span className="text-red-600 font-medium">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-red-600 font-semibold text-base">
                     ${product.discountedPrice}
                   </span>
-                  <span className="ml-2 text-xs line-through text-gray-400">
+                  <span className="text-base line-through text-gray-400 font-normal">
                     ${product.price}
                   </span>
-                </>
+                </div>
               ) : (
                 <span className="font-medium">${product.price}</span>
               )}

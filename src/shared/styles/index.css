@@ -53,6 +53,7 @@
     --color-red-300: oklch(.808 .114 19.571);
     --color-red-500: oklch(.637 .237 25.331);
     --color-red-600: oklch(.577 .245 27.325);
+    --color-red-700: oklch(.517 .253 29.319);
     --color-red-800: oklch(.444 .177 26.899);
     --color-yellow-100: oklch(.973 .071 103.193);
     --color-yellow-800: oklch(.476 .114 61.907);
@@ -1944,7 +1945,25 @@
 }
 
 html {
-  font-size: var(--font-size);
+  font-size: 16px;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1920px) {
+  html {
+    font-size: 20px;
+  }
 }
 
 .scrollbar-hide {

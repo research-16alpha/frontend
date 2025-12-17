@@ -187,7 +187,25 @@
 }
 
 html {
-  font-size: var(--font-size);
+  font-size: 16px;
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1440px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1920px) {
+  html {
+    font-size: 20px;
+  }
 }
 
 /* Hide scrollbar for horizontal scroll sections */
@@ -213,4 +231,36 @@ html {
       0 0 0 1px rgba(255, 255, 255, 0.6),
       0 14px 36px rgba(0, 0, 0, 0.55);
   }
+
+
+
+
+
+
+@keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
 }
+.animate-marquee {
+  animation: marquee 45s linear infinite;
+}
+
+
+@keyframes marquee2 {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+}
+.animate-marquee2 {
+  animation: marquee2 45s linear infinite;
+}
+
+

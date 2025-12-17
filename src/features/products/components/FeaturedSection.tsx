@@ -22,7 +22,7 @@ interface Product {
 }
 
 export function FeaturedSection() {
-  const { navigateToProduct } = useNavigation();
+  const { navigateToProduct, navigateToCurated } = useNavigation();
   
   return (
     <section className="w-full bg-[#f4d58d] py-10 md:py-16">
@@ -30,17 +30,20 @@ export function FeaturedSection() {
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-12">
           {/* Left Content */}
           <div className="w-full lg:w-1/3 space-y-4 md:space-y-6">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tight leading-tight">
-              Culture
+            <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase font-bold tracking-wide leading-tight">
+              <span className="text-red-400">LUXURY,</span>
               <br />
-              for One
+              <span className="text-gray-600">CURATED.</span>
             </h2>
             <p className="text-sm md:text-base text-gray-800 leading-relaxed">
               Discover unique pieces that tell your story.
               <br />
               Curated collections for the modern individual.
             </p>
-            <button className="flex items-center gap-2 uppercase text-sm tracking-wide hover:gap-4 transition-all mt-4">
+            <button 
+              onClick={() => navigateToCurated()}
+              className="flex items-center gap-2 uppercase text-sm tracking-wide hover:gap-4 transition-all mt-4"
+            >
               Explore Now
               <ArrowRight className="w-4 h-4" />
             </button>

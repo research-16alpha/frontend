@@ -6,13 +6,13 @@ import { Footer } from '../shared/components/Footer';
 import { ProductCard } from '../features/products/components/ProductCard';
 import { CategoryFilter, CategoryGroup } from '../features/products/components/CategoryFilter';
 import { SortBy, SortOption } from '../features/products/components/SortBy';
-import { fetchProducts, fetchProductsByGender } from '../features/products/services/productsService';
+import { fetchProducts } from '../features/products/services/productsService';
 import { transformProducts, FrontendProduct } from '../features/products/utils/productTransform';
 import { useNavigation } from '../shared/contexts/NavigationContext';
 
-export function Products() {
-  console.log('Products');
-  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToProduct, productsGender } = useNavigation();
+export function Curated() {
+  console.log('Curated');
+  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToProduct } = useNavigation();
   
   const handleCategoryClick = (category: string) => {
     if (category === 'men' || category === 'women') {
@@ -147,23 +147,10 @@ export function Products() {
   }, [products, selectedFilters, sortBy]);
 
   React.useEffect(() => {
-    // Reset page and products when gender changes
-    setPage(1);
-    setProducts([]);
-    setFilteredProducts([]);
-    setHasMore(true);
-    setError(null);
-    setSelectedFilters({});
-    setSortBy('featured');
-  }, [productsGender]);
-
-  React.useEffect(() => {
     async function loadProducts() {
       try {
         setLoading(true);
-        const data = productsGender 
-          ? await fetchProductsByGender(productsGender, page, 20)
-          : await fetchProducts(page, 20);
+        const data = await fetchProducts(page, 20);
         const backendProducts = Array.isArray(data) ? data : (data.products || []);
         const transformed = transformProducts(backendProducts);
         
@@ -183,7 +170,7 @@ export function Products() {
       }
     }
     loadProducts();
-  }, [page, productsGender]);
+  }, [page]);
 
   const handleFilterChange = (filters: Record<string, string[]>) => {
     setSelectedFilters(filters);
@@ -199,9 +186,7 @@ export function Products() {
   };
 
   const displayProducts = filteredProducts.length > 0 ? filteredProducts : products;
-  const pageTitle = productsGender 
-    ? `All ${productsGender.charAt(0).toUpperCase() + productsGender.slice(1)}`
-    : 'All Products';
+  const pageTitle = 'Curated Collection';
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -217,7 +202,6 @@ export function Products() {
           // Navigate to products page - can be customized to filter for pre-owned items
           navigateToProducts();
         }}
-        onCuratedClick={navigateToCurated}
       />
       <AISearchBar />
       
@@ -235,9 +219,7 @@ export function Products() {
         <div className="mb-6">
           <h2 className="mb-2 text-2xl md:text-3xl">{pageTitle}</h2>
           <p className="text-sm text-gray-600">
-            {productsGender 
-              ? `Discover luxury ${productsGender} fashion from all the world's most celebrated designers—shop online today.`
-              : 'Discover our curated collection of premium fashion and accessories'}
+            Discover our curated collection of premium fashion and accessories.
           </p>
         </div>
 
@@ -345,3 +327,4 @@ export function Products() {
     </div>
   );
 }
+

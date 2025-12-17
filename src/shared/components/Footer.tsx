@@ -10,35 +10,35 @@ export function Footer({ show = true }: FooterProps) {
 
   return (
     <footer className="bg-[#d8cfe6] border-t border-gray-300">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-gray-700">
           
           {/* Left: Copyright */}
-          <div className="text-center md:text-left text-xs text-gray-600">
-           
+          <div className="text-center md:text-left text-xs text-gray-600 select-none">
            halfsy.shop © {new Date().getFullYear()} All rights reserved.
           </div>
 
           {/* Center: Legal */}
           <div className="flex gap-6 text-xs">
-            <button className="hover:text-black transition-colors">
+            <button className="hover:text-black transition-colors cursor-pointer">
               Privacy Policy
             </button>
-            <button className="hover:text-black transition-colors">
+            <button className="hover:text-black transition-colors cursor-pointer">
               Terms of Service
             </button>
           </div>
 
           {/* Right: Social Icons */}
           <div className="flex gap-4">
+            <span className="text-xs text-gray-600">Follow us on:</span>
             <a
-              href="#"
+              href="https://www.instagram.com/halfsy.shop?igsh=YmZraDgwM2wzdDQx"
               aria-label="Instagram"
               className="hover:text-black transition-colors"
             >
               <Instagram className="w-4 h-4" />
             </a>
-            <a
+            {/* <a
               href="#"
               aria-label="Twitter"
               className="hover:text-black transition-colors"
@@ -51,7 +51,7 @@ export function Footer({ show = true }: FooterProps) {
               className="hover:text-black transition-colors"
             >
               <Facebook className="w-4 h-4" />
-            </a>
+            </a> */}
           </div>
 
         </div>

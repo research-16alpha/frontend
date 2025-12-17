@@ -8,7 +8,7 @@ export interface BackendProduct {
   product_description?: string;
   price_original?: string;
   price_final?: string;
-  available_sizes?: string;
+  available_sizes?: string | string[]; // Can be string or array from backend
   wishlist_state?: string;
   disc_pct?: string;
   discount?: number;
@@ -69,11 +69,22 @@ function calculateDiscountedPrice(originalPrice: number, discPct?: string): numb
 }
 
 /**
- * Parse sizes from comma-separated string to array
+ * Parse sizes from comma-separated string or array to array
  */
-function parseSizes(sizesStr?: string): string[] {
-  if (!sizesStr) return [];
-  return sizesStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+function parseSizes(sizes?: string | string[]): string[] {
+  if (!sizes) return [];
+  
+  // If it's already an array, return it (ensuring it's a proper string array)
+  if (Array.isArray(sizes)) {
+    return sizes.map(s => String(s).trim()).filter(s => s.length > 0);
+  }
+  
+  // If it's a string, split by comma
+  if (typeof sizes === 'string') {
+    return sizes.split(',').map(s => s.trim()).filter(s => s.length > 0);
+  }
+  
+  return [];
 }
 
 /**

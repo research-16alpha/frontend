@@ -23,7 +23,7 @@ type Tab = 'orders' | 'favorites' | 'profile' | 'addresses' | 'payment' | 'setti
 
 export function Account() {
   const { user, logout, orders, favorites, updateProfile, toggleFavorite } = useApp();
-  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout } = useNavigation();
+  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated } = useNavigation();
   
   const handleCategoryClick = (category: string) => {
     if (category === 'men' || category === 'women' || category === 'pre-owned') {
@@ -136,6 +136,7 @@ export function Account() {
           // Navigate to products page - can be customized to filter for pre-owned items
           navigateToProducts();
         }}
+        onCuratedClick={navigateToCurated}
       />
 
       <div className="max-w-7xl mx-auto px-6 py-12 flex-1 w-full">
