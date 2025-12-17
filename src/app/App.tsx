@@ -18,9 +18,10 @@ import { NavigationProvider, useNavigation } from '../shared/contexts/Navigation
 import { Toaster } from 'sonner';
 import { About } from './About';
 import { Curated } from './Curated';
+import { New } from './New';
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new'>('home');
 
   return (
     <NavigationProvider 
@@ -37,7 +38,7 @@ function AppContent() {
 }
 
 function AppWithNavigation() {
-  const { currentPage, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated } = useNavigation();
+  const { currentPage, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToNew } = useNavigation();
   const { user } = useApp();
 
   // Redirect from account page if user logs out
@@ -72,21 +73,16 @@ function AppWithNavigation() {
   }
 
   if (currentPage === 'about') {
-    return (
-      <About 
-        onNavigateHome={navigateToHome}
-        onNavigateProducts={navigateToProducts}
-        onNavigateAccount={navigateToAccount}
-        onNavigateAbout={navigateToAbout}
-        onNavigateCurated={navigateToCurated}
-        onCategoryClick={handleCategoryClick}
-      />
-    );
+    return <About />;
   }
 
   // If on curated page, render that instead
   if (currentPage === 'curated') {
     return <Curated />;
+  }
+
+  if (currentPage === 'new') {
+    return <New />;
   }
 
   return (
@@ -98,6 +94,7 @@ function AppWithNavigation() {
         onLogoClick={navigateToHome}
         onAccountClick={navigateToAccount}
         onAboutClick={navigateToAbout}
+        onNewArrivalsClick={navigateToNew}
         onCategoryClick={handleCategoryClick}
         onPreOwnedClick={() => {
           // Navigate to products page - can be customized to filter for pre-owned items

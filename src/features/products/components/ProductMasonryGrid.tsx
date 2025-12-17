@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { fetchProducts } from '../services/productsService';
+import { fetchBestDeals } from '../services/productsService';
 import { transformProducts, FrontendProduct } from '../utils/productTransform';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
@@ -33,7 +33,7 @@ export function ProductMasonryGrid() {
     async function loadProducts() {
       try {
         setLoading(true);
-        const data = await fetchProducts(1, 20);
+        const data = await fetchBestDeals(20);
         const backendProducts = Array.isArray(data) ? data : (data.products || []);
         const transformed = transformProducts(backendProducts);
         setProducts(transformed.map(p => ({
@@ -67,7 +67,7 @@ export function ProductMasonryGrid() {
   return (
     <section className="w-full bg-white py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-2xl md:text-3xl mb-6 md:mb-8 uppercase tracking-tight">Trending Now</h2>
+        <h2 className="text-2xl md:text-3xl mb-6 md:mb-8 uppercase tracking-tight">Best Deals</h2>
         
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">

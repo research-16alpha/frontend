@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 export function AnnouncementBanner() {
   const textContent =
-    " The Halfsy Ship is sailing soon • A refined journey through modern luxury • Navigating the world's finest brands with care and intention • Discovered in calm waters, sourced from sales across the web, when the time, tide, and price are right • Buy better, Sail smarter • Join our waitlist now to get top brand deals first •";
+    " The Halfsy Ship is sailing soon • A refined journey through modern luxury • Navigating the world's finest brands with care and intention • Discovered in calm waters, sourced from sales across the web, when the time, tide, and price are right • Buy better, Sail smarter • Join our waitlist to get top brand deals •";
   const textContentMobile = "The Halfsy Ship is sailing soon • A refined journey through Modern Luxury • Navigating the world's finest brands with care and intention • Sourced from Sales across the Web • Buy Better, Sail Smarter • Join our Waitlist now • Get Top Brand Deals First •";
   // Break text into sentences for mobile animation
   const sentences = textContentMobile
