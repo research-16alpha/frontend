@@ -17,9 +17,10 @@ import { AppProvider, useApp } from '../features/bag/contexts/AppContext';
 import { NavigationProvider, useNavigation } from '../shared/contexts/NavigationContext';
 import { Toaster } from 'sonner';
 import { About } from './About';
+import { Curated } from './Curated';
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated'>('home');
 
   return (
     <NavigationProvider 
@@ -36,7 +37,7 @@ function AppContent() {
 }
 
 function AppWithNavigation() {
-  const { currentPage, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout } = useNavigation();
+  const { currentPage, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated } = useNavigation();
   const { user } = useApp();
 
   // Redirect from account page if user logs out
@@ -77,9 +78,15 @@ function AppWithNavigation() {
         onNavigateProducts={navigateToProducts}
         onNavigateAccount={navigateToAccount}
         onNavigateAbout={navigateToAbout}
+        onNavigateCurated={navigateToCurated}
         onCategoryClick={handleCategoryClick}
       />
     );
+  }
+
+  // If on curated page, render that instead
+  if (currentPage === 'curated') {
+    return <Curated />;
   }
 
   return (
@@ -96,6 +103,7 @@ function AppWithNavigation() {
           // Navigate to products page - can be customized to filter for pre-owned items
           navigateToProducts();
         }}
+        onCuratedClick={navigateToCurated}
       />
       <AISearchBar />
       

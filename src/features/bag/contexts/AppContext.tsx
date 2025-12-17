@@ -257,23 +257,23 @@ export function AppProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    try {
-      if (isCurrentlyFavorite) {
-        await removeFromFavorites(user._id, productId);
-      } else {
-        await addToFavorites(user._id, productId);
-      }
-      // Refresh favorites from backend to ensure sync
-      const updatedFavorites = await getFavorites(user._id);
-      setFavorites(updatedFavorites);
-    } catch (error) {
-      console.error('Failed to sync favorite with backend:', error);
-      // Revert local state on error
-      setFavorites((prev) =>
-        isCurrentlyFavorite
-          ? [...prev, productId]
-          : prev.filter((id) => id !== productId)
-      );
+      try {
+        if (isCurrentlyFavorite) {
+          await removeFromFavorites(user._id, productId);
+        } else {
+          await addToFavorites(user._id, productId);
+        }
+        // Refresh favorites from backend to ensure sync
+        const updatedFavorites = await getFavorites(user._id);
+        setFavorites(updatedFavorites);
+      } catch (error) {
+        console.error('Failed to sync favorite with backend:', error);
+        // Revert local state on error
+        setFavorites((prev) =>
+          isCurrentlyFavorite
+            ? [...prev, productId]
+            : prev.filter((id) => id !== productId)
+        );
     }
   };
 

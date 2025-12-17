@@ -39,8 +39,8 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
             <h2 className="text-2xl md:text-3xl uppercase tracking-tight">Designer Sale</h2>
             <div className="text-xs md:text-sm text-gray-700">
-              <p>Shop the latest sales</p>
-              <p>from independent brands</p>
+              <p>Smarter buying starts here.</p>
+              <p>We track prices across the internet so you don't have to.</p>
             </div>
           </div>
         </div>

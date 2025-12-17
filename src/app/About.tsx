@@ -8,6 +8,7 @@ interface AboutProps {
   onNavigateProducts?: () => void;
   onNavigateAccount?: () => void;
   onNavigateAbout?: () => void;
+  onNavigateCurated?: () => void;
   onCategoryClick?: (category: string) => void;
   onNewArrivalsClick?: () => void;
 }
@@ -17,6 +18,7 @@ export function About({
   onNavigateProducts, 
   onNavigateAccount, 
   onNavigateAbout,
+  onNavigateCurated,
   onCategoryClick,
   onNewArrivalsClick
 }: AboutProps) {
@@ -53,6 +55,7 @@ export function About({
             onNavigateProducts();
           }
         }}
+        onCuratedClick={onNavigateCurated}
       />
 
       <main className="max-w-7xl mx-auto px-6 py-12 flex-1 w-full">

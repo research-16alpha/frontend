@@ -11,7 +11,7 @@ import { ExpandedContent } from '../features/products/components/ProductCard';
 import { toast } from 'sonner';
 
 export function ProductItem() {
-  const { productId, navigateBack, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout } = useNavigation();
+  const { productId, navigateBack, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated } = useNavigation();
   const { addToBag, toggleFavorite, favorites, user } = useApp();
   
   const [product, setProduct] = useState<FrontendProduct | null>(null);
@@ -121,6 +121,7 @@ export function ProductItem() {
           onAboutClick={navigateToAbout}
           onCategoryClick={handleCategoryClick}
           onPreOwnedClick={() => navigateToProducts()}
+          onCuratedClick={navigateToCurated}
         />
         <AISearchBar />
         <main className="flex-1 flex items-center justify-center">
@@ -149,6 +150,7 @@ export function ProductItem() {
         onAboutClick={navigateToAbout}
         onCategoryClick={handleCategoryClick}
         onPreOwnedClick={() => navigateToProducts()}
+        onCuratedClick={navigateToCurated}
       />
       <AISearchBar />
 

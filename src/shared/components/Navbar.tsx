@@ -15,6 +15,7 @@ interface NavbarProps {
   onNewArrivalsClick?: () => void;
   onCategoryClick?: (category: string) => void;
   onPreOwnedClick?: () => void;
+  onCuratedClick?: () => void;
 }
 
 export function Navbar({ 
@@ -26,6 +27,7 @@ export function Navbar({
   onNewArrivalsClick,
   onCategoryClick,
   onPreOwnedClick,
+  onCuratedClick,
 }: NavbarProps) {
   const { bag, user, setIsCartOpen, setIsAuthModalOpen } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
@@ -71,34 +73,36 @@ export function Navbar({
   return (
     <>
       <nav className={`border-b border-gray-200 bg-white sticky top-0 shadow-sm z-50 ${mobileMenuOpen ? 'hidden lg:block' : 'block'}`}>
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-3 md:py-4">
+        <div className="max-w-[1400px] mx-auto md:px-8 py-3 md:py-4">
           <div className="flex items-center justify-between">
-            {/* Mobile Menu Button - Visible below lg breakpoint */}
-            <button
-              onClick={() => {
-                setMobileMenuOpen(true);
-              }}
-              className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65]"
-              aria-label="Open menu"
-              type="button"
-            >
-              <Menu className="w-5 h-5 text-gray-700" />
-            </button>
-
-            {/* Logo */}
-            <button
-              onClick={onLogoClick}
-              className="flex items-center gap-2 text-xl md:text-2xl tracking-tight hover:opacity-70 transition-opacity flex-1 lg:flex-initial text-center lg:text-left"
-            >
-              <ImageWithFallback
-                src={logoImage}
-                alt="Halfsy logo"
-                className="w-8 h-8 object-contain"
-              />
-              <span className="font-semibold">halfsy</span>
-            </button>
-
             
+
+            <div className="flex items-center gap-2 lg:gap-6 xl:gap-8">
+              {/* Mobile Menu Button - Visible below lg breakpoint */}
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(true);
+                }}
+                className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65]"
+                aria-label="Open menu"
+                type="button"
+              >
+                <Menu className="w-8 h-8 text-gray-700" />
+              </button>
+
+              {/* Logo */}
+              <button
+                onClick={onLogoClick}
+                className="flex items-center gap-2 text-xl md:text-2xl tracking-tight hover:opacity-70 transition-opacity"
+              >
+                <ImageWithFallback
+                  src={logoImage}
+                  alt="Halfsy logo"
+                  className="w-5 h-5 object-contain"
+                />
+                <span className="text-lg text-gray-700 hover:text-black transition-colors tracking-wide">halfsy</span>
+              </button>
+            </div>
             {/* Navigation Items - Hidden on mobile */}
             <div className="hidden lg:flex items-center gap-6 xl:gap-8">
               <button
@@ -106,6 +110,12 @@ export function Navbar({
                 className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide"
               >
                 Shop All
+              </button>
+              <button
+                onClick={() => onCuratedClick?.()}
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide"
+              >
+                Curated
               </button>
               <button 
                 onClick={onNewArrivalsClick || (() => {})}
@@ -219,6 +229,12 @@ export function Navbar({
                   className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
                 >
                   Shop All
+                </button>
+                <button
+                  onClick={() => handleNavClick(() => onCuratedClick?.())}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-3 border-b border-gray-100"
+                >
+                  Curated
                 </button>
                 <button
                   onClick={() => handleNavClick(onNewArrivalsClick || (() => {}))}

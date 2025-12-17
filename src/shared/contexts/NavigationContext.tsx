@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
-export type Page = 'home' | 'products' | 'account' | 'about' | 'product';
+export type Page = 'home' | 'products' | 'account' | 'about' | 'product' | 'curated';
 
 interface NavigationContextType {
   currentPage: Page;
@@ -12,6 +12,7 @@ interface NavigationContextType {
   navigateToProducts: (gender?: string) => void;
   navigateToAccount: () => void;
   navigateToAbout: () => void;
+  navigateToCurated: () => void;
   navigateToProduct: (productId: string) => void;
   navigateBack: () => void;
 }
@@ -66,6 +67,12 @@ export function NavigationProvider({
     navigateTo('about');
   };
 
+  const navigateToCurated = () => {
+    setProductId(null);
+    setPreviousPage(null);
+    navigateTo('curated');
+  };
+
   const navigateToProduct = (id: string) => {
     setProductId(id);
     setPreviousPage(currentPage);
@@ -96,6 +103,7 @@ export function NavigationProvider({
         navigateToProducts,
         navigateToAccount,
         navigateToAbout,
+        navigateToCurated,
         navigateToProduct,
         navigateBack,
       }}
