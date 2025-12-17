@@ -6,13 +6,13 @@ import { Footer } from '../shared/components/Footer';
 import { ProductCard } from '../features/products/components/ProductCard';
 import { CategoryFilter, CategoryGroup } from '../features/products/components/CategoryFilter';
 import { SortBy, SortOption } from '../features/products/components/SortBy';
-import { fetchProducts, fetchProductsByGender } from '../features/products/services/productsService';
+import { fetchProducts, fetchProductsByGender, fetchLatestProducts } from '../features/products/services/productsService';
 import { transformProducts, FrontendProduct } from '../features/products/utils/productTransform';
 import { useNavigation } from '../shared/contexts/NavigationContext';
 
 export function Products() {
   console.log('Products');
-  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToProduct, productsGender } = useNavigation();
+  const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToNew, navigateToProduct, productsGender, productsMode } = useNavigation();
   
   const handleCategoryClick = (category: string) => {
     if (category === 'men' || category === 'women') {
@@ -29,7 +29,7 @@ export function Products() {
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
-  const [sortBy, setSortBy] = React.useState<string>('featured');
+  const [sortBy, setSortBy] = React.useState<string>(productsMode === 'new' ? 'newest' : 'featured');
   const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
   
 
@@ -38,6 +38,7 @@ export function Products() {
     // Extract unique categories from products
     const categories = Array.from(new Set(products.map(p => p.category).filter(Boolean))) as string[];
     const sizes = Array.from(new Set(products.flatMap(p => p.sizes || []))) as string[];
+    const brands = Array.from(new Set(products.map(p => p.brand_name).filter(Boolean))) as string[];
     
     return [
       {
@@ -46,6 +47,15 @@ export function Products() {
           label: cat,
           value: cat.toLowerCase().replace(/\s+/g, '-'),
           count: products.filter(p => p.category === cat).length
+        })),
+        multiSelect: true
+      },
+      {
+        title: 'BRAND',
+        options: brands.map((brand: string) => ({
+          label: brand,
+          value: brand.toLowerCase().replace(/\s+/g, '-'),
+          count: products.filter(p => p.brand_name === brand).length
         })),
         multiSelect: true
       },
@@ -71,14 +81,28 @@ export function Products() {
   }, [products]);
 
   // Sort options
-  const sortOptions: SortOption[] = [
-    { label: 'Featured', value: 'featured' },
-    { label: 'Price: Low to High', value: 'price-asc' },
-    { label: 'Price: High to Low', value: 'price-desc' },
-    { label: 'Newest', value: 'newest' },
-    { label: 'Name: A-Z', value: 'name-asc' },
-    { label: 'Name: Z-A', value: 'name-desc' }
-  ];
+  const sortOptions: SortOption[] = React.useMemo(() => {
+    if (productsMode === 'new') {
+      return [
+        { label: 'Newest', value: 'newest' },
+        { label: 'Price: Low to High', value: 'price-asc' },
+        { label: 'Price: High to Low', value: 'price-desc' },
+        { label: 'Discount: High to Low', value: 'discount-desc' },
+        { label: 'Name: A to Z', value: 'name-asc' },
+        { label: 'Name: Z to A', value: 'name-desc' },
+        { label: 'Featured', value: 'featured' }
+      ];
+    }
+    return [
+      { label: 'Featured', value: 'featured' },
+      { label: 'Price: Low to High', value: 'price-asc' },
+      { label: 'Price: High to Low', value: 'price-desc' },
+      { label: 'Discount: High to Low', value: 'discount-desc' },
+      { label: 'Newest', value: 'newest' },
+      { label: 'Name: A to Z', value: 'name-asc' },
+      { label: 'Name: Z to A', value: 'name-desc' }
+    ];
+  }, [productsMode]);
 
   // Filter and sort products
   React.useEffect(() => {
@@ -89,6 +113,14 @@ export function Products() {
       filtered = filtered.filter(p => {
         const categoryValue = p.category?.toLowerCase().replace(/\s+/g, '-');
         return selectedFilters['CATEGORY'].includes(categoryValue);
+      });
+    }
+
+    // Apply brand filter
+    if (selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0) {
+      filtered = filtered.filter(p => {
+        const brandValue = p.brand_name?.toLowerCase().replace(/\s+/g, '-');
+        return brandValue && selectedFilters['BRAND'].includes(brandValue);
       });
     }
 
@@ -128,6 +160,20 @@ export function Products() {
       case 'price-desc':
         filtered.sort((a, b) => (b.discountedPrice || b.price) - (a.discountedPrice || a.price));
         break;
+      case 'discount-desc':
+        filtered.sort((a, b) => {
+          // Calculate discount percentage for each product
+          const getDiscountPercent = (product: FrontendProduct): number => {
+            if (product.originalPrice && product.discountedPrice) {
+              return ((product.originalPrice - product.discountedPrice) / product.originalPrice) * 100;
+            }
+            return 0; // No discount if missing originalPrice or discountedPrice
+          };
+          const discountA = getDiscountPercent(a);
+          const discountB = getDiscountPercent(b);
+          return discountB - discountA; // Highest to lowest
+        });
+        break;
       case 'name-asc':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
         break;
@@ -147,23 +193,28 @@ export function Products() {
   }, [products, selectedFilters, sortBy]);
 
   React.useEffect(() => {
-    // Reset page and products when gender changes
+    // Reset page and products when gender or mode changes
     setPage(1);
     setProducts([]);
     setFilteredProducts([]);
     setHasMore(true);
     setError(null);
     setSelectedFilters({});
-    setSortBy('featured');
-  }, [productsGender]);
+    setSortBy(productsMode === 'new' ? 'newest' : 'featured');
+  }, [productsGender, productsMode]);
 
   React.useEffect(() => {
     async function loadProducts() {
       try {
         setLoading(true);
-        const data = productsGender 
-          ? await fetchProductsByGender(productsGender, page, 20)
-          : await fetchProducts(page, 20);
+        let data;
+        if (productsMode === 'new') {
+          data = await fetchLatestProducts(page, 20);
+        } else if (productsGender) {
+          data = await fetchProductsByGender(productsGender, page, 20);
+        } else {
+          data = await fetchProducts(page, 20);
+        }
         const backendProducts = Array.isArray(data) ? data : (data.products || []);
         const transformed = transformProducts(backendProducts);
         
@@ -183,7 +234,7 @@ export function Products() {
       }
     }
     loadProducts();
-  }, [page, productsGender]);
+  }, [page, productsGender, productsMode]);
 
   const handleFilterChange = (filters: Record<string, string[]>) => {
     setSelectedFilters(filters);
@@ -199,7 +250,11 @@ export function Products() {
   };
 
   const displayProducts = filteredProducts.length > 0 ? filteredProducts : products;
-  const pageTitle = productsGender 
+  const pageTitle = productsMode === 'new' 
+    ? 'New Arrivals'
+    : productsMode === 'curated'
+    ? 'Curated Collection'
+    : productsGender 
     ? `All ${productsGender.charAt(0).toUpperCase() + productsGender.slice(1)}`
     : 'All Products';
 
@@ -218,6 +273,7 @@ export function Products() {
           navigateToProducts();
         }}
         onCuratedClick={navigateToCurated}
+        onNewArrivalsClick={navigateToNew}
       />
       <AISearchBar />
       
@@ -230,50 +286,65 @@ export function Products() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 flex-1 w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-1 w-full">
         {/* Page Title */}
         <div className="mb-6">
           <h2 className="mb-2 text-2xl md:text-3xl">{pageTitle}</h2>
           <p className="text-sm text-gray-600">
-            {productsGender 
+            {productsMode === 'new'
+              ? "Explore the newest arrivals, sorted by latest first."
+              : productsMode === 'curated'
+              ? "Discover our curated collection of premium fashion and accessories."
+              : productsGender 
               ? `Discover luxury ${productsGender} fashion from all the world's most celebrated designers—shop online today.`
               : 'Discover our curated collection of premium fashion and accessories'}
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar - Desktop */}
-          <aside className="hidden lg:block w-64 flex-shrink-0">
-            <CategoryFilter 
-              categories={categoryData}
-              onFilterChange={handleFilterChange}
-            />
-          </aside>
-
-          {/* Category View - Mobile */}
-          <div className="lg:hidden">
-            <button
-              onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-              className="w-full px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide mb-4 min-w-[140px]"
-            >
-
-
-              {mobileFiltersOpen ? 'Hide Filters' : 'Show Filters'}
-            </button>
-            {mobileFiltersOpen && (
-              <div className="mb-6 border border-gray-200 bg-white p-4">
-                <CategoryFilter 
-                  categories={categoryData}
-                  onFilterChange={handleFilterChange}
+        <div className="flex flex-col gap-8">
+          {/* Filters Section - Above products for all viewports */}
+          <div className="flex flex-col items-center">
+            {/* 2 Column Layout - Filter Button and Sort Button */}
+            <div className="w-full max-w-2xl">
+              <div className="grid grid-cols-2 gap-4">
+                {/* Filter Button - First Column */}
+                <div className="relative inline-block w-full">
+                  <button
+                    onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                    className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full"
+                  >
+                    Filter
+                  </button>
+                  {mobileFiltersOpen && (
+                    <>
+                      <div 
+                        className="fixed inset-0 z-10" 
+                        onClick={() => setMobileFiltersOpen(false)}
+                      />
+                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4">
+                        <CategoryFilter 
+                          categories={categoryData}
+                          onFilterChange={handleFilterChange}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+                {/* Sort Button - Second Column */}
+                <SortBy 
+                  options={sortOptions}
+                  defaultValue={productsMode === 'new' ? 'newest' : 'featured'}
+                  onSortChange={handleSortChange}
+                  label="Sort"
                 />
               </div>
-            )}
+            </div>
           </div>
 
           {/* Product Grid */}
-          <div className="flex-1">
-            {/* Sort and Results Count */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+          <div className="w-full">
+            {/* Results Count */}
+            <div className="mb-6">
               <p className="text-sm text-gray-600">
                 {displayProducts.length} {displayProducts.length === 1 ? 'item' : 'items'}
                 {selectedFilters && Object.keys(selectedFilters).length > 0 && 
@@ -281,20 +352,12 @@ export function Products() {
                   ` (filtered from ${products.length})`
                 }
               </p>
-              <div className="sm:ml-auto flex justify-end w-full sm:w-auto">
-                <SortBy 
-                  options={sortOptions}
-                  defaultValue="featured"
-                  onSortChange={handleSortChange}
-                />
-              </div>
-
             </div>
 
             {loading && page === 1 ? (
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 items-stretch">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="animate-pulse">
+                  <div key={i} className="animate-pulse h-full">
                     <div className="bg-gray-200 aspect-[3/4] mb-3"></div>
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -308,24 +371,24 @@ export function Products() {
             ) : (
               <>
                 {/* Grid */}
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 items-stretch">
 
                   {displayProducts.map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={{
-                        ...product,
-                        images: product.images || [product.image],
-                        originalPrice: product.originalPrice,
-                      }}
-                      onClick={() => handleProductClick(product)}
-                    />
+                    <div key={product.id} className="h-full">
+                      <ProductCard
+                        product={{
+                          ...product,
+                          images: product.images || [product.image],
+                          originalPrice: product.originalPrice,
+                        }}
+                        onClick={() => handleProductClick(product)}
+                      />
+                    </div>
                   ))}
                 </div>
-                
-                {/* Load More Button */}
+                <div className="flex justify-center pt-6 sm:pt-8 md:pt-12 lg:pt-18 xl:pt-18">
                 {hasMore && (
-                  <div className="text-center mt-12">
+                  <div className="text-center mt-[4vh] sm:mt-[5vh] md:mt-[6vh] lg:mt-[7vh] xl:mt-[8vh] mb-8 sm:mb-12 md:mb-16 lg:mb-20">
                     <button
                       onClick={() => setPage(prev => prev + 1)}
                       disabled={loading}
@@ -335,13 +398,18 @@ export function Products() {
                     </button>
                   </div>
                 )}
+                </div>
+                {/* Load More Button */}
+                
               </>
             )}
           </div>
         </div>
       </main>
+      <div className="mt-6 sm:mt-10 md:mt-14 lg:mt-18 xl:mt-22 pt-6 sm:pt-10 md:pt-14 lg:pt-18 xl:pt-22">
+        <Footer />
+      </div>
 
-      <Footer />
     </div>
   );
 }

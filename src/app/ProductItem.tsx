@@ -175,7 +175,6 @@ export function ProductItem() {
           </div>
         </div>
       </main>
-
       <Footer />
     </div>
   );

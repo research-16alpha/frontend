@@ -17,8 +17,6 @@ import { AppProvider, useApp } from '../features/bag/contexts/AppContext';
 import { NavigationProvider, useNavigation } from '../shared/contexts/NavigationContext';
 import { Toaster } from 'sonner';
 import { About } from './About';
-import { Curated } from './Curated';
-import { New } from './New';
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new'>('home');
@@ -62,8 +60,8 @@ function AppWithNavigation() {
     return <ProductItem />;
   }
 
-  // If on products page, render that instead
-  if (currentPage === 'products') {
+  // If on products page (including curated and new), render that instead
+  if (currentPage === 'products' || currentPage === 'curated' || currentPage === 'new') {
     return <Products />;
   }
 
@@ -74,15 +72,6 @@ function AppWithNavigation() {
 
   if (currentPage === 'about') {
     return <About />;
-  }
-
-  // If on curated page, render that instead
-  if (currentPage === 'curated') {
-    return <Curated />;
-  }
-
-  if (currentPage === 'new') {
-    return <New />;
   }
 
   return (

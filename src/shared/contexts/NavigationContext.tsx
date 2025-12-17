@@ -1,10 +1,12 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
 export type Page = 'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new';
+export type ProductsMode = 'products' | 'curated' | 'new';
 
 interface NavigationContextType {
   currentPage: Page;
   productsGender: string | null;
+  productsMode: ProductsMode | null;
   productId: string | null;
   previousPage: Page | null;
   navigateTo: (page: Page) => void;
@@ -30,6 +32,7 @@ export function NavigationProvider({
   setCurrentPage: (page: Page) => void;
 }) {
   const [productsGender, setProductsGender] = useState<string | null>(null);
+  const [productsMode, setProductsMode] = useState<ProductsMode | null>(null);
   const [productId, setProductId] = useState<string | null>(null);
   const [previousPage, setPreviousPage] = useState<Page | null>(null);
 
@@ -43,6 +46,7 @@ export function NavigationProvider({
 
   const navigateToHome = () => {
     setProductsGender(null);
+    setProductsMode(null);
     setProductId(null);
     setPreviousPage(null);
     navigateTo('home');
@@ -50,6 +54,7 @@ export function NavigationProvider({
   
   const navigateToProducts = (gender?: string) => {
     setProductsGender(gender || null);
+    setProductsMode('products');
     setProductId(null);
     setPreviousPage(null);
     // Always navigate to products page, even if already there, to trigger refresh
@@ -69,15 +74,19 @@ export function NavigationProvider({
   };
 
   const navigateToCurated = () => {
+    setProductsGender(null);
+    setProductsMode('curated');
     setProductId(null);
     setPreviousPage(null);
-    navigateTo('curated');
+    setCurrentPage('products');
   };
 
   const navigateToNew = () => {
+    setProductsGender(null);
+    setProductsMode('new');
     setProductId(null);
     setPreviousPage(null);
-    navigateTo('new');
+    setCurrentPage('products');
   };
 
   const navigateToProduct = (id: string) => {
@@ -103,6 +112,7 @@ export function NavigationProvider({
       value={{
         currentPage,
         productsGender,
+        productsMode,
         productId,
         previousPage,
         navigateTo,

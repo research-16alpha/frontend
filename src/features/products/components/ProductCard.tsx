@@ -74,21 +74,22 @@ export function ProductCard({
   };
 
   return (
-    <div className="relative">
+    <div className="relative h-full flex flex-col">
       <div
-        className="bg-white overflow-hidden transition-shadow hover:shadow-[0_30px_80px_rgba(0,0,0,0.25)] rounded-lg"
+        className="bg-[#fef5f0] overflow-hidden transition-shadow hover:shadow-[0_30px_80px_rgba(0,0,0,0.25)] rounded-lg h-full flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          className={onClick ? "cursor-pointer" : ""}
+          className={onClick ? "cursor-pointer h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] flex flex-col" : "h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] flex flex-col"}
           onClick={handleCardClick}
         >
-          <div className="relative aspect-[3/4] overflow-hidden bg-gray-50">
+          {/* Fixed height image container based on viewport */}
+          <div className="relative w-full h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px] xl:h-[360px] overflow-hidden bg-[#fef5f0] flex-shrink-0 p-3 sm:p-4 md:p-5">
             <ImageWithFallback
               src={product.images[0]}
               alt={product.name}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded"
             />
 
             <AnimatePresence>
@@ -151,34 +152,41 @@ export function ProductCard({
             </AnimatePresence>
           </div>
 
-          <div className="p-4 space-y-1">
-            {product.brand_name && (
-              <div className="text-sm font-semibold  uppercase tracking-wider">
-                {product.brand_name}
-              </div>
-            )}
-            <div className="text-xs text-gray-700 line-clamp-2">
-              {capitalizeWords(product.description)}
-            </div>
-            <div className="text-[10px] uppercase text-gray-400">
-              {product.category}
-            </div>
-
-            <div className="mt-2">
-              {product.discountedPrice ? (
-                <div className="flex items-baseline gap-2">
-                  <span className="text-red-600 font-semibold text-base">
-                    ${product.discountedPrice}
-                  </span>
-                  <span className="text-base line-through text-gray-400 font-normal">
-                    ${product.price}
-                  </span>
+          {/* Content section with fixed height based on viewport - aligned to bottom */}
+          <div className="h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px] xl:h-[200px] bg-[#fef5f0] flex-shrink-0 flex flex-col justify-end">
+            <div className="p-4 flex flex-col items-start">
+              {product.brand_name && (
+                <div className="text-sm font-semibold uppercase tracking-wider mb-1 line-clamp-1">
+                  {product.brand_name}
                 </div>
-              ) : (
-                <span className="font-medium">${product.price}</span>
               )}
+
+              <div className="text-xs text-gray-700 line-clamp-2 mb-1 min-h-[2.5rem]">
+                {capitalizeWords(product.description)}
+              </div>
+
+              <div className="text-[10px] uppercase text-gray-400 mb-2 line-clamp-1">
+                {product.category}
+              </div>
+
+              {/* PRICE */}
+              <div className="pt-2">
+                {product.discountedPrice ? (
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-red-600 font-semibold text-base">
+                      ${product.discountedPrice}
+                    </span>
+                    <span className="text-base line-through text-gray-400 font-normal">
+                      ${product.price}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="font-medium">${product.price}</span>
+                )}
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
