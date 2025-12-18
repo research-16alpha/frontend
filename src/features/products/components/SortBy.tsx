@@ -11,6 +11,7 @@ export interface SortByProps {
   onSortChange?: (value: string) => void;
   className?: string;
   label?: string;
+  variant?: 'default' | 'black';
 }
 
 export function SortBy({ 
@@ -18,7 +19,8 @@ export function SortBy({
   defaultValue,
   onSortChange,
   className = '',
-  label = 'Sort by'
+  label = 'Sort by',
+  variant = 'default'
 }: SortByProps) {
   const [selectedValue, setSelectedValue] = useState(defaultValue || options[0]?.value || '');
   const [isOpen, setIsOpen] = useState(false);
@@ -31,11 +33,15 @@ export function SortBy({
 
   const selectedOption = options.find(opt => opt.value === selectedValue);
 
+  const buttonClasses = variant === 'black' 
+    ? "px-3 py-3 border border-black bg-black text-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full hover:bg-gray-800 transition-colors cursor-pointer"
+    : "px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full";
+
   return (
     <div className={`relative block ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full"
+        className={buttonClasses}
       >
         {label}
       </button>

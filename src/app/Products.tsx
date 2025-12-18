@@ -34,6 +34,8 @@ export function Products() {
   const [desktopFilterOpen, setDesktopFilterOpen] = React.useState<string | null>(null);
   const [sortBy, setSortBy] = React.useState<string>(productsMode === 'new' ? 'newest' : 'featured');
   const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
+  const [showFloatingButtons, setShowFloatingButtons] = React.useState(false);
+  const topFiltersRef = React.useRef<HTMLDivElement>(null);
   
 
   // Category filter data
@@ -239,6 +241,25 @@ export function Products() {
     loadProducts();
   }, [page, productsGender, productsMode]);
 
+  // Scroll detection for floating buttons (mobile only)
+  React.useEffect(() => {
+    if (!isMobile || !topFiltersRef.current) return;
+
+    const handleScroll = () => {
+      const topFiltersElement = topFiltersRef.current;
+      if (!topFiltersElement) return;
+
+      const rect = topFiltersElement.getBoundingClientRect();
+      // Show floating buttons when top filters are scrolled out of view
+      setShowFloatingButtons(rect.bottom < 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial state
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile]);
+
   const handleFilterChange = (filters: Record<string, string[]>) => {
     setSelectedFilters(filters);
   };
@@ -310,12 +331,12 @@ export function Products() {
           {/* Filters Section - Above products for all viewports */}
           {/* Mobile: 2 Column Layout - Filter Button and Sort Button - Hidden at 768px+ when desktop filters appear */}
           {isMobile && (
-            <div className="w-full max-w-2xl mx-auto">
+            <div ref={topFiltersRef} className="w-full max-w-2xl mx-auto">
             <div className="grid grid-cols-2 gap-4">
               <div className="relative inline-block w-full">
                 <button
                   onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-                  className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
+                  className="px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
                 >
                   Filters
                 </button>
@@ -339,6 +360,7 @@ export function Products() {
                 defaultValue={productsMode === 'new' ? 'newest' : 'featured'}
                 onSortChange={handleSortChange}
                 label="Sort"
+                variant="black"
               />
             </div>
           </div>
@@ -350,9 +372,9 @@ export function Products() {
               <div className="relative flex-1">
                 <button
                   onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'CATEGORY' ? null : 'CATEGORY')}
-                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                  className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                     selectedFilters['CATEGORY'] && selectedFilters['CATEGORY'].length > 0
-                      ? 'bg-gray-100 border-gray-400'
+                      ? 'bg-gray-100'
                       : ''
                   }`}
                 >
@@ -382,9 +404,9 @@ export function Products() {
               <div className="relative flex-1">
                 <button
                   onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'BRAND' ? null : 'BRAND')}
-                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                  className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                     selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0
-                      ? 'bg-gray-100 border-gray-400'
+                      ? 'bg-gray-100'
                       : ''
                   }`}
                 >
@@ -414,9 +436,9 @@ export function Products() {
               <div className="relative flex-1">
                 <button
                   onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'SIZE' ? null : 'SIZE')}
-                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                  className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                     selectedFilters['SIZE'] && selectedFilters['SIZE'].length > 0
-                      ? 'bg-gray-100 border-gray-400'
+                      ? 'bg-gray-100'
                       : ''
                   }`}
                 >
@@ -446,9 +468,9 @@ export function Products() {
               <div className="relative flex-1">
                 <button
                   onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'PRICE' ? null : 'PRICE')}
-                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                  className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                     selectedFilters['PRICE'] && selectedFilters['PRICE'].length > 0
-                      ? 'bg-gray-100 border-gray-400'
+                      ? 'bg-gray-100'
                       : ''
                   }`}
                 >
@@ -482,6 +504,7 @@ export function Products() {
                   onSortChange={handleSortChange}
                   label="Sort"
                   className="w-full"
+                  variant="black"
                 />
               </div>
             </div>
@@ -551,6 +574,44 @@ export function Products() {
           </div>
         </div>
       </main>
+      
+      {/* Floating Filter and Sort Buttons - Mobile Only */}
+      {isMobile && showFloatingButtons && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-4 md:hidden">
+          <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+            <div className="relative inline-block w-full">
+              <button
+                onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                className="px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
+              >
+                Filters
+              </button>
+              {mobileFiltersOpen && (
+                <>
+                  <div 
+                    className="fixed inset-0 z-10 bg-black/50" 
+                    onClick={() => setMobileFiltersOpen(false)}
+                  />
+                  <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 shadow-lg z-50 p-4 max-h-[60vh] overflow-y-auto">
+                    <CategoryFilter 
+                      categories={categoryData}
+                      onFilterChange={handleFilterChange}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+            <SortBy
+              options={sortOptions}
+              defaultValue={productsMode === 'new' ? 'newest' : 'featured'}
+              onSortChange={handleSortChange}
+              label="Sort"
+              variant="black"
+            />
+          </div>
+        </div>
+      )}
+
       <div className="mt-6 sm:mt-10 md:mt-14 lg:mt-18 xl:mt-22 pt-6 sm:pt-10 md:pt-14 lg:pt-18 xl:pt-22">
         <Footer />
       </div>
