@@ -72,6 +72,7 @@
     --color-gray-800: oklch(.278 .033 256.848);
     --color-gray-900: oklch(.21 .034 264.665);
     --color-black: #000;
+    --color-black-soft-1: #1A1A1A;
     --color-white: #fff;
     --spacing: .25rem;
     --container-xs: 20rem;
@@ -978,13 +979,23 @@
   .bg-\[\#d8cfe6\] {
     background-color: #d8cfe6;
   }
+  .bg-\[\#173f56\] {
+    background-color: #173f56;
+  }
 
-  .bg-\[\#f4d58d\] {
-    background-color: #f4d58d;
+
+  .bg-\[\#673E1E\] {
+    background-color: #673E1E;
+  }
+  .bg-\[\#F4D58D\] {
+    background-color: #F4D58D;
   }
 
   .bg-\[\#fef5f0\] {
     background-color: #fef5f0;
+  }
+  .bg-\[\#FBEFD9\] {
+    background-color: #FBEFD9;
   }
 
   .bg-black {
@@ -1315,6 +1326,10 @@
 
   .text-black {
     color: var(--color-black);
+  }
+
+  .text-black-soft-1 {
+    color: var(--color-black-soft-1);
   }
 
   .text-blue-800 {

@@ -39,6 +39,22 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Core Brand */
+  --lux-espresso: #5b3419;
+  --lux-champagne: #d0a06a;
+  --lux-atlantic: #2f6f8e;
+  --lux-navy: #173f56;
+
+  /* Neutrals (Luxury UI Essentials) */
+  --lux-ivory: #f6f3ee;
+  --lux-stone: #e3ddd4;
+  --lux-ash: #9c9a95;
+  --lux-charcoal: #1b1b1b;
+
+  /* Utility */
+  --lux-border: rgba(0, 0, 0, 0.08);
+  --lux-shadow: rgba(0, 0, 0, 0.18);
 }
 
 .dark {
@@ -125,9 +141,14 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    color: var(--lux-charcoal);
+    background-color: var(--lux-ivory);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  .muted {
+    color: var(--lux-ash);
   }
 }
 
@@ -232,6 +253,218 @@ html {
       0 14px 36px rgba(0, 0, 0, 0.55);
   }
 
+  .btn-primary {
+    background-color: var(--lux-navy);
+    color: var(--lux-ivory);
+    box-shadow: 0 12px 30px var(--lux-shadow);
+  }
+
+  .btn-accent {
+    background-color: var(--lux-champagne);
+    color: var(--lux-charcoal);
+  }
+
+  .product-card {
+    background: var(--lux-ivory);
+    border: 1px solid var(--lux-border);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+  }
+
+  .footer-text {
+    color: rgb(216, 216, 216);
+  }
+
+  .footer-text-hover:hover {
+    opacity: 0.8;
+  }
+
+  /* Font Weight Classes */
+  .font-thin {
+    font-weight: 100;
+  }
+
+  .font-extralight {
+    font-weight: 200;
+  }
+
+  .font-light {
+    font-weight: 300;
+  }
+
+  .font-normal {
+    font-weight: 400;
+  }
+
+  .font-medium {
+    font-weight: 500;
+  }
+
+  .font-semibold {
+    font-weight: 600;
+  }
+
+  .font-bold {
+    font-weight: 700;
+  }
+
+  .font-extrabold {
+    font-weight: 800;
+  }
+
+  .font-black {
+    font-weight: 900;
+  }
+
+  /* Letter Spacing Classes */
+  .tracking-tighter {
+    letter-spacing: -0.05em;
+  }
+
+  .tracking-tight {
+    letter-spacing: -0.025em;
+  }
+
+  .tracking-normal {
+    letter-spacing: 0em;
+  }
+
+  .tracking-wide {
+    letter-spacing: 0.025em;
+  }
+
+  .tracking-wider {
+    letter-spacing: 0.05em;
+  }
+
+  .tracking-widest {
+    letter-spacing: 0.1em;
+  }
+
+  /* Text Size Classes */
+  .text-xxs {
+    font-size: var(--text-xxs);
+    line-height: var(--text-xxs--line-height);
+  }
+
+  .text-xs {
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+  }
+
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+  }
+
+  .text-base {
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+
+  .text-lg {
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+  }
+
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+  }
+
+  .text-2xl {
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+  }
+
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+
+  .text-4xl {
+    font-size: var(--text-4xl);
+    line-height: var(--text-4xl--line-height);
+  }
+
+  .text-5xl {
+    font-size: var(--text-5xl);
+    line-height: var(--text-5xl--line-height);
+  }
+
+  .text-6xl {
+    font-size: var(--text-6xl);
+    line-height: var(--text-6xl--line-height);
+  }
+
+  /* Text Color Classes - Grays and Soft Whites */
+  /* Soft Whites (equally spaced from white to light gray) */
+  .text-white-soft-1 {
+    color: #ffffff; /* Pure white */
+  }
+
+  .text-white-soft-2 {
+    color: #fafafa; /* Very soft white */
+  }
+
+  .text-white-soft-3 {
+    color: #f5f5f5; /* Soft white */
+  }
+
+  .text-white-soft-4 {
+    color: #f0f0f0; /* Off-white */
+  }
+
+  .text-white-soft-5 {
+    color: #ebebeb; /* Light cream */
+  }
+
+  /* Grays (equally spaced from light to dark) */
+  .text-gray-custom-1 {
+    color: #e5e5e5; /* Very light gray */
+  }
+
+  .text-gray-custom-2 {
+    color: #d4d4d4; /* Light gray */
+  }
+
+  .text-gray-custom-3 {
+    color: #c4c4c4; /* Medium-light gray */
+  }
+
+  .text-gray-custom-4 {
+    color: #b3b3b3; /* Medium gray */
+  }
+
+  .text-gray-custom-5 {
+    color: #a3a3a3; /* Medium-dark gray */
+  }
+
+  .text-gray-custom-6 {
+    color: #929292; /* Dark gray */
+  }
+
+  .text-gray-custom-7 {
+    color: #828282; /* Darker gray */
+  }
+
+  .text-gray-custom-8 {
+    color: #717171; /* Very dark gray */
+  }
+
+  .text-gray-custom-9 {
+    color: #616161; /* Almost charcoal */
+  }
+
+  .text-gray-custom-10 {
+    color: #404040; /* Charcoal gray */
+  }
+
+  /* Charcoal Text Colors */
+  .text-gray-charcoal-1 {
+    color: var(--lux-charcoal); /* Rich Charcoal */
+  }
+}
+
 
 
 
@@ -257,7 +490,6 @@ html {
     100% {
       transform: translateX(0%);
     }
-  }
 }
 .animate-marquee2 {
   animation: marquee2 45s linear infinite;

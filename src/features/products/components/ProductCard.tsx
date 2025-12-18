@@ -28,7 +28,8 @@ interface ProductCardProps {
 }
 
 // Helper function to capitalize first letter of each word
-const capitalizeWords = (str: string): string => {
+const capitalizeWords = (str: string | undefined | null): string => {
+  if (!str) return '';
   return str.replace(/\b\w+/g, word =>
     word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
   );
@@ -76,109 +77,72 @@ export function ProductCard({
   return (
     <div className="relative h-full flex flex-col">
       <div
-        className="bg-[#fef5f0] overflow-hidden transition-shadow hover:shadow-[0_30px_80px_rgba(0,0,0,0.25)] rounded-lg h-full flex flex-col"
+        className="bg-white border border-[#1b1b1b] overflow-hidden transition-all duration-200 shadow-md hover:shadow-lg h-full flex flex-col relative"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {/* Grayish overlay on hover */}
+        {isHovered && (
+          <div className="absolute inset-0 bg-black/10 z-10 pointer-events-none transition-opacity duration-200" />
+        )}
+        
+        {/* Favorite Button - Top Right Corner of Card */}
+        <button
+          onClick={handleToggleFavorite}
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 md:top-5 md:right-5 z-30 bg-white border border-gray-200 w-9 h-9 flex items-center justify-center transition-all duration-200 hover:[&_svg]:fill-black hover:[&_svg]:text-black"
+        >
+          <Heart
+            className={`w-5 h-5 transition-colors duration-200 ${
+              isFavorite
+                ? 'fill-black text-black'
+                : 'text-gray-900'
+            }`}
+          />
+        </button>
+
         <div
           className={onClick ? "cursor-pointer h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] flex flex-col" : "h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] flex flex-col"}
           onClick={handleCardClick}
         >
           {/* Fixed height image container based on viewport */}
-          <div className="relative w-full h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px] xl:h-[360px] overflow-hidden bg-[#fef5f0] flex-shrink-0 p-3 sm:p-4 md:p-5">
+          <div className="relative w-full h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px] xl:h-[360px] overflow-hidden bg-white flex-shrink-0 p-3 sm:p-4 md:p-5">
             <ImageWithFallback
               src={product.images[0]}
               alt={product.name}
-              className="w-full h-full object-cover rounded"
+              className="w-full h-full object-cover"
             />
-
-            <AnimatePresence>
-              {isHovered && (
-                /* ===== HOVERED PRODUCT CARD CONTROLS ===== */
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="absolute bottom-4 left-4 right-4 flex gap-2"
-                >
-                  {/* Quick View Button */}
-                  <button
-                    className="
-                      flex-1
-                      py-2
-                      rounded-md
-
-                      bg-black
-                      text-white
-
-                      shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_12px_30px_rgba(0,0,0,0.45)]
-
-                      transition-all duration-200 ease-out
-                      hover:bg-neutral-900
-                      hover:shadow-[0_0_0_1px_rgba(255,255,255,0.5),0_18px_40px_rgba(0,0,0,0.55)]
-                    "
-                  >
-                    Quick View
-                  </button>
-
-                  {/* Favorite Button */}
-                  <button
-                    onClick={handleToggleFavorite}
-                    className="
-                      p-2
-                      rounded-md
-
-                      bg-black
-
-                      shadow-[0_0_0_1px_rgba(255,255,255,0.35),0_12px_30px_rgba(0,0,0,0.45)]
-
-                      transition-all duration-200 ease-out
-                      hover:bg-neutral-900
-                      hover:shadow-[0_0_0_1px_rgba(255,255,255,0.5),0_18px_40px_rgba(0,0,0,0.55)]
-                    "
-                  >
-                    <Heart
-                      className={`w-5 h-5 transition-colors duration-200 ${
-                        isFavorite
-                          ? 'fill-red-500 text-red-500'
-                          : 'text-white'
-                      }`}
-                    />
-                  </button>
-
-
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* Content section with fixed height based on viewport - aligned to bottom */}
-          <div className="h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px] xl:h-[200px] bg-[#fef5f0] flex-shrink-0 flex flex-col justify-end">
-            <div className="p-4 flex flex-col items-start">
-              {product.brand_name && (
-                <div className="text-sm font-semibold uppercase tracking-wider mb-1 line-clamp-1">
-                  {product.brand_name}
+          <div className="h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px] xl:h-[200px] bg-white flex-shrink-0 flex flex-col">
+            <div className="p-4 flex flex-col items-start h-full justify-between">
+              <div className="flex flex-col items-start">
+                {product.brand_name && (
+                  <div className="text-base font-semibold uppercase tracking-wider mb-1 line-clamp-1">
+                    {product.brand_name}
+                  </div>
+                )}
+
+                <div className="text-sm text-gray-700 line-clamp-2 mb-1 min-h-[2.5rem]">
+                  {capitalizeWords(product.description)}
                 </div>
-              )}
 
-              <div className="text-xs text-gray-700 line-clamp-2 mb-1 min-h-[2.5rem]">
-                {capitalizeWords(product.description)}
-              </div>
-
-              <div className="text-[10px] uppercase text-gray-400 mb-2 line-clamp-1">
-                {product.category}
+                {/* <div className="text-[10px] uppercase text-gray-400 mb-2 line-clamp-1">
+                  {product.category}
+                </div> */}
               </div>
 
               {/* PRICE */}
               <div className="pt-2">
                 {product.discountedPrice ? (
                   <div className="flex items-baseline gap-2">
+                    <span className="text-base line-through text-gray-600 font-normal">
+                      ${product.price}
+                    </span>
                     <span className="text-red-600 font-semibold text-base">
                       ${product.discountedPrice}
                     </span>
-                    <span className="text-base line-through text-gray-400 font-normal">
-                      ${product.price}
-                    </span>
+                    
                   </div>
                 ) : (
                   <span className="font-medium">${product.price}</span>
@@ -197,6 +161,23 @@ export function ProductCard({
 export { ExpandedContent, capitalizeWords };
 
 /* ================= EXPANDED CONTENT ================= */
+
+// Viewport detection hook
+function useIsDesktop(breakpoint = 1024) {
+  const [isDesktop, setIsDesktop] = React.useState(false);
+
+  React.useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= breakpoint);
+
+    check();
+
+    window.addEventListener('resize', check);
+
+    return () => window.removeEventListener('resize', check);
+  }, [breakpoint]);
+
+  return isDesktop;
+}
 
 interface ExpandedContentProps {
   product: Product;
@@ -223,22 +204,26 @@ function ExpandedContent({
   isFavorite,
   isAddingToBag,
 }: ExpandedContentProps) {
+  const [isSizeDropdownOpen, setIsSizeDropdownOpen] = useState(false);
+  const isDesktop = useIsDesktop();
+
   return (
-    <div className="relative flex flex-col min-h-0">
+    <div
+      className={
+        isDesktop
+          ? "relative mx-auto my-10 max-w-[900px] max-h-[85vh] bg-white rounded-2xl shadow-[0_40px_120px_rgba(0,0,0,0.35)] overflow-hidden flex flex-col"
+          : "relative flex flex-col min-h-0"
+      }
+    >
       <div className="sticky top-0 z-[5] shrink-0 bg-white/95 backdrop-blur-xl shadow-sm px-8 py-5 relative">
-        <div className="flex items-start justify-between gap-4">
+        {/* <div className="flex items-start justify-between gap-4">
           <div className="flex-1 pr-12">
-            {product.brand_name && (
-              <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1.5">
-                {product.brand_name}
-              </div>
-            )}
             <h2 className="text-2xl font-light leading-snug text-gray-900 tracking-tight">
               {capitalizeWords(product.name)}
             </h2>
           </div>
-        </div>
-        <button
+        </div> */}
+        {/* <button
           onClick={(e) => {
             e.stopPropagation();
             onClose();
@@ -247,13 +232,13 @@ function ExpandedContent({
           aria-label="Close"
         >
           ✕
-        </button>
+        </button> */}
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-10 py-6 pb-8">
-        <div className="mx-auto max-w-5xl">
-          {/* MASTER PRODUCT FRAME */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 md:px-10 py-6 pb-8">
+        <div className="mx-auto max-w-5xl lg:max-w-4xl xl:max-w-3xl">
+          {/* 1 column for mobile/tablet, 2 columns for desktop */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Image */}
             <div className="relative aspect-[3/4] bg-neutral-100 rounded-xl overflow-hidden shadow-[0_30px_80px_rgba(0,0,0,0.15)]">
               <ImageWithFallback
@@ -263,126 +248,131 @@ function ExpandedContent({
               />
             </div>
 
-            {/* Details */}
-            <div className="flex flex-col justify-between h-full space-y-6">
-              {/* Price */}
-              <div className="flex items-baseline gap-4 pt-2">
-                {product.discountedPrice ? (
-                  <>
-                    <span className="text-3xl font-light text-gray-900 tracking-tight">
-                      ${product.discountedPrice}
-                    </span>
-                    <span className="text-lg text-gray-400 line-through font-light">
-                      ${product.price}
-                    </span>
-                  </>
-                ) : (
-                  <span className="text-3xl font-light text-gray-900 tracking-tight">
-                    ${product.price}
-                  </span>
-                )}
-              </div>
-
-              {/* Meta */}
-              <div className="space-y-4 text-gray-600 pt-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Category</span>
-                  <span className="text-sm font-light">{product.category}</span>
-                </div>
+            {/* Content Container */}
+            <div className="flex flex-col gap-4">
+              {/* Category and Gender - one line with bullet separator */}
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span>{product.category}</span>
                 {product.product_gender && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] uppercase tracking-wider text-gray-400 font-medium">Gender</span>
-                    <span className="text-sm font-light">{product.product_gender}</span>
-                  </div>
+                  <>
+                    <span className="text-gray-400">•</span>
+                    <span className="uppercase">{product.product_gender}</span>
+                  </>
                 )}
               </div>
 
-              {/* Description */}
-              <p className="text-gray-700 leading-relaxed text-[15px] font-light pt-4 pr-2">
-                {capitalizeWords(product.description)}
-              </p>
-
-              {/* Size */}
-              <div className="pt-5">
-                <div className="mb-3 text-[10px] uppercase tracking-[0.15em] text-gray-500 font-semibold">
-                  Size
+              {/* Description, Brand Name, and Price */}
+              <div className="flex flex-col gap-1">
+                {/* Description and Brand Name */}
+                <div className="flex flex-col gap-1">
+                  <p className="text-lg text-gray-700 leading-relaxed text-base font-light">
+                    {capitalizeWords(product.description)}
+                  </p>
+                  {product.brand_name && (
+                    <div className="text-lg font-semibold uppercase tracking-wider text-gray-900">
+                      {product.brand_name}
+                    </div>
+                  )}
                 </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {product.sizes.map((s: string) => (
-                    <button
-                      key={s}
-                      onClick={() => setSelectedSize(s)}
-                      className={`px-4 py-2.5 text-xs rounded-lg font-medium transition-all duration-200 ${
-                        selectedSize === s
-                          ? 'bg-black text-white shadow-[0_30px_80px_rgba(0,0,0,0.25)]'
-                          : 'bg-white/95 backdrop-blur-xl text-gray-700 hover:bg-white shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]'
-                      }`}
-                    >
-                      {s}
-                    </button>
-                  ))}
+
+                {/* PRICE */}
+                <div>
+                  {product.discountedPrice ? (
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-lg line-through text-gray-600 font-normal">
+                        ${product.price}
+                      </span>
+                      <span className="text-lg text-red-600 font-semibold text-base">
+                        ${product.discountedPrice}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="font-medium text-base">${product.price}</span>
+                  )}
                 </div>
               </div>
 
-              {/* Color */}
-              <div className="pt-5">
-                <div className="mb-3 text-[10px] uppercase tracking-[0.15em] text-gray-500 font-semibold">
-                  Color
-                </div>
-                <div className="flex flex-wrap gap-2.5">
-                  {product.colors.map((c: string) => (
-                    <button
-                      key={c}
-                      onClick={() => setSelectedColor(c)}
-                      className={`px-4 py-2.5 text-xs rounded-lg font-medium transition-all duration-200 ${
-                        selectedColor === c
-                          ? 'bg-black text-white shadow-[0_30px_80px_rgba(0,0,0,0.25)]'
-                          : 'bg-white/95 backdrop-blur-xl text-gray-700 hover:bg-white shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]'
-                      }`}
-                    >
-                      {c}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* External link */}
+              {/* Link to original product */}
               {product.product_link && (
                 <a
                   href={product.product_link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 pt-4"
+                  className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 pt-2"
                 >
                   <span>View original product</span>
                   <span className="text-[10px]">→</span>
                 </a>
               )}
+
+              {/* Select Size Dropdown */}
+              <div className="relative pt-2">
+                <button
+                  onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
+                  className="w-full border border-black px-4 py-3 text-left bg-white hover:bg-gray-50 transition-colors flex items-center justify-between"
+                >
+                  <span className="text-sm">
+                    {selectedSize ? `Size: ${selectedSize}` : 'Select Size'}
+                  </span>
+                  <span className="text-gray-500">{isSizeDropdownOpen ? '▲' : '▼'}</span>
+                </button>
+                {isSizeDropdownOpen && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-black shadow-lg">
+                    {product.sizes.map((size: string) => (
+                      <button
+                        key={size}
+                        onClick={() => {
+                          setSelectedSize(size);
+                          setIsSizeDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors ${
+                          selectedSize === size ? 'bg-gray-100 font-medium' : ''
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Add to Bag and Add to Favorites buttons - same line */}
+              <div className="flex gap-4 pt-2">
+                <button
+                  onClick={handleAddToBag}
+                  disabled={isAddingToBag}
+                  className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Add to Bag
+                </button>
+
+                <button
+                  onClick={handleToggleFavorite}
+                  className="px-5 bg-white/95 backdrop-blur-xl border border-black rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center justify-center shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
+                >
+                  <Heart
+                    className={`w-5 h-5 transition-colors duration-200 ${
+                      isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                    }`}
+                  />
+                </button>
+              </div>
+
+              {/* Back Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+                className="mt-4 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer text-sm flex items-center justify-center"
+                aria-label="Back"
+              >
+                ← Back
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="shrink-0 bg-white/95 backdrop-blur-xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] px-8 py-6 flex gap-4">
-        <button
-          onClick={handleAddToBag}
-          disabled={isAddingToBag}
-          className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
-        >
-          <ShoppingCart className="w-4 h-4" />
-          Add to Bag
-        </button>
-
-        <button
-          onClick={handleToggleFavorite}
-          className="px-5 bg-white/95 backdrop-blur-xl rounded-xl hover:bg-gray-100 transition-all duration-200 flex items-center justify-center shadow-[0_10px_40px_rgba(0,0,0,0.1)] hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
-        >
-          <Heart
-            className={`w-5 h-5 transition-colors duration-200 ${
-              isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'
-            }`}
-          />
-        </button>
       </div>
     </div>
   );
