@@ -77,7 +77,7 @@ export function ProductCard({
   return (
     <div className="relative h-full flex flex-col">
       <div
-        className="bg-white border border-[#1b1b1b] overflow-hidden transition-all duration-200 shadow-md hover:shadow-lg h-full flex flex-col relative"
+        className="bg-white border border-gray-300 overflow-hidden transition-all duration-200 shadow-md hover:shadow-lg hover:border-black h-full flex flex-col relative"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >

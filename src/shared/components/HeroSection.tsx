@@ -20,6 +20,8 @@ export function HeroSection() {
   const [desktopFilterOpen, setDesktopFilterOpen] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<string>('featured');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+  const [showFloatingButtons, setShowFloatingButtons] = useState(false);
+  const topFiltersRef = React.useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     async function loadProducts() {
@@ -38,6 +40,25 @@ export function HeroSection() {
     }
     loadProducts();
   }, []);
+
+  // Scroll detection for floating buttons (mobile only)
+  useEffect(() => {
+    if (!isMobile || !topFiltersRef.current) return;
+
+    const handleScroll = () => {
+      const topFiltersElement = topFiltersRef.current;
+      if (!topFiltersElement) return;
+
+      const rect = topFiltersElement.getBoundingClientRect();
+      // Show floating buttons when top filters are scrolled out of view
+      setShowFloatingButtons(rect.bottom < 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial state
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobile]);
 
   // Category filter data
   const categoryData: CategoryGroup[] = useMemo(() => {
@@ -190,13 +211,13 @@ export function HeroSection() {
     <section className="w-full bg-white py-6 md:py-8 px-4 md:px-8">
       <div className="max-w-[1400px] mx-auto">
         {/* Filters Section - Mobile - Hidden at 768px+ when desktop filters appear */}
-        {isMobile && (
-          <div className="w-full max-w-2xl mx-auto mb-6">
+        {/* {isMobile && (
+          <div ref={topFiltersRef} className="w-full max-w-2xl mx-auto mb-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="relative inline-block w-full">
               <button
                 onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-                className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
+                className="px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
               >
                 Filters
               </button>
@@ -220,20 +241,21 @@ export function HeroSection() {
               defaultValue="featured"
               onSortChange={handleSortChange}
               label="Sort"
+              variant="black"
             />
           </div>
         </div>
-        )}
+        )} */}
 
         {/* Filters Section - Desktop */}
-        <div className="hidden md:flex lg:flex xl:flex xxl:flex w-full items-center gap-4 mb-6">
-          {/* Category Filter Button */}
+        {/* <div className="hidden md:flex lg:flex xl:flex xxl:flex w-full items-center gap-4 mb-6">
+          
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'CATEGORY' ? null : 'CATEGORY')}
-              className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                 selectedFilters['CATEGORY'] && selectedFilters['CATEGORY'].length > 0
-                  ? 'bg-gray-100 border-gray-400'
+                  ? 'bg-gray-100'
                   : ''
               }`}
             >
@@ -259,13 +281,13 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Brand Filter Button */}
+          
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'BRAND' ? null : 'BRAND')}
-              className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                 selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0
-                  ? 'bg-gray-100 border-gray-400'
+                  ? 'bg-gray-100'
                   : ''
               }`}
             >
@@ -291,13 +313,13 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Size Filter Button */}
+         
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'SIZE' ? null : 'SIZE')}
-              className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                 selectedFilters['SIZE'] && selectedFilters['SIZE'].length > 0
-                  ? 'bg-gray-100 border-gray-400'
+                  ? 'bg-gray-100'
                   : ''
               }`}
             >
@@ -323,13 +345,13 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Price Filter Button */}
+          
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'PRICE' ? null : 'PRICE')}
-              className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
                 selectedFilters['PRICE'] && selectedFilters['PRICE'].length > 0
-                  ? 'bg-gray-100 border-gray-400'
+                  ? 'bg-gray-100'
                   : ''
               }`}
             >
@@ -355,7 +377,7 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Sort Button */}
+          
           <div className="relative flex-1 w-full">
             <SortBy
               options={sortOptions}
@@ -363,9 +385,10 @@ export function HeroSection() {
               onSortChange={handleSortChange}
               label="Sort"
               className="w-full"
+              variant="black"
             />
           </div>
-        </div>
+        </div> */}
 
         {/* Top Banner */}
         <div className="mb-4 md:mb-6">
@@ -437,6 +460,43 @@ export function HeroSection() {
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Floating Filter and Sort Buttons - Mobile Only */}
+        {isMobile && showFloatingButtons && (
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 shadow-lg p-4 md:hidden">
+            <div className="grid grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <div className="relative inline-block w-full">
+                <button
+                  onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                  className="px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
+                >
+                  Filters
+                </button>
+                {mobileFiltersOpen && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10 bg-black/50" 
+                      onClick={() => setMobileFiltersOpen(false)}
+                    />
+                    <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 shadow-lg z-50 p-4 max-h-[60vh] overflow-y-auto">
+                      <CategoryFilter 
+                        categories={categoryData}
+                        onFilterChange={handleFilterChange}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+              <SortBy
+                options={sortOptions}
+                defaultValue="featured"
+                onSortChange={handleSortChange}
+                label="Sort"
+                variant="black"
+              />
+            </div>
           </div>
         )}
       </div>

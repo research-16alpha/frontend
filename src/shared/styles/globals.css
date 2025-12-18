@@ -468,6 +468,17 @@ html {
   .mt-1\.5 {
     margin-top: 0.375rem; /* 6px */
   }
+
+  /* Filter and Sort Button Border */
+  .filter-button-border {
+    border: 1px solid #d1d5db; /* Grey border initially (gray-300) */
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .filter-button-border:hover {
+    border-color: #000000; /* Black border on hover */
+  }
 }
 
 
@@ -477,27 +488,33 @@ html {
 
 @keyframes marquee {
     0% {
-      transform: translateX(0%);
+      transform: translate3d(0%, 0, 0);
     }
     100% {
-      transform: translateX(-100%);
+      transform: translate3d(-100%, 0, 0);
     }
 }
 .animate-marquee {
   animation: marquee 45s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 
 @keyframes marquee2 {
     0% {
-      transform: translateX(100%);
+      transform: translate3d(100%, 0, 0);
     }
     100% {
-      transform: translateX(0%);
+      transform: translate3d(0%, 0, 0);
     }
 }
 .animate-marquee2 {
   animation: marquee2 45s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 
