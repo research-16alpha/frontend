@@ -32,7 +32,7 @@ export function SortBy({
   const selectedOption = options.find(opt => opt.value === selectedValue);
 
   return (
-    <div className={`relative inline-block ${className}`}>
+    <div className={`relative block ${className}`}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full"

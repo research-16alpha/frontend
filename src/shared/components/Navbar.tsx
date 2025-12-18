@@ -83,7 +83,7 @@ export function Navbar({
                 onClick={() => {
                   setMobileMenuOpen(true);
                 }}
-                className="lg:hidden p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65] cursor-pointer flex items-center justify-center"
+                className="lg:hidden mb-1.5 p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65] cursor-pointer flex items-center justify-center"
                 aria-label="Open menu"
                 type="button"
               >
@@ -93,18 +93,18 @@ export function Navbar({
               {/* Logo */}
               <button
                 onClick={onLogoClick}
-                className="flex items-center gap-2 text-xl md:text-2xl tracking-tight hover:opacity-70 transition-opacity cursor-pointer"
+                className="flex items-center mb-1.5 gap-2 text-xl md:text-2xl tracking-tight hover:opacity-70 transition-opacity cursor-pointer"
               >
                 <ImageWithFallback
                   src={logoImage}
                   alt="Halfsy logo"
                   className="w-5 h-5 object-contain"
                 />
-                <span className="text-lg text-gray-700 hover:text-black transition-colors tracking-wide cursor-pointer">halfsy</span>
+                <span className="text-xl font-thintext-gray-900 hover:text-black transition-colors tracking-wide cursor-pointer">halfsy</span>
               </button>
             </div>
             {/* Navigation Items - Hidden on mobile */}
-            <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+            <div className="hidden lg:flex items-center gap-6 xl:gap-6 mt-1.5">
               <button
                 onClick={onLogoClick}
                 className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"

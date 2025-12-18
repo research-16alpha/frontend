@@ -76,9 +76,9 @@ export function HorizontalScrollSection() {
   };
 
   return (
-    <section className="w-full bg-white py-8 md:py-12 relative">
+    <section className="w-full bg-[#FBEFD9] py-8 md:py-12 relative">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-xl md:text-2xl mb-6 uppercase tracking-tight">New This Week</h2>
+        <h2 className="text-3xl md:text-4xl lg:text-6xl font-light mb-6 uppercase tracking-tight">New This Week</h2>
         
         {/* Scroll Container */}
         <div className="relative group">

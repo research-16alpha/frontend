@@ -9,10 +9,12 @@ import { SortBy, SortOption } from '../features/products/components/SortBy';
 import { fetchProducts, fetchProductsByGender, fetchLatestProducts } from '../features/products/services/productsService';
 import { transformProducts, FrontendProduct } from '../features/products/utils/productTransform';
 import { useNavigation } from '../shared/contexts/NavigationContext';
+import { useIsMobile } from '../shared/components/ui/use-mobile';
 
 export function Products() {
   console.log('Products');
   const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToNew, navigateToProduct, productsGender, productsMode } = useNavigation();
+  const isMobile = useIsMobile();
   
   const handleCategoryClick = (category: string) => {
     if (category === 'men' || category === 'women') {
@@ -29,6 +31,7 @@ export function Products() {
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
+  const [desktopFilterOpen, setDesktopFilterOpen] = React.useState<string | null>(null);
   const [sortBy, setSortBy] = React.useState<string>(productsMode === 'new' ? 'newest' : 'featured');
   const [selectedFilters, setSelectedFilters] = React.useState<Record<string, string[]>>({});
   
@@ -255,8 +258,8 @@ export function Products() {
     : productsMode === 'curated'
     ? 'Curated Collection'
     : productsGender 
-    ? `All ${productsGender.charAt(0).toUpperCase() + productsGender.slice(1)}`
-    : 'All Products';
+    ? `${productsGender.toLowerCase() === 'men' ? "Men's" : productsGender.toLowerCase() === 'women' ? "Women's" : productsGender.charAt(0).toUpperCase() + productsGender.slice(1)} Fashion`
+    : 'Premium Fashion & More';
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -278,68 +281,210 @@ export function Products() {
       <AISearchBar />
       
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full">
+      {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full">
         <div className="text-xs text-gray-600">
           <button onClick={navigateToHome} className="hover:underline">Home</button>
           <span className="mx-2">/</span>
           <span>{pageTitle}</span>
         </div>
-      </div>
+      </div> */}
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-1 w-full">
         {/* Page Title */}
         <div className="mb-6">
-          <h2 className="mb-2 text-2xl md:text-3xl">{pageTitle}</h2>
+          <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight">
+            <span className="text-gray-charcoal-1 font-light">{pageTitle} </span>
+          </h2>
           <p className="text-sm text-gray-600">
             {productsMode === 'new'
               ? "Explore the newest arrivals, sorted by latest first."
               : productsMode === 'curated'
               ? "Discover our curated collection of premium fashion and accessories."
               : productsGender 
-              ? `Discover luxury ${productsGender} fashion from all the world's most celebrated designers—shop online today.`
-              : 'Discover our curated collection of premium fashion and accessories'}
+              ? `Discover luxury ${productsGender}'s fashion from all the world's most celebrated designers—shop online today.`
+              : 'Discover our curated collection of premium fashion and accessories and get upto 50% Off'}
           </p>
         </div>
 
         <div className="flex flex-col gap-8">
           {/* Filters Section - Above products for all viewports */}
-          <div className="flex flex-col items-center">
-            {/* 2 Column Layout - Filter Button and Sort Button */}
-            <div className="w-full max-w-2xl">
-              <div className="grid grid-cols-2 gap-4">
-                {/* Filter Button - First Column */}
-                <div className="relative inline-block w-full">
-                  <button
-                    onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-                    className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full"
-                  >
-                    Filter
-                  </button>
-                  {mobileFiltersOpen && (
-                    <>
-                      <div 
-                        className="fixed inset-0 z-10" 
-                        onClick={() => setMobileFiltersOpen(false)}
+          {/* Mobile: 2 Column Layout - Filter Button and Sort Button - Hidden at 768px+ when desktop filters appear */}
+          {isMobile && (
+            <div className="w-full max-w-2xl mx-auto">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative inline-block w-full">
+                <button
+                  onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                  className="px-3 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
+                >
+                  Filters
+                </button>
+                {mobileFiltersOpen && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setMobileFiltersOpen(false)}
+                    />
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4">
+                      <CategoryFilter 
+                        categories={categoryData}
+                        onFilterChange={handleFilterChange}
                       />
-                      <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4">
-                        <CategoryFilter 
-                          categories={categoryData}
-                          onFilterChange={handleFilterChange}
-                        />
-                      </div>
-                    </>
+                    </div>
+                  </>
+                )}
+              </div>
+              <SortBy
+                options={sortOptions}
+                defaultValue={productsMode === 'new' ? 'newest' : 'featured'}
+                onSortChange={handleSortChange}
+                label="Sort"
+              />
+            </div>
+          </div>
+          )}
+
+          {/* Desktop: Separate Filter Buttons + Sort Button */}
+          <div className="hidden md:flex lg:flex xl:flex xxl:flex w-full items-center gap-4">
+              {/* Category Filter Button */}
+              <div className="relative flex-1">
+                <button
+                  onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'CATEGORY' ? null : 'CATEGORY')}
+                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                    selectedFilters['CATEGORY'] && selectedFilters['CATEGORY'].length > 0
+                      ? 'bg-gray-100 border-gray-400'
+                      : ''
+                  }`}
+                >
+                  Category
+                  {selectedFilters['CATEGORY'] && selectedFilters['CATEGORY'].length > 0 && (
+                    <span className="ml-2 text-xs">({selectedFilters['CATEGORY'].length})</span>
                   )}
-                </div>
-                {/* Sort Button - Second Column */}
-                <SortBy 
+                </button>
+                {desktopFilterOpen === 'CATEGORY' && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setDesktopFilterOpen(null)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4 min-w-[200px]">
+                      <CategoryFilter 
+                        categories={[categoryData[0]]}
+                        onFilterChange={handleFilterChange}
+                        defaultExpanded={true}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Brand Filter Button */}
+              <div className="relative flex-1">
+                <button
+                  onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'BRAND' ? null : 'BRAND')}
+                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                    selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0
+                      ? 'bg-gray-100 border-gray-400'
+                      : ''
+                  }`}
+                >
+                  Brand
+                  {selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0 && (
+                    <span className="ml-2 text-xs">({selectedFilters['BRAND'].length})</span>
+                  )}
+                </button>
+                {desktopFilterOpen === 'BRAND' && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setDesktopFilterOpen(null)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4 min-w-[200px]">
+                      <CategoryFilter 
+                        categories={[categoryData[1]]}
+                        onFilterChange={handleFilterChange}
+                        defaultExpanded={true}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Size Filter Button */}
+              <div className="relative flex-1">
+                <button
+                  onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'SIZE' ? null : 'SIZE')}
+                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                    selectedFilters['SIZE'] && selectedFilters['SIZE'].length > 0
+                      ? 'bg-gray-100 border-gray-400'
+                      : ''
+                  }`}
+                >
+                  Size
+                  {selectedFilters['SIZE'] && selectedFilters['SIZE'].length > 0 && (
+                    <span className="ml-2 text-xs">({selectedFilters['SIZE'].length})</span>
+                  )}
+                </button>
+                {desktopFilterOpen === 'SIZE' && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setDesktopFilterOpen(null)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4 min-w-[200px]">
+                      <CategoryFilter 
+                        categories={[categoryData[2]]}
+                        onFilterChange={handleFilterChange}
+                        defaultExpanded={true}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Price Filter Button */}
+              <div className="relative flex-1">
+                <button
+                  onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'PRICE' ? null : 'PRICE')}
+                  className={`w-full px-4 py-3 border border-gray-300 bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+                    selectedFilters['PRICE'] && selectedFilters['PRICE'].length > 0
+                      ? 'bg-gray-100 border-gray-400'
+                      : ''
+                  }`}
+                >
+                  Price
+                  {selectedFilters['PRICE'] && selectedFilters['PRICE'].length > 0 && (
+                    <span className="ml-2 text-xs">({selectedFilters['PRICE'].length})</span>
+                  )}
+                </button>
+                {desktopFilterOpen === 'PRICE' && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setDesktopFilterOpen(null)}
+                    />
+                    <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4 min-w-[200px]">
+                      <CategoryFilter 
+                        categories={[categoryData[3]]}
+                        onFilterChange={handleFilterChange}
+                        defaultExpanded={true}
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Sort Button */}
+              <div className="relative flex-1 w-full">
+                <SortBy
                   options={sortOptions}
                   defaultValue={productsMode === 'new' ? 'newest' : 'featured'}
                   onSortChange={handleSortChange}
                   label="Sort"
+                  className="w-full"
                 />
               </div>
             </div>
-          </div>
 
           {/* Product Grid */}
           <div className="w-full">
