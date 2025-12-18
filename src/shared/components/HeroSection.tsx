@@ -9,9 +9,11 @@ import { useNavigation } from '../../shared/contexts/NavigationContext';
 import { ProductCard } from '../../features/products/components/ProductCard';
 import { CategoryFilter, CategoryGroup } from '../../features/products/components/CategoryFilter';
 import { SortBy, SortOption } from '../../features/products/components/SortBy';
+import { useIsMobile } from './ui/use-mobile';
 
 export function HeroSection() {
   const { navigateToProduct } = useNavigation();
+  const isMobile = useIsMobile();
   const [saleProducts, setSaleProducts] = useState<FrontendProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -188,7 +190,8 @@ export function HeroSection() {
     <section className="w-full bg-white py-6 md:py-8 px-4 md:px-8">
       <div className="max-w-[1400px] mx-auto">
         {/* Filters Section - Mobile - Hidden at 768px+ when desktop filters appear */}
-        <div className="w-full max-w-2xl md:hidden lg:hidden xl:hidden xxl:hidden mx-auto mb-6">
+        {isMobile && (
+          <div className="w-full max-w-2xl mx-auto mb-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="relative inline-block w-full">
               <button
@@ -220,6 +223,7 @@ export function HeroSection() {
             />
           </div>
         </div>
+        )}
 
         {/* Filters Section - Desktop */}
         <div className="hidden md:flex lg:flex xl:flex xxl:flex w-full items-center gap-4 mb-6">

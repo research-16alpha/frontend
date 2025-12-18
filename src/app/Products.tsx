@@ -9,10 +9,12 @@ import { SortBy, SortOption } from '../features/products/components/SortBy';
 import { fetchProducts, fetchProductsByGender, fetchLatestProducts } from '../features/products/services/productsService';
 import { transformProducts, FrontendProduct } from '../features/products/utils/productTransform';
 import { useNavigation } from '../shared/contexts/NavigationContext';
+import { useIsMobile } from '../shared/components/ui/use-mobile';
 
 export function Products() {
   console.log('Products');
   const { navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToNew, navigateToProduct, productsGender, productsMode } = useNavigation();
+  const isMobile = useIsMobile();
   
   const handleCategoryClick = (category: string) => {
     if (category === 'men' || category === 'women') {
@@ -307,7 +309,8 @@ export function Products() {
         <div className="flex flex-col gap-8">
           {/* Filters Section - Above products for all viewports */}
           {/* Mobile: 2 Column Layout - Filter Button and Sort Button - Hidden at 768px+ when desktop filters appear */}
-          <div className="w-full max-w-2xl md:hidden mx-auto">
+          {isMobile && (
+            <div className="w-full max-w-2xl mx-auto">
             <div className="grid grid-cols-2 gap-4">
               <div className="relative inline-block w-full">
                 <button
@@ -339,6 +342,7 @@ export function Products() {
               />
             </div>
           </div>
+          )}
 
           {/* Desktop: Separate Filter Buttons + Sort Button */}
           <div className="hidden md:flex lg:flex xl:flex xxl:flex w-full items-center gap-4">
