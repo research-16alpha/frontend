@@ -9,7 +9,7 @@ import { ProductMasonryGrid } from '../features/products/components/ProductMason
 import { EditorialSection } from '../features/products/components/EditorialSection';
 import { Footer } from '../shared/components/Footer';
 import { Account } from '../features/auth/pages/Account';
-import { ExpandedContent } from '../features/products/components/ProductCard';
+import { ExpandedContent } from '../features/products/components/ProductView';
 import { useProductDetail } from '../features/products/hooks/useProductDetail';
 import { BagSidebar } from '../features/bag/components/BagSidebar';
 import { AuthModal } from '../features/auth/components/AuthModal';

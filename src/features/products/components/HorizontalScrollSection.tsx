@@ -8,7 +8,7 @@ import { useProducts } from '../hooks/useProducts';
 export function HorizontalScrollSection() {
   const { navigateToProduct } = useNavigation();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { products, loading, error } = useProducts({ fetchFn: fetchTopDeals, limit: 6 });
+  const { products, loading, error } = useProducts({ fetchFn: fetchTopDeals, limit: 20 });
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
