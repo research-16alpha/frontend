@@ -15,24 +15,27 @@ export interface SortByProps {
 }
 
 export function SortBy({ 
-  options, 
+  options = [], 
   defaultValue,
   onSortChange,
   className = '',
   label = 'Sort by',
   variant = 'default'
 }: SortByProps) {
-  const [selectedValue, setSelectedValue] = useState(defaultValue || options[0]?.value || '');
+  // Use defaultValue as controlled value, fallback to first option
+  // This ensures the component reflects the parent's sortBy state
+  const selectedValue = defaultValue || (options && options.length > 0 ? options[0].value : '');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: string) => {
-    setSelectedValue(value);
     setIsOpen(false);
     onSortChange?.(value);
   };
 
-  const selectedOption = options.find(opt => opt.value === selectedValue);
+  const selectedOption = options && options.length > 0 ? options.find(opt => opt.value === selectedValue) : null;
 
+  // Always render the button, even if options are loading
+  // Show loading state if options are empty
   const buttonClasses = variant === 'black' 
     ? "px-3 py-3 border border-black bg-black text-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full hover:bg-gray-800 transition-colors cursor-pointer"
     : "px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full";
@@ -40,13 +43,21 @@ export function SortBy({
   return (
     <div className={`relative block ${className}`}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          if (options && options.length > 0) {
+            setIsOpen(!isOpen);
+          }
+        }}
+        disabled={!options || options.length === 0}
         className={buttonClasses}
       >
         {label}
+        {(!options || options.length === 0) && (
+          <span className="ml-2 text-xs opacity-75">(Loading...)</span>
+        )}
       </button>
 
-      {isOpen && (
+      {isOpen && options && options.length > 0 && (
         <>
           <div 
             className="fixed inset-0 z-10" 

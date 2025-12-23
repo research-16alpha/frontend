@@ -17,7 +17,8 @@ import {
 } from 'lucide-react';
 import { ImageWithFallback } from '../../../shared/components/figma/ImageWithFallback';
 import { fetchProductById } from '../../products/services/productsService';
-import { FrontendProduct, transformProduct } from '../../products/utils/productTransform';
+import { normalizeProduct } from '../../products/utils/productTransform';
+import { Product } from '../../products/types/product';
 
 type Tab = 'orders' | 'favorites' | 'profile' | 'addresses' | 'payment' | 'settings';
 
@@ -36,7 +37,7 @@ export function Account() {
   const [activeTab, setActiveTab] = useState<Tab>('orders');
   const [isEditing, setIsEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState(user);
-  const [favoriteProducts, setFavoriteProducts] = useState<FrontendProduct[]>([]);
+  const [favoriteProducts, setFavoriteProducts] = useState<Product[]>([]);
   const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
 
   if (!user) {
@@ -67,13 +68,13 @@ export function Account() {
       }
 
       setIsLoadingFavorites(true);
-      const products: FrontendProduct[] = [];
+      const products: Product[] = [];
 
       for (const id of favorites) {
         try {
           const data = await fetchProductById(id);
-          const transformed = transformProduct(data);
-          products.push(transformed);
+          const normalized = normalizeProduct(data);
+          products.push(normalized);
         } catch (error) {
           console.error(`Failed to load favorite product ${id}:`, error);
         }
@@ -297,8 +298,8 @@ export function Account() {
                         >
                           <div className="aspect-[3/4] bg-gray-50 rounded-lg overflow-hidden">
                             <ImageWithFallback
-                              src={product.image}
-                              alt={product.name}
+                              src={product.product_image || ''}
+                              alt={product.product_name || 'Product'}
                               className="w-full h-full object-cover"
                             />
                           </div>
@@ -309,23 +310,23 @@ export function Account() {
                               </div>
                             )}
                             <div className="text-sm font-medium text-gray-800 line-clamp-2">
-                              {product.name}
+                              {product.product_name}
                             </div>
                             <div className="text-xs text-gray-500 line-clamp-2">
-                              {product.description || 'No description available.'}
+                              {product.product_description || 'No description available.'}
                             </div>
                             <div className="text-sm font-semibold">
-                              {product.discountedPrice ? (
+                              {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
                                 <>
                                   <span className="text-red-600">
-                                    ${product.discountedPrice.toFixed(2)}
+                                    {product.currency || '$'}{product.sale_price.toFixed(2)}
                                   </span>
                                   <span className="ml-2 text-xs line-through text-gray-400">
-                                    ${product.price.toFixed(2)}
+                                    {product.currency || '$'}{product.original_price.toFixed(2)}
                                   </span>
                                 </>
                               ) : (
-                                <span>${product.price.toFixed(2)}</span>
+                                <span>{product.currency || '$'}{(product.sale_price || product.original_price || 0).toFixed(2)}</span>
                               )}
                             </div>
                           </div>

@@ -2,42 +2,85 @@ import React, { useState, useEffect } from 'react';
 import { AnnouncementBanner } from '../shared/components/AnnouncementBanner';
 import { Navbar } from '../shared/components/Navbar';
 import { AISearchBar } from '../shared/components/AISearchBar';
-import { HeroSection } from '../shared/components/HeroSection';
+import { HeroSection } from '../features/products/components/HeroSection';
 import { HorizontalScrollSection } from '../features/products/components/HorizontalScrollSection';
 import { FeaturedSection } from '../features/products/components/FeaturedSection';
 import { ProductMasonryGrid } from '../features/products/components/ProductMasonryGrid';
-import { EditorialSection } from '../shared/components/EditorialSection';
+import { EditorialSection } from '../features/products/components/EditorialSection';
 import { Footer } from '../shared/components/Footer';
-import { Products } from './Products';
 import { Account } from '../features/auth/pages/Account';
-import { ProductItem } from './ProductItem';
+import { ExpandedContent } from '../features/products/components/ProductCard';
+import { useProductDetail } from '../features/products/hooks/useProductDetail';
 import { BagSidebar } from '../features/bag/components/BagSidebar';
 import { AuthModal } from '../features/auth/components/AuthModal';
 import { AppProvider, useApp } from '../features/bag/contexts/AppContext';
 import { NavigationProvider, useNavigation } from '../shared/contexts/NavigationContext';
+import { FilterMetadataProvider } from '../shared/contexts/FilterMetadataContext';
 import { Toaster } from 'sonner';
 import { About } from './About';
+import { ShopAll } from './pages/ShopAll';
+import { Curated } from './pages/Curated';
+import { New } from './pages/New';
+import { Women } from './pages/Women';
+import { Men } from './pages/Men';
+import { Accessories } from './pages/Accessories';
+import { PreOwned } from './pages/PreOwned';
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new' | 'shop-all' | 'women' | 'men' | 'accessories' | 'pre-owned'>('home');
 
   return (
-    <NavigationProvider 
-      currentPage={currentPage} 
-      setCurrentPage={setCurrentPage}
-    >
-      <>
-        <AppWithNavigation />
-        <BagSidebar />
-        <AuthModal />
-      </>
-    </NavigationProvider>
+    <FilterMetadataProvider>
+      <NavigationProvider 
+        currentPage={currentPage} 
+        setCurrentPage={setCurrentPage}
+      >
+        <>
+          <AppWithNavigation />
+          <BagSidebar />
+          <AuthModal />
+        </>
+      </NavigationProvider>
+    </FilterMetadataProvider>
   );
 }
 
 function AppWithNavigation() {
-  const { currentPage, navigateToHome, navigateToProducts, navigateToAccount, navigateToAbout, navigateToCurated, navigateToNew } = useNavigation();
+  const { 
+    currentPage, 
+    productId,
+    navigateBack,
+    navigateToHome, 
+    navigateToProducts, 
+    navigateToAccount, 
+    navigateToAbout, 
+    navigateToCurated, 
+    navigateToNew,
+    navigateToShopAll,
+    navigateToWomen,
+    navigateToMen,
+    navigateToAccessories,
+    navigateToPreOwned,
+  } = useNavigation();
   const { user } = useApp();
+  
+  // Product detail page hook
+  const {
+    product,
+    loading,
+    selectedSize,
+    selectedColor,
+    isAddingToBag,
+    isFavorite,
+    setSelectedSize,
+    setSelectedColor,
+    handleAddToBag,
+    handleToggleFavorite,
+  } = useProductDetail({
+    productId,
+    currentPage,
+    navigateBack,
+  });
 
   // Redirect from account page if user logs out
   useEffect(() => {
@@ -46,23 +89,111 @@ function AppWithNavigation() {
     }
   }, [user, currentPage, navigateToHome]);
 
+  // Redirect legacy products page to ShopAll
+  useEffect(() => {
+    if (currentPage === 'products') {
+      navigateToShopAll();
+    }
+  }, [currentPage, navigateToShopAll]);
+
   const handleCategoryClick = (category: string) => {
-    if (category === 'men' || category === 'women' || category === 'pre-owned') {
-      navigateToProducts(category);
+    if (category === 'men') {
+      navigateToMen();
+    } else if (category === 'women') {
+      navigateToWomen();
+    } else if (category === 'accessories') {
+      navigateToAccessories();
+    } else if (category === 'pre-owned') {
+      navigateToPreOwned();
     } else {
-      // For other categories like 'accessories' or 'sale', navigate to products without gender filter
       navigateToProducts();
     }
   };
 
   // If on product item page, render that instead
   if (currentPage === 'product') {
-    return <ProductItem />;
-  }
+    const handleCategoryClick = (category: string) => {
+      if (category === 'men') {
+        navigateToMen();
+      } else if (category === 'women') {
+        navigateToWomen();
+      } else if (category === 'accessories') {
+        navigateToAccessories();
+      } else if (category === 'pre-owned') {
+        navigateToPreOwned();
+      } else {
+        navigateToShopAll();
+      }
+    };
 
-  // If on products page (including curated and new), render that instead
-  if (currentPage === 'products' || currentPage === 'curated' || currentPage === 'new') {
-    return <Products />;
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+          <AnnouncementBanner />
+          <Navbar 
+            onFeaturedClick={() => {}} 
+            onProductsClick={navigateToShopAll}
+            onLogoClick={navigateToHome}
+            onAccountClick={navigateToAccount}
+            onAboutClick={navigateToAbout}
+            onCategoryClick={handleCategoryClick}
+            onPreOwnedClick={navigateToPreOwned}
+            onCuratedClick={navigateToCurated}
+            onNewArrivalsClick={navigateToNew}
+          />
+          <AISearchBar />
+          <main className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
+              <p className="text-gray-600">Loading product...</p>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      );
+    }
+
+    if (!product) {
+      return null;
+    }
+
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <AnnouncementBanner />
+        <Navbar 
+          onFeaturedClick={() => {}} 
+          onProductsClick={navigateToShopAll}
+          onLogoClick={navigateToHome}
+          onAccountClick={navigateToAccount}
+          onAboutClick={navigateToAbout}
+          onCategoryClick={handleCategoryClick}
+          onPreOwnedClick={navigateToPreOwned}
+          onCuratedClick={navigateToCurated}
+          onNewArrivalsClick={navigateToNew}
+        />
+        <AISearchBar />
+
+        <main className="flex-1 w-full relative">
+          <div className="max-w-7xl mx-auto px-6 py-12">
+            <div className="bg-white rounded-lg shadow-[0_30px_80px_rgba(0,0,0,0.15)] overflow-hidden min-h-[600px]">
+              <ExpandedContent
+                product={product}
+                onClose={navigateBack}
+                selectedSize={selectedSize}
+                setSelectedSize={setSelectedSize}
+                selectedColor={selectedColor}
+                setSelectedColor={setSelectedColor}
+                handleAddToBag={handleAddToBag}
+                handleToggleFavorite={handleToggleFavorite}
+                isFavorite={isFavorite}
+                isAddingToBag={isAddingToBag}
+              />
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
   // If on account page, render that instead
@@ -74,21 +205,52 @@ function AppWithNavigation() {
     return <About />;
   }
 
+  // Render dedicated pages
+  if (currentPage === 'shop-all') {
+    return <ShopAll />;
+  }
+
+  if (currentPage === 'curated') {
+    return <Curated />;
+  }
+
+  if (currentPage === 'new') {
+    return <New />;
+  }
+
+  if (currentPage === 'women') {
+    return <Women />;
+  }
+
+  if (currentPage === 'men') {
+    return <Men />;
+  }
+
+  if (currentPage === 'accessories') {
+    return <Accessories />;
+  }
+
+  if (currentPage === 'pre-owned') {
+    return <PreOwned />;
+  }
+
+  // Legacy products page - redirect handled by useEffect above
+  if (currentPage === 'products') {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <AnnouncementBanner />
       <Navbar 
         onFeaturedClick={() => {}}
-        onProductsClick={navigateToProducts}
+        onProductsClick={navigateToShopAll}
         onLogoClick={navigateToHome}
         onAccountClick={navigateToAccount}
         onAboutClick={navigateToAbout}
         onNewArrivalsClick={navigateToNew}
         onCategoryClick={handleCategoryClick}
-        onPreOwnedClick={() => {
-          // Navigate to products page - can be customized to filter for pre-owned items
-          navigateToProducts();
-        }}
+        onPreOwnedClick={navigateToPreOwned}
         onCuratedClick={navigateToCurated}
       />
       <AISearchBar />

@@ -479,7 +479,7 @@ html {
   .filter-button-border:hover {
     border-color: #000000; /* Black border on hover */
   }
-}
+  }
 
 
 
@@ -508,7 +508,7 @@ html {
     }
     100% {
       transform: translate3d(0%, 0, 0);
-    }
+  }
 }
 .animate-marquee2 {
   animation: marquee2 45s linear infinite;

@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState, ReactNode, useEffect } from
 import { register as apiRegister, login as apiLogin, logout as apiLogout, getBag as apiGetBag, syncBag, addToFavorites, removeFromFavorites, getFavorites } from '../../auth/api/auth';
 import { BagService } from '../services/bagService';
 import { fetchProductById } from '../../products/services/productsService';
-import { transformProduct } from '../../products/utils/productTransform';
+import { normalizeProduct } from '../../products/utils/productTransform';
+import { Product } from '../../products/types/product';
 
 export interface BagItem {
   id: string;
@@ -85,16 +86,16 @@ export function AppProvider({ children }: { children: ReactNode }) {
         for (const productId of productIds) {
           try {
             const productData = await fetchProductById(productId);
-            const frontendProduct = transformProduct(productData);
+            const product = normalizeProduct(productData);
             
             // Create BagItem from product
             bagItems.push({
-              id: frontendProduct.id,
-              name: frontendProduct.name,
-              price: frontendProduct.discountedPrice || frontendProduct.price,
-              image: frontendProduct.image,
-              size: frontendProduct.sizes?.[0] || 'One Size',
-              color: frontendProduct.colors?.[0] || 'Default',
+              id: product.id || '',
+              name: product.product_name || 'Product',
+              price: product.sale_price || product.original_price || 0,
+              image: product.product_image || '',
+              size: product.available_sizes?.[0] || 'One Size',
+              color: product.product_color?.[0] || 'Default',
               quantity: 1, // Default quantity
             });
           } catch (error) {

@@ -1,25 +1,8 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from './ProductCard';
+import { Product } from '../types/product';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  discountedPrice?: number;
-  originalPrice?: number;
-  category: string;
-  images: string[];
-  description: string;
-  rating: number;
-  reviews: number;
-  sizes: string[];
-  colors: string[];
-  product_link?: string;
-  brand_name?: string;
-  product_gender?: string;
-}
 
 export function FeaturedSection() {
   const { navigateToProduct, navigateToCurated } = useNavigation();
@@ -69,53 +52,38 @@ export function FeaturedSection() {
 const featuredImages: Product[] = [
   {
     id: '301',
-    name: "Editorial Collection",
-    images: [
-      "https://images.unsplash.com/photo-1700150662401-9b96a5fedfbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600",
-      "https://images.unsplash.com/photo-1633821879282-0c4e91f96232?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600"
-    ],
-    category: "Art & Fashion",
-    description: "Curated editorial pieces blending art and fashion. Each item tells a unique story.",
-    price: 280,
-    discountedPrice: 224,
-    originalPrice: 280,
-    rating: 4.7,
-    reviews: 89,
-    sizes: ['One Size'],
-    colors: ['Original']
+    product_name: "Editorial Collection",
+    product_image: "https://images.unsplash.com/photo-1700150662401-9b96a5fedfbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600",
+    product_category: "Art & Fashion",
+    product_description: "Curated editorial pieces blending art and fashion. Each item tells a unique story.",
+    original_price: 280,
+    sale_price: 224,
+    currency: '$',
+    available_sizes: ['One Size'],
+    product_color: ['Original']
   },
   {
     id: '302',
-    name: "Minimal Essentials",
-    images: [
-      "https://images.unsplash.com/photo-1633821879282-0c4e91f96232?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
-      "https://images.unsplash.com/photo-1610209740880-6ecc4b20ea78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400"
-    ],
-    category: "Clothing",
-    description: "Essential pieces designed with minimalist aesthetics. Timeless and versatile.",
-    price: 320,
-    discountedPrice: 256,
-    originalPrice: 320,
-    rating: 4.8,
-    reviews: 156,
-    sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    colors: ['Beige', 'Black', 'White']
+    product_name: "Minimal Essentials",
+    product_image: "https://images.unsplash.com/photo-1633821879282-0c4e91f96232?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
+    product_category: "Clothing",
+    product_description: "Essential pieces designed with minimalist aesthetics. Timeless and versatile.",
+    original_price: 320,
+    sale_price: 256,
+    currency: '$',
+    available_sizes: ['XS', 'S', 'M', 'L', 'XL'],
+    product_color: ['Beige', 'Black', 'White']
   },
   {
     id: '303',
-    name: "Modern Classics",
-    images: [
-      "https://images.unsplash.com/photo-1610209740880-6ecc4b20ea78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
-      "https://images.unsplash.com/photo-1633821879282-0c4e91f96232?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400"
-    ],
-    category: "Clothing",
-    description: "Contemporary takes on classic designs. Sophisticated and refined.",
-    price: 380,
-    discountedPrice: 304,
-    originalPrice: 380,
-    rating: 4.9,
-    reviews: 203,
-    sizes: ['XS', 'S', 'M', 'L'],
-    colors: ['Black', 'Navy', 'Charcoal']
+    product_name: "Modern Classics",
+    product_image: "https://images.unsplash.com/photo-1610209740880-6ecc4b20ea78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
+    product_category: "Clothing",
+    product_description: "Contemporary takes on classic designs. Sophisticated and refined.",
+    original_price: 380,
+    sale_price: 304,
+    currency: '$',
+    available_sizes: ['XS', 'S', 'M', 'L'],
+    product_color: ['Black', 'Navy', 'Charcoal']
   }
 ];

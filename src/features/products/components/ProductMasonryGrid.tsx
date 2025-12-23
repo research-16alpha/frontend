@@ -1,68 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import React from 'react';
 import { fetchBestDeals } from '../services/productsService';
-import { transformProducts, FrontendProduct } from '../utils/productTransform';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  discountedPrice?: number;
-  originalPrice?: number;
-  category: string;
-  images: string[];
-  description: string;
-  rating: number;
-  reviews: number;
-  sizes: string[];
-  colors: string[];
-  product_link?: string;
-  brand_name?: string;
-  product_gender?: string;
-}
+import { useProducts } from '../hooks/useProducts';
 
 export function ProductMasonryGrid() {
   const { navigateToProduct } = useNavigation();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function loadProducts() {
-      try {
-        setLoading(true);
-        const data = await fetchBestDeals(20);
-        const backendProducts = Array.isArray(data) ? data : (data.products || []);
-        const transformed = transformProducts(backendProducts);
-        setProducts(transformed.map(p => ({
-          id: String(p.id),
-          name: p.name,
-          price: p.originalPrice || p.price,
-          discountedPrice: p.discountedPrice,
-          originalPrice: p.originalPrice,
-          category: p.category || 'Uncategorized',
-          images: p.images && p.images.length > 0 ? p.images : [p.image],
-          description: p.description || '',
-          rating: p.rating || 4.5,
-          reviews: p.reviews || 0,
-          sizes: p.sizes && p.sizes.length > 0 ? p.sizes : ['S', 'M', 'L'],
-          colors: p.colors && p.colors.length > 0 ? p.colors : ['Black', 'White'],
-          product_link: p.product_link,
-          brand_name: p.brand_name,
-          product_gender: p.product_gender,
-        })));
-        setError(null);
-      } catch (err) {
-        setError('Failed to load products');
-        console.error('Error loading products:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadProducts();
-  }, []);
+  const { products, loading, error } = useProducts({ fetchFn: fetchBestDeals, limit: 20 });
 
   return (
     <section className="w-full bg-white py-10 md:py-16">

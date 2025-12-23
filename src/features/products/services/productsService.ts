@@ -145,8 +145,8 @@ export async function fetchProductsByCategory(
   return res.json();
 }
 
-export async function fetchTopDeals(limit: number = 6) {
-  const res = await fetch(`${API_BASE}/api/products/top-deals?limit=${limit}`);
+export async function fetchTopDeals(limit: number = 4, skip: number = 0) {
+  const res = await fetch(`${API_BASE}/api/products/top-deals?limit=${limit}&skip=${skip}`);
   if (!res.ok) throw new Error("Failed to load top deals");
   return res.json();
 }
@@ -172,14 +172,16 @@ export async function fetchProductsByGender(
   return res.json();
 }
 
-export async function fetchProductsByBrand(brand: string, page: number = 1, limit: number = 20) {
-  const skip = (page - 1) * limit;
-  const res = await fetch(
-    `${API_BASE}/api/products/brand/${encodeURIComponent(brand)}?limit=${limit}&skip=${skip}`
-  );
-  if (!res.ok) throw new Error("Failed to load products by brand");
-  return res.json();
-}
+// Note: Brand filtering endpoint not available in backend router
+// Use fetchProductsWithFilters with brand filter instead
+// export async function fetchProductsByBrand(brand: string, page: number = 1, limit: number = 20) {
+//   const skip = (page - 1) * limit;
+//   const res = await fetch(
+//     `${API_BASE}/api/products/brand/${encodeURIComponent(brand)}?limit=${limit}&skip=${skip}`
+//   );
+//   if (!res.ok) throw new Error("Failed to load products by brand");
+//   return res.json();
+// }
 
 export async function fetchLatestProducts(page: number = 1, limit: number = 20) {
   const skip = (page - 1) * limit;
@@ -188,4 +190,63 @@ export async function fetchLatestProducts(page: number = 1, limit: number = 20) 
   const data = await res.json();
   console.log("Latest products response:", data);
   return data;
+}
+
+/**
+ * Fetch filter metadata (categories, brands, occasions) with counts from backend
+ */
+export async function fetchFilterMetadata() {
+  const res = await fetch(`${API_BASE}/api/products/filter/metadata`);
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Failed to load filter metadata:", res.status, errorText);
+    throw new Error("Failed to load filter metadata");
+  }
+  const data = await res.json();
+  console.log("Filter metadata response:", data);
+  return data;
+}
+
+/**
+ * Fetch filtered products from backend
+ */
+export async function fetchFilteredProducts(options: {
+  page?: number;
+  limit?: number;
+  category?: string[];
+  brand?: string[];
+  occasion?: string[];
+  price_min?: number;
+  price_max?: number;
+  gender?: string;
+}) {
+  const { page = 1, limit = 40, ...filters } = options;
+  const skip = (page - 1) * limit;
+  
+  const params = new URLSearchParams();
+  params.append('limit', String(limit));
+  params.append('skip', String(skip));
+  
+  if (filters.category && filters.category.length > 0) {
+    filters.category.forEach(cat => params.append('category', cat));
+  }
+  if (filters.brand && filters.brand.length > 0) {
+    filters.brand.forEach(b => params.append('brand', b));
+  }
+  if (filters.occasion && filters.occasion.length > 0) {
+    filters.occasion.forEach(occ => params.append('occasion', occ));
+  }
+  if (filters.price_min !== undefined) {
+    params.append('price_min', String(filters.price_min));
+  }
+  if (filters.price_max !== undefined) {
+    params.append('price_max', String(filters.price_max));
+  }
+  if (filters.gender) {
+    params.append('gender', filters.gender);
+  }
+  
+  const res = await fetch(`${API_BASE}/api/products/filter/products?${params.toString()}`);
+  if (!res.ok) throw new Error("Failed to load filtered products");
+  return res.json();
 }

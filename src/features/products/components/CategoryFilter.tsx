@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export interface CategoryOption {
@@ -15,21 +15,42 @@ export interface CategoryGroup {
 
 export interface CategoryFilterProps {
   categories: CategoryGroup[];
+  selectedFilters?: Record<string, string[]>;
   onFilterChange?: (filters: Record<string, string[]>) => void;
   className?: string;
   defaultExpanded?: boolean;
 }
 
 export function CategoryFilter({ 
-  categories, 
+  categories = [], 
+  selectedFilters: externalSelectedFilters,
   onFilterChange,
   className = '',
   defaultExpanded = false
 }: CategoryFilterProps) {
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(
-    categories.reduce((acc, cat) => ({ ...acc, [cat.title]: defaultExpanded }), {})
-  );
+  // Use external selectedFilters if provided, otherwise maintain internal state
+  const [internalSelectedFilters, setInternalSelectedFilters] = useState<Record<string, string[]>>({});
+  const selectedFilters = externalSelectedFilters !== undefined ? externalSelectedFilters : internalSelectedFilters;
+  
+  // Initialize expandedSections based on categories, and update when categories change
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
+    return (categories || []).reduce((acc, cat) => ({ ...acc, [cat.title]: defaultExpanded }), {});
+  });
+
+  // Update expandedSections when categories change
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      setExpandedSections(prev => {
+        const newSections = { ...prev };
+        categories.forEach(cat => {
+          if (!(cat.title in newSections)) {
+            newSections[cat.title] = defaultExpanded;
+          }
+        });
+        return newSections;
+      });
+    }
+  }, [categories, defaultExpanded]);
 
   const toggleSection = (title: string) => {
     setExpandedSections(prev => ({
@@ -39,27 +60,35 @@ export function CategoryFilter({
   };
 
   const handleFilterChange = (groupTitle: string, value: string, multiSelect: boolean = false) => {
-    setSelectedFilters(prev => {
-      const current = prev[groupTitle] || [];
-      let updated: string[];
+    const current = selectedFilters[groupTitle] || [];
+    let updated: string[];
 
-      if (multiSelect) {
-        updated = current.includes(value)
-          ? current.filter(v => v !== value)
-          : [...current, value];
-      } else {
-        updated = current.includes(value) ? [] : [value];
-      }
+    if (multiSelect) {
+      updated = current.includes(value)
+        ? current.filter(v => v !== value)
+        : [...current, value];
+    } else {
+      updated = current.includes(value) ? [] : [value];
+    }
 
-      const newFilters = {
-        ...prev,
-        [groupTitle]: updated
-      };
+    const newFilters = {
+      ...selectedFilters,
+      [groupTitle]: updated
+    };
 
-      onFilterChange?.(newFilters);
-      return newFilters;
-    });
+    // Update internal state if not using external state
+    if (externalSelectedFilters === undefined) {
+      setInternalSelectedFilters(newFilters);
+    }
+    
+    // Always call the callback to notify parent
+    onFilterChange?.(newFilters);
   };
+
+  // Don't render if no categories
+  if (!categories || categories.length === 0) {
+    return null;
+  }
 
   return (
     <div className={`space-y-6 ${className}`}>
@@ -77,34 +106,40 @@ export function CategoryFilter({
             )}
           </button>
 
-          {expandedSections[category.title] && (
-            <div className="space-y-2">
-              {category.options.map((option) => {
-                const isSelected = (selectedFilters[category.title] || []).includes(option.value);
-                
-                return (
-                  <label
-                    key={option.value}
-                    className="flex items-center gap-x-3 cursor-pointer hover:text-gray-600 transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => handleFilterChange(category.title, option.value, category.multiSelect)}
-                      className="w-4 h-4 border-gray-300 rounded cursor-pointer"
-                    />
-                    <span className="text-sm flex-1 font-light text-gray-500" > 
-                      
-                      {option.label} 
-                      {option.count !== undefined && (
-                        <span className="text-gray-400 ml-1 px-2 font-light"> ({option.count})</span>
-                      )}
-                    </span>
-
-                    
-                  </label>
-                );
-              })}
+          {expandedSections[category.title] && category.options.length > 0 && (
+            <div className="mt-2 overflow-hidden">
+              <div 
+                className="space-y-2 overflow-y-auto pr-2"
+                style={{ 
+                  maxHeight: '300px',
+                  scrollbarWidth: 'thin',
+                  WebkitOverflowScrolling: 'touch'
+                }}
+              >
+                {category.options.map((option) => {
+                  const isSelected = (selectedFilters[category.title] || []).includes(option.value);
+                  
+                  return (
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-x-3 cursor-pointer hover:text-gray-600 transition-colors py-1 min-h-[32px]"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => handleFilterChange(category.title, option.value, category.multiSelect)}
+                        className="w-4 h-4 border-gray-300 rounded cursor-pointer flex-shrink-0"
+                      />
+                      <span className="text-sm flex-1 font-light text-gray-500"> 
+                        {option.label} 
+                        {option.count !== undefined && (
+                          <span className="text-gray-400 ml-1 px-2 font-light"> ({option.count})</span>
+                        )}
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
