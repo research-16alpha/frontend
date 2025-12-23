@@ -1,9 +1,9 @@
 import React from 'react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from '../../../shared/components/figma/ImageWithFallback';
 import { ArrowRight } from 'lucide-react';
-import { useNavigation } from '../contexts/NavigationContext';
+import { useNavigation } from '../../../shared/contexts/NavigationContext';
 
-const editorialImage = new URL('../assets/halfsy-edit.png', import.meta.url).href;
+const editorialImage = new URL('../../../shared/assets/halfsy-edit.png', import.meta.url).href;
 export function EditorialSection() {
   const { navigateToCurated } = useNavigation();
   return (
@@ -42,3 +42,4 @@ export function EditorialSection() {
     </section>
   );
 }
+

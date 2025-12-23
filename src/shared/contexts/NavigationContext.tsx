@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode, useState } from 'react';
 
-export type Page = 'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new';
+export type Page = 'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new' | 'shop-all' | 'women' | 'men' | 'accessories' | 'pre-owned';
 export type ProductsMode = 'products' | 'curated' | 'new';
 
 interface NavigationContextType {
@@ -16,6 +16,11 @@ interface NavigationContextType {
   navigateToAbout: () => void;
   navigateToCurated: () => void;
   navigateToNew: () => void;
+  navigateToShopAll: () => void;
+  navigateToWomen: () => void;
+  navigateToMen: () => void;
+  navigateToAccessories: () => void;
+  navigateToPreOwned: () => void;
   navigateToProduct: (productId: string) => void;
   navigateBack: () => void;
 }
@@ -53,12 +58,18 @@ export function NavigationProvider({
   };
   
   const navigateToProducts = (gender?: string) => {
-    setProductsGender(gender || null);
-    setProductsMode('products');
+    setProductsGender(null);
+    setProductsMode(null);
     setProductId(null);
     setPreviousPage(null);
-    // Always navigate to products page, even if already there, to trigger refresh
-    setCurrentPage('products');
+    // Navigate to appropriate page based on gender, or ShopAll if no gender
+    if (gender === 'men') {
+      setCurrentPage('men');
+    } else if (gender === 'women') {
+      setCurrentPage('women');
+    } else {
+      setCurrentPage('shop-all');
+    }
   };
   
   const navigateToAccount = () => {
@@ -75,18 +86,58 @@ export function NavigationProvider({
 
   const navigateToCurated = () => {
     setProductsGender(null);
-    setProductsMode('curated');
+    setProductsMode(null);
     setProductId(null);
     setPreviousPage(null);
-    setCurrentPage('products');
+    setCurrentPage('curated');
   };
 
   const navigateToNew = () => {
     setProductsGender(null);
-    setProductsMode('new');
+    setProductsMode(null);
     setProductId(null);
     setPreviousPage(null);
-    setCurrentPage('products');
+    setCurrentPage('new');
+  };
+
+  const navigateToShopAll = () => {
+    setProductsGender(null);
+    setProductsMode(null);
+    setProductId(null);
+    setPreviousPage(null);
+    setCurrentPage('shop-all');
+  };
+
+  const navigateToWomen = () => {
+    setProductsGender(null);
+    setProductsMode(null);
+    setProductId(null);
+    setPreviousPage(null);
+    setCurrentPage('women');
+  };
+
+  const navigateToMen = () => {
+    setProductsGender(null);
+    setProductsMode(null);
+    setProductId(null);
+    setPreviousPage(null);
+    setCurrentPage('men');
+  };
+
+  const navigateToAccessories = () => {
+    setProductsGender(null);
+    setProductsMode(null);
+    setProductId(null);
+    setPreviousPage(null);
+    setCurrentPage('accessories');
+  };
+
+  const navigateToPreOwned = () => {
+    setProductsGender(null);
+    setProductsMode(null);
+    setProductId(null);
+    setPreviousPage(null);
+    setCurrentPage('pre-owned');
   };
 
   const navigateToProduct = (id: string) => {
@@ -122,6 +173,11 @@ export function NavigationProvider({
         navigateToAbout,
         navigateToCurated,
         navigateToNew,
+        navigateToShopAll,
+        navigateToWomen,
+        navigateToMen,
+        navigateToAccessories,
+        navigateToPreOwned,
         navigateToProduct,
         navigateBack,
       }}
