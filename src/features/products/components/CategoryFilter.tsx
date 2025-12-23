@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 
 export interface CategoryOption {
   label: string;
@@ -37,6 +37,7 @@ export function CategoryFilter({
   // Use external selectedFilters if provided, otherwise maintain internal state
   const [internalSelectedFilters, setInternalSelectedFilters] = useState<Record<string, string[]>>({});
   const selectedFilters = externalSelectedFilters !== undefined ? externalSelectedFilters : internalSelectedFilters;
+  const [searchQuery, setSearchQuery] = useState<string>('');
   
   // Initialize expandedSections based on categories, and update when categories change
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
@@ -91,6 +92,40 @@ export function CategoryFilter({
     onFilterChange?.(newFilters);
   };
 
+  // Filter categories and options based on search query
+  const filteredCategories = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return categories;
+    }
+
+    const query = searchQuery.toLowerCase().trim();
+    
+    return categories.map(category => {
+      const filteredOptions = category.options.filter(option => {
+        const label = option.label.toLowerCase();
+        return label.includes(query);
+      });
+      
+      return {
+        ...category,
+        options: filteredOptions
+      };
+    }).filter(category => category.options.length > 0);
+  }, [categories, searchQuery]);
+
+  // Auto-expand categories when searching
+  useEffect(() => {
+    if (searchQuery.trim() && filteredCategories.length > 0) {
+      setExpandedSections(prev => {
+        const newSections = { ...prev };
+        filteredCategories.forEach(cat => {
+          newSections[cat.title] = true;
+        });
+        return newSections;
+      });
+    }
+  }, [searchQuery, filteredCategories]);
+
   // Don't render if no categories
   if (!categories || categories.length === 0) {
     return null;
@@ -98,7 +133,24 @@ export function CategoryFilter({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {categories.map((category) => (
+      {/* Search Input */}
+      <div className="relative mb-4">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search filters..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-sm"
+        />
+      </div>
+
+      {filteredCategories.length === 0 && searchQuery.trim() ? (
+        <div className="text-sm text-gray-500 py-4 text-center">
+          No filters found matching "{searchQuery}"
+        </div>
+      ) : (
+        filteredCategories.map((category) => (
         <div key={category.title} className="border-b border-gray-200 pb-4">
           <button
             onClick={() => toggleSection(category.title)}
@@ -149,7 +201,8 @@ export function CategoryFilter({
             </div>
           )}
         </div>
-      ))}
+        ))
+      )}
     </div>
   );
 }

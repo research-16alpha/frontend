@@ -4,8 +4,7 @@ import { Navbar } from '../../shared/components/Navbar';
 import { AISearchBar } from '../../shared/components/AISearchBar';
 import { Footer } from '../../shared/components/Footer';
 import { ProductsGrid } from '../../features/products/components/ProductsGrid';
-import { CategoryGroup } from '../../features/products/components/CategoryFilter';
-import { SortOption } from '../../features/products/components/SortBy';
+import { ProductFilters } from '../../features/products/components/ProductFilters';
 import { Product } from '../../features/products/types/product';
 import { normalizeProducts } from '../../features/products/utils/productTransform';
 import { useNavigation } from '../../shared/contexts/NavigationContext';
@@ -161,22 +160,42 @@ export function BaseProductsPage({
       />
       <AISearchBar />
       
-      <ProductsGrid
-        products={products}
-        loading={loading}
-        error={error}
-        pageTitle={pageTitle}
-        pageDescription={pageDescription}
-        hasMore={hasMore}
-        onLoadMore={handleLoadMore}
-        onProductClick={handleProductClick}
-        categoryData={categoryData}
-        sortOptions={sortOptions}
-        selectedFilters={selectedFilters}
-        sortBy={sortBy}
-        onFilterChange={handleFilterChange}
-        onSortChange={handleSortChange}
-      />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24 mb-8 sm:mb-12 md:mb-16 lg:mb-20 xl:mb-24 flex-1 w-full">
+        {/* Page Title */}
+        <div className="mb-6">
+          <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight">
+            <span className="text-gray-charcoal-1 font-light">{pageTitle}</span>
+          </h2>
+          {pageDescription && (
+            <p className="text-sm text-gray-600">
+              {pageDescription}
+            </p>
+          )}
+        </div>
+
+        {/* Filters and Sort */}
+        <ProductFilters
+          categoryData={categoryData}
+          sortOptions={sortOptions}
+          selectedFilters={selectedFilters}
+          sortBy={sortBy}
+          onFilterChange={handleFilterChange}
+          onSortChange={handleSortChange}
+        />
+
+        {/* Product Grid */}
+        <ProductsGrid
+          products={products}
+          loading={loading}
+          error={error}
+          pageTitle=""
+          hasMore={hasMore}
+          onLoadMore={handleLoadMore}
+          onProductClick={handleProductClick}
+          sortBy={sortBy}
+          selectedFilters={selectedFilters}
+        />
+      </main>
 
       <div className="mt-6 sm:mt-10 md:mt-14 lg:mt-18 xl:mt-22 pt-6 sm:pt-10 md:pt-14 lg:pt-18 xl:pt-22">
         <Footer />
