@@ -21,6 +21,12 @@ export interface CategoryFilterProps {
   defaultExpanded?: boolean;
 }
 
+// Helper function to capitalize first letter
+const capitalizeFirstLetter = (str: string | undefined | null): string => {
+  if (!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export function CategoryFilter({ 
   categories = [], 
   selectedFilters: externalSelectedFilters,
@@ -122,7 +128,7 @@ export function CategoryFilter({
                   return (
                     <label
                       key={option.value}
-                      className="flex items-center gap-x-3 cursor-pointer hover:text-gray-600 transition-colors py-1 min-h-[32px]"
+                      className="flex items-center gap-x-10 cursor-pointer hover:text-black transition-colors py-1 min-h-[32px]"
                     >
                       <input
                         type="checkbox"
@@ -130,8 +136,8 @@ export function CategoryFilter({
                         onChange={() => handleFilterChange(category.title, option.value, category.multiSelect)}
                         className="w-4 h-4 border-gray-300 rounded cursor-pointer flex-shrink-0"
                       />
-                      <span className="text-sm flex-1 font-light text-gray-500"> 
-                        {option.label} 
+                      <span className="text-sm md:text-base lg:text-lg flex-1 font-thin text-gray-700"> 
+                        {capitalizeFirstLetter(option.label)} 
                         {option.count !== undefined && (
                           <span className="text-gray-400 ml-1 px-2 font-light"> ({option.count})</span>
                         )}

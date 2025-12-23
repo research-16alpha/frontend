@@ -9,20 +9,47 @@ export function useScrollDetection({ elementRef, enabled }: UseScrollDetectionOp
   const [isScrolledOut, setIsScrolledOut] = useState(false);
 
   useEffect(() => {
-    if (!enabled || !elementRef.current) return;
+    if (!enabled || !elementRef.current) {
+      setIsScrolledOut(false);
+      return;
+    }
+
+    let ticking = false;
 
     const handleScroll = () => {
       const element = elementRef.current;
-      if (!element) return;
+      if (!element) {
+        setIsScrolledOut(false);
+        return;
+      }
 
       const rect = element.getBoundingClientRect();
-      setIsScrolledOut(rect.bottom < 0);
+      // Show floating buttons when the element has scrolled out of view
+      // rect.top < 0 means the top of the element has scrolled past the top of the viewport
+      setIsScrolledOut(rect.top < 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial state
+    const requestTick = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Check initial state
+    handleScroll();
+
+    // Add scroll listener with passive option for better performance
+    window.addEventListener('scroll', requestTick, { passive: true });
+    window.addEventListener('resize', requestTick, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', requestTick);
+      window.removeEventListener('resize', requestTick);
+    };
   }, [enabled, elementRef]);
 
   return isScrolledOut;

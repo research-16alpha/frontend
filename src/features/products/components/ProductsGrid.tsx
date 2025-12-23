@@ -396,10 +396,10 @@ export function ProductsGrid({
               {mobileFiltersOpen && (
                 <>
                   <div 
-                    className="fixed inset-0 z-10 bg-black/50" 
+                    className="fixed inset-0 z-[60] bg-black/50" 
                     onClick={() => setMobileFiltersOpen(false)}
                   />
-                  <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 shadow-lg z-50 p-4 max-h-[60vh] overflow-y-auto">
+                  <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-gray-200 shadow-lg z-[70] p-4 max-h-[60vh] overflow-y-auto">
                     {categoryData && categoryData.length > 0 ? (
                       <CategoryFilter 
                         categories={categoryData}

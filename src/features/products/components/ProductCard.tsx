@@ -107,6 +107,12 @@ export function ProductCard({
                   </div>
                 )}
 
+                {product.product_name && (
+                  <div className="text-sm text-gray-700 line-clamp-1 mb-1">
+                    {capitalizeWords(product.product_name)}
+                  </div>
+                )}
+
                 <div className="text-sm text-gray-700 line-clamp-2 mb-1 min-h-[2.5rem]">
                   {capitalizeWords(product.product_description)}
                 </div>
@@ -117,20 +123,41 @@ export function ProductCard({
               </div>
 
               {/* PRICE */}
-              <div className="pt-2">
+              <div className="pt-2 flex flex-col gap-1">
                 {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-base line-through text-gray-600 font-normal">
-                      {product.currency || '$'}{product.original_price.toFixed(2)}
-                    </span>
-                    <span className="text-red-600 font-semibold text-base">
-                      {product.currency || '$'}{product.sale_price.toFixed(2)}
-                    </span>
-                  </div>
+                  <>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-red-600 font-semibold text-base">
+                        {product.currency || '$'}{product.sale_price.toFixed(2)}
+                      </span>
+                      <span className="text-base line-through text-gray-600 font-normal">
+                        {product.currency || '$'}{product.original_price.toFixed(2)}
+                      </span>
+                    </div>
+                    {product.discount && (
+                      <div className="text-sm text-red-600 font-medium">
+                        {product.discount}% OFF
+                      </div>
+                    )}
+                  </>
                 ) : product.sale_price ? (
-                  <span className="font-medium">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                  <>
+                    <span className="font-medium">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                    {product.discount && (
+                      <div className="text-sm text-red-600 font-medium">
+                        {product.discount}% OFF
+                      </div>
+                    )}
+                  </>
                 ) : product.original_price ? (
-                  <span className="font-medium">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                  <>
+                    <span className="font-medium">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                    {product.discount && (
+                      <div className="text-sm text-red-600 font-medium">
+                        {product.discount}% OFF
+                      </div>
+                    )}
+                  </>
                 ) : null}
               </div>
             </div>
@@ -246,35 +273,63 @@ function ExpandedContent({
                 )}
               </div>
 
-              {/* Description, Brand Name, and Price */}
+              {/* Brand Name, Product Name, Description, and Price */}
               <div className="flex flex-col gap-1">
-                {/* Description and Brand Name */}
-                <div className="flex flex-col gap-1">
-                  <p className="text-lg text-gray-700 leading-relaxed text-base font-light">
-                    {capitalizeWords(product.product_description)}
-                  </p>
-                  {product.brand_name && (
-                    <div className="text-lg font-semibold uppercase tracking-wider text-gray-900">
-                      {product.brand_name}
-                    </div>
-                  )}
-                </div>
+                {/* Brand Name */}
+                {product.brand_name && (
+                  <div className="text-lg font-semibold uppercase tracking-wider text-gray-900">
+                    {product.brand_name}
+                  </div>
+                )}
+
+                {/* Product Name */}
+                {product.product_name && (
+                  <div className="text-base text-gray-700 font-medium">
+                    {capitalizeWords(product.product_name)}
+                  </div>
+                )}
+
+                {/* Description */}
+                <p className="text-lg text-gray-700 leading-relaxed text-base font-light">
+                  {capitalizeWords(product.product_description)}
+                </p>
 
                 {/* PRICE */}
-                <div>
+                <div className="flex flex-col gap-1">
                   {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-lg line-through text-gray-600 font-normal">
-                        {product.currency || '$'}{product.original_price.toFixed(2)}
-                      </span>
-                      <span className="text-lg text-red-600 font-semibold text-base">
-                        {product.currency || '$'}{product.sale_price.toFixed(2)}
-                      </span>
-                    </div>
+                    <>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg text-red-600 font-semibold text-base">
+                          {product.currency || '$'}{product.sale_price.toFixed(2)}
+                        </span>
+                        <span className="text-lg line-through text-gray-600 font-normal">
+                          {product.currency || '$'}{product.original_price.toFixed(2)}
+                        </span>
+                      </div>
+                      {product.discount && (
+                        <div className="text-sm text-red-600 font-medium">
+                          {product.discount}% OFF
+                        </div>
+                      )}
+                    </>
                   ) : product.sale_price ? (
-                    <span className="font-medium text-base">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                    <>
+                      <span className="font-medium text-base">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                      {product.discount && (
+                        <div className="text-sm text-red-600 font-medium">
+                          {product.discount}% OFF
+                        </div>
+                      )}
+                    </>
                   ) : product.original_price ? (
-                    <span className="font-medium text-base">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                    <>
+                      <span className="font-medium text-base">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                      {product.discount && (
+                        <div className="text-sm text-red-600 font-medium">
+                          {product.discount}% OFF
+                        </div>
+                      )}
+                    </>
                   ) : null}
                 </div>
               </div>
