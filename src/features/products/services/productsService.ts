@@ -124,6 +124,32 @@ export async function fetchProducts(page: number = 1, limit: number = 20) {
   return res.json();
 }
 
+export async function fetchProductsWithCustomSort(pageOrLimit: number = 1, limit?: number) {
+  // Support two signatures:
+  // 1. (limit: number) - for useProducts hook compatibility
+  // 2. (page: number, limit: number) - for pagination
+  let actualLimit: number;
+  let skip: number;
+  
+  if (limit !== undefined) {
+    // Called with (page, limit)
+    actualLimit = limit;
+    skip = (pageOrLimit - 1) * limit;
+  } else {
+    // Called with (limit) only
+    actualLimit = pageOrLimit;
+    skip = 0;
+  }
+  
+  console.log("fetchProductsWithCustomSort API called", { limit: actualLimit, skip });
+
+  const res = await fetch(
+    `${API_BASE}/api/products/custom-sort?limit=${actualLimit}&skip=${skip}`
+  );
+  if (!res.ok) throw new Error("Failed to load products with custom sort");
+  return res.json();
+}
+
 export async function fetchProductById(id: string | number) {
   const res = await fetch(`${API_BASE}/api/products/${id}`);
   if (!res.ok) throw new Error("Failed to load product");

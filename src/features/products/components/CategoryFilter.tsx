@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useLayoutEffect } from 'react';
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 
 export interface CategoryOption {
@@ -93,38 +93,71 @@ export function CategoryFilter({
   };
 
   // Filter categories and options based on search query
+  // Optimized for large arrays (e.g., many brands)
   const filteredCategories = useMemo(() => {
-    if (!searchQuery.trim()) {
+    const trimmedQuery = searchQuery.trim();
+    
+    // If no search query, return all categories
+    if (!trimmedQuery) {
       return categories;
     }
 
-    const query = searchQuery.toLowerCase().trim();
+    // Normalize query once
+    const normalizedQuery = trimmedQuery.toLowerCase();
     
-    return categories.map(category => {
-      const filteredOptions = category.options.filter(option => {
-        const label = option.label.toLowerCase();
-        return label.includes(query);
-      });
-      
-      return {
-        ...category,
-        options: filteredOptions
-      };
-    }).filter(category => category.options.length > 0);
+    // Filter categories and their options in a single pass
+    const result = categories
+      .map(category => {
+        // Filter options that match the query substring
+        const filteredOptions = category.options.filter(option => {
+          // Normalize label once and check if it includes the query
+          return option.label.toLowerCase().includes(normalizedQuery);
+        });
+        
+        // Only include category if it has matching options
+        if (filteredOptions.length === 0) {
+          return null;
+        }
+        
+        return {
+          ...category,
+          options: filteredOptions
+        };
+      })
+      .filter((category): category is CategoryGroup => category !== null);
+    
+    return result;
   }, [categories, searchQuery]);
 
   // Auto-expand categories when searching
-  useEffect(() => {
-    if (searchQuery.trim() && filteredCategories.length > 0) {
+  // Reset expansion when search is cleared
+  // Use useLayoutEffect for synchronous updates before browser paint
+  // This fixes the issue where first keystroke doesn't show results for large arrays (2000+ brands)
+  useLayoutEffect(() => {
+    const trimmedQuery = searchQuery.trim();
+    
+    if (trimmedQuery && filteredCategories.length > 0) {
+      // Expand all categories that have matching results synchronously (before paint)
       setExpandedSections(prev => {
         const newSections = { ...prev };
+        let hasChanges = false;
+        
         filteredCategories.forEach(cat => {
-          newSections[cat.title] = true;
+          if (!newSections[cat.title]) {
+            newSections[cat.title] = true;
+            hasChanges = true;
+          }
         });
-        return newSections;
+        
+        // Only update if there are actual changes to prevent unnecessary re-renders
+        return hasChanges ? newSections : prev;
       });
+    } else if (!trimmedQuery) {
+      // Reset to default expanded state when search is cleared
+      const defaultSections = (categories || []).reduce((acc, cat) => ({ ...acc, [cat.title]: defaultExpanded }), {});
+      setExpandedSections(defaultSections);
     }
-  }, [searchQuery, filteredCategories]);
+  }, [searchQuery, filteredCategories, categories, defaultExpanded]);
 
   // Don't render if no categories
   if (!categories || categories.length === 0) {
@@ -133,16 +166,18 @@ export function CategoryFilter({
 
   return (
     <div className={`space-y-6 ${className}`}>
-      {/* Search Input */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search filters..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-sm"
-        />
+      {/* Search Input - Sticky at top */}
+      <div className="sticky top-0 z-10 bg-white pb-4 -mb-4 border-b border-gray-200">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search filters..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent text-sm bg-white"
+          />
+        </div>
       </div>
 
       {filteredCategories.length === 0 && searchQuery.trim() ? (

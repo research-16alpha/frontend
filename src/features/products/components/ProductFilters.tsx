@@ -47,15 +47,16 @@ export function ProductFilters({
                       className="fixed inset-0 z-10" 
                       onClick={() => setMobileFiltersOpen(false)}
                     />
-                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 p-4">
+                    <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 max-h-[60vh] overflow-y-auto">
                       {categoryData && categoryData.length > 0 ? (
                         <CategoryFilter 
                           categories={categoryData}
                           selectedFilters={selectedFilters}
                           onFilterChange={onFilterChange}
+                          className="p-4"
                         />
                       ) : (
-                        <div className="text-sm text-gray-500 p-2">Loading filters...</div>
+                        <div className="text-sm text-gray-500 p-4">Loading filters...</div>
                       )}
                     </div>
                   </>
@@ -96,16 +97,17 @@ export function ProductFilters({
                   onClick={() => setDesktopFilterOpen(null)}
                 />
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 overflow-hidden">
-                  <div className="p-4 max-h-[60vh] overflow-y-auto">
+                  <div className="max-h-[60vh] overflow-y-auto">
                     {categoryData && categoryData.length > 0 && categoryData[0] ? (
                       <CategoryFilter 
                         categories={[categoryData[0]]}
                         selectedFilters={selectedFilters}
                         onFilterChange={onFilterChange}
                         defaultExpanded={true}
+                        className="p-4"
                       />
                     ) : (
-                      <div className="text-sm text-gray-500 p-2">Loading categories...</div>
+                      <div className="text-sm text-gray-500 p-4">Loading categories...</div>
                     )}
                   </div>
                 </div>
@@ -135,16 +137,17 @@ export function ProductFilters({
                   onClick={() => setDesktopFilterOpen(null)}
                 />
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 overflow-hidden">
-                  <div className="p-4 max-h-[60vh] overflow-y-auto">
+                  <div className="max-h-[60vh] overflow-y-auto">
                     {categoryData && categoryData.length > 1 && categoryData[1] ? (
                       <CategoryFilter 
                         categories={[categoryData[1]]}
                         selectedFilters={selectedFilters}
                         onFilterChange={onFilterChange}
                         defaultExpanded={true}
+                        className="p-4"
                       />
                     ) : (
-                      <div className="text-sm text-gray-500 p-2">Loading brands...</div>
+                      <div className="text-sm text-gray-500 p-4">Loading brands...</div>
                     )}
                   </div>
                 </div>
@@ -174,16 +177,17 @@ export function ProductFilters({
                   onClick={() => setDesktopFilterOpen(null)}
                 />
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 overflow-hidden">
-                  <div className="p-4 max-h-[60vh] overflow-y-auto">
+                  <div className="max-h-[60vh] overflow-y-auto">
                     {categoryData && categoryData.length > 2 && categoryData[2] ? (
                       <CategoryFilter 
                         categories={[categoryData[2]]}
                         selectedFilters={selectedFilters}
                         onFilterChange={onFilterChange}
                         defaultExpanded={true}
+                        className="p-4"
                       />
                     ) : (
-                      <div className="text-sm text-gray-500 p-2">Loading occasions...</div>
+                      <div className="text-sm text-gray-500 p-4">Loading occasions...</div>
                     )}
                   </div>
                 </div>
@@ -213,16 +217,17 @@ export function ProductFilters({
                   onClick={() => setDesktopFilterOpen(null)}
                 />
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 shadow-lg z-50 overflow-hidden">
-                  <div className="p-4 max-h-[60vh] overflow-y-auto">
+                  <div className="max-h-[60vh] overflow-y-auto">
                     {categoryData && categoryData.length > 3 && categoryData[3] ? (
                       <CategoryFilter 
                         categories={[categoryData[3]]}
                         selectedFilters={selectedFilters}
                         onFilterChange={onFilterChange}
                         defaultExpanded={true}
+                        className="p-4"
                       />
                     ) : (
-                      <div className="text-sm text-gray-500 p-2">Loading prices...</div>
+                      <div className="text-sm text-gray-500 p-4">Loading prices...</div>
                     )}
                   </div>
                 </div>

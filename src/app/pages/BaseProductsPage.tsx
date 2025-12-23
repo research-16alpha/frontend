@@ -94,16 +94,32 @@ export function BaseProductsPage({
         const priceFilter = selectedFilters['PRICE']?.[0];
         const priceRange = priceFilter ? getPriceRange(priceFilter) : {};
         
-        const data = await fetchFilteredProducts({
-          page,
-          limit: 20,
-          category: categoryFilters.length > 0 ? categoryFilters : undefined,
-          brand: brandFilters.length > 0 ? brandFilters : undefined,
-          occasion: occasionFilters.length > 0 ? occasionFilters : undefined,
-          price_min: priceRange.min,
-          price_max: priceRange.max,
-          gender: gender,
-        });
+        // Check if any filters are applied
+        const hasFilters = categoryFilters.length > 0 || 
+                          brandFilters.length > 0 || 
+                          occasionFilters.length > 0 || 
+                          priceFilter !== undefined ||
+                          gender !== undefined;
+        
+        let data;
+        
+        // If filters are applied, use fetchFilteredProducts
+        // Otherwise, use the provided fetchProductsFn (e.g., fetchProductsWithCustomSort)
+        if (hasFilters) {
+          data = await fetchFilteredProducts({
+            page,
+            limit: 20,
+            category: categoryFilters.length > 0 ? categoryFilters : undefined,
+            brand: brandFilters.length > 0 ? brandFilters : undefined,
+            occasion: occasionFilters.length > 0 ? occasionFilters : undefined,
+            price_min: priceRange.min,
+            price_max: priceRange.max,
+            gender: gender,
+          });
+        } else {
+          // Use the provided fetchProductsFn (e.g., fetchProductsWithCustomSort for ShopAll)
+          data = await fetchProductsFn(page, 20);
+        }
         
         const backendProducts = Array.isArray(data) ? data : (data.products || []);
         const normalized = normalizeProducts(backendProducts);
@@ -124,7 +140,7 @@ export function BaseProductsPage({
       }
     }
     loadProducts();
-  }, [page, selectedFilters, sortBy, gender]);
+  }, [page, selectedFilters, sortBy, gender, fetchProductsFn]);
 
   const handleLoadMore = () => {
     setPage(prev => prev + 1);
