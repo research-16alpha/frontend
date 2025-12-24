@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { Search } from 'lucide-react';
 import { searchProducts, getSearchSuggestions } from '../../features/products/services/searchService';
 import { useNavigation } from '../contexts/NavigationContext';
 
 export function AISearchBar() {
   const { navigateToShopAll } = useNavigation();
   const [isHovered, setIsHovered] = useState(false);
-  const [isFixed, setIsFixed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -16,15 +14,12 @@ export function AISearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isExpanded = isHovered || isFixed;
-
   // Load search query from sessionStorage on mount and listen for changes
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const savedQuery = sessionStorage.getItem('searchQuery');
       if (savedQuery) {
         setSearchQuery(savedQuery);
-        setIsFixed(true);
       }
       
       // Listen for storage events to update when search query changes from other tabs/components
@@ -32,11 +27,9 @@ export function AISearchBar() {
         if (e.key === 'searchQuery') {
           if (e.newValue) {
             setSearchQuery(e.newValue);
-            setIsFixed(true);
           } else {
             // Search query was cleared
             setSearchQuery('');
-            setIsFixed(false);
           }
         }
       };
@@ -68,7 +61,6 @@ export function AISearchBar() {
   }, []);
 
   const handleSearchClick = async () => {
-    setIsFixed(true);
     if (searchQuery.trim()) {
       await handleSearch();
     }
@@ -115,8 +107,11 @@ export function AISearchBar() {
       // Small delay to ensure navigation happens
       await new Promise(resolve => setTimeout(resolve, 100));
     } catch (error) {
+      console.log("search error, ")
       console.error('Search error:', error);
     } finally {
+      console.log("final stage")
+      console.log("isSearching", isSearching)
       setIsSearching(false);
     }
   };
@@ -191,109 +186,67 @@ export function AISearchBar() {
   };
 
   return (
-    <div className="w-full bg-white border-b border-gray-100">
+    <div className="w-full bg-white ">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <motion.div
-          className="w-full py-4 md:py-6"
-          onMouseEnter={() => !isFixed && setIsHovered(true)}
-          onMouseLeave={() => !isFixed && setIsHovered(false)}
-          animate={{
-            paddingTop: isExpanded ? '2rem' : '1rem',
-            paddingBottom: isExpanded ? '2rem' : '1rem',
-          }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
-        >
-          <AnimatePresence mode="wait">
-            {isExpanded ? (
-              <motion.div
-                key="expanded"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="max-w-3xl mx-auto"
+        <div className="w-full py-4 md:py-6">
+          <div className="max-w-2xl mx-auto">
+            <div className="relative w-full">
+              <div 
+                className={`relative flex items-center gap-3 px-5 py-3 bg-gray-50 rounded-full border transition-colors cursor-pointer ${
+                  isHovered ? 'border-black' : 'border-gray-200'
+                }`}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onClick={() => inputRef.current?.focus()}
               >
-                <motion.div 
-                  className="text-center mb-6"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.1 }}
-                >
-                  <h2 className="text-2xl md:text-3xl mb-2 tracking-tight">Discover Your Style</h2>
-                  <p className="text-gray-600">Search our vast collection to grab the Best deals</p>
-                </motion.div>
-
-                <div className="relative w-full">
-                  <div className="relative flex items-center gap-3 px-5 md:px-6 py-3 md:py-4 bg-gray-50 rounded-full border border-gray-200 hover:border-gray-300 transition-colors">
-                    <Search className="w-5 h-5 md:w-6 md:h-6 text-gray-400 flex-shrink-0" />
-                    <input
-                      ref={inputRef}
-                      type="text"
-                      placeholder="Search our collection..."
-                      value={searchQuery}
-                      onChange={(e) => handleInputChange(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      onFocus={handleInputFocus}
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck="false"
-                      data-form-type="other"
-                      className="flex-1 bg-transparent outline-none placeholder:text-gray-400"
-                    />
-                    <button
-                      onClick={handleSearchClick}
-                      disabled={isSearching}
-                      className="flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Search className="w-4 h-4" />
-                    </button>
-                  </div>
-                  
-                  {/* Suggestions Dropdown */}
-                  {showSuggestions && suggestions.length > 0 && (
-                    <div
-                      ref={suggestionsRef}
-                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
-                    >
-                      {suggestions.map((suggestion, index) => (
-                        <button
-                          key={index}
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
-                        >
-                          <div className="flex items-center gap-2">
-                            <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">{suggestion}</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="collapsed"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="max-w-2xl mx-auto"
-              >
-                <div 
+                <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Search our collection..."
+                  value={searchQuery}
+                  onChange={(e) => handleInputChange(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  onFocus={handleInputFocus}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck="false"
+                  data-form-type="other"
+                  className="flex-1 bg-transparent outline-none placeholder:text-gray-400"
+                />
+                <button
                   onClick={handleSearchClick}
-                  className="relative flex items-center gap-3 px-5 py-3 bg-gray-50 rounded-full border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors"
+                  disabled={isSearching}
+                  className="flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <span className={`flex-1 ${searchQuery ? 'text-gray-900' : 'text-gray-400'}`}>
-                    {searchQuery || 'Search our collection...'}
-                  </span>
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+              
+              {/* Suggestions Dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div
+                  ref={suggestionsRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto"
+                >
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                        <span className="text-sm text-gray-700">{suggestion}</span>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
