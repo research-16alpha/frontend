@@ -1,45 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
-import { searchProducts, getSearchSuggestions } from '../../features/products/services/searchService';
+import { useSearch } from '../../features/products/hooks/useSearch';
 import { useNavigation } from '../contexts/NavigationContext';
+import { getUrlParam } from '../utils/urlParams';
 
 export function AISearchBar() {
   const { navigateToShopAll } = useNavigation();
   const [isHovered, setIsHovered] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Load search query from sessionStorage on mount and listen for changes
+  // Initialize search hook with URL parameter
+  const initialQuery = typeof window !== 'undefined' ? getUrlParam('q') || '' : '';
+  const {
+    query,
+    suggestions,
+    isSearching,
+    setQuery,
+    handleSearch: handleSearchInternal,
+    handleSuggestionClick,
+    clearSearch,
+  } = useSearch({
+    initialQuery,
+    onSearch: (searchQuery) => {
+      navigateToShopAll(searchQuery);
+    },
+  });
+
+  // Sync with URL changes (e.g., browser back/forward)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedQuery = sessionStorage.getItem('searchQuery');
-      if (savedQuery) {
-        setSearchQuery(savedQuery);
+    const handlePopState = () => {
+      const urlQuery = getUrlParam('q') || '';
+      if (urlQuery !== query) {
+        setQuery(urlQuery);
       }
-      
-      // Listen for storage events to update when search query changes from other tabs/components
-      const handleStorageChange = (e: StorageEvent) => {
-        if (e.key === 'searchQuery') {
-          if (e.newValue) {
-            setSearchQuery(e.newValue);
-          } else {
-            // Search query was cleared
-            setSearchQuery('');
-          }
-        }
-      };
-      
-      window.addEventListener('storage', handleStorageChange);
-      return () => {
-        window.removeEventListener('storage', handleStorageChange);
-      };
-    }
-  }, []);
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [query, setQuery]);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -60,123 +62,38 @@ export function AISearchBar() {
     };
   }, []);
 
-  const handleSearchClick = async () => {
-    if (searchQuery.trim()) {
-      await handleSearch();
-    }
-  };
-
-  const handleSearch = async (query?: string) => {
-    const queryToSearch = query || searchQuery;
-    
-    // If search is cleared (empty), clear sessionStorage and navigate to reset to default fetch
-    if (!queryToSearch.trim()) {
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('searchQuery');
-        sessionStorage.removeItem('searchTimestamp');
-        // Trigger storage event so ShopAll can detect the change
-        window.dispatchEvent(new StorageEvent('storage', {
-          key: 'searchQuery',
-          newValue: null,
-          storageArea: sessionStorage
-        }));
-      }
-      setSearchQuery('');
-      setShowSuggestions(false);
-      // Navigate to shop-all to trigger re-fetch with default function
-      navigateToShopAll();
-      return;
-    }
-    
-    try {
-      setIsSearching(true);
-      setShowSuggestions(false);
-      const trimmedQuery = queryToSearch.trim();
-      
-      // Update state immediately
-      setSearchQuery(trimmedQuery);
-      
-      // Store search query in sessionStorage with timestamp to ensure it's treated as new search
-      sessionStorage.setItem('searchQuery', trimmedQuery);
-      sessionStorage.setItem('searchTimestamp', Date.now().toString());
-      
-      // Navigate to shop-all page which will handle displaying search results
-      // Force navigation even if already on shop-all page
-      navigateToShopAll();
-      
-      // Small delay to ensure navigation happens
-      await new Promise(resolve => setTimeout(resolve, 100));
-    } catch (error) {
-      console.log("search error, ")
-      console.error('Search error:', error);
-    } finally {
-      console.log("final stage")
-      console.log("isSearching", isSearching)
-      setIsSearching(false);
-    }
-  };
-
-  const handleInputChange = async (value: string) => {
-    setSearchQuery(value);
-    
-    // Clear previous debounce timer
-    if (debounceTimerRef.current) {
-      clearTimeout(debounceTimerRef.current);
-    }
-    
-    // If search bar is cleared, remove search query from sessionStorage
-    // This will cause ShopAll to use default fetchProducts instead of searchProducts
-    if (!value.trim()) {
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('searchQuery');
-        sessionStorage.removeItem('searchTimestamp');
-        // Trigger storage event so ShopAll can detect the change
-        window.dispatchEvent(new StorageEvent('storage', {
-          key: 'searchQuery',
-          newValue: null,
-          storageArea: sessionStorage
-        }));
-      }
-      setSuggestions([]);
-      setShowSuggestions(false);
-      return;
-    }
-    
-    // Get suggestions as user types (debounced)
-    if (value.trim().length > 2) {
-      debounceTimerRef.current = setTimeout(async () => {
-        try {
-          const suggestionsData = await getSearchSuggestions(value, 5);
-          // Handle both array response and object with suggestions property
-          const suggestionsList = Array.isArray(suggestionsData) 
-            ? suggestionsData 
-            : (suggestionsData?.suggestions || []);
-          setSuggestions(suggestionsList.slice(0, 5)); // Ensure max 5
-          setShowSuggestions(suggestionsList.length > 0);
-        } catch (error) {
-          console.error('Error fetching suggestions:', error);
-          setSuggestions([]);
-          setShowSuggestions(false);
-        }
-      }, 300); // 300ms debounce
+  const handleSearchClick = () => {
+    if (query.trim()) {
+      handleSearchInternal();
     } else {
-      setSuggestions([]);
+      // Clear search and navigate to shop-all without query
+      clearSearch();
+      navigateToShopAll(''); // Pass empty string to clear URL param
+    }
+  };
+
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+    
+    // Show suggestions if there are any
+    if (suggestions.length > 0 && value.trim().length > 2) {
+      setShowSuggestions(true);
+    } else {
       setShowSuggestions(false);
     }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSearch();
+      handleSearchInternal();
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
     }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
-    setSearchQuery(suggestion);
+  const handleSuggestionClickWrapper = (suggestion: string) => {
     setShowSuggestions(false);
-    handleSearch(suggestion);
+    handleSuggestionClick(suggestion);
   };
 
   const handleInputFocus = () => {
@@ -204,7 +121,7 @@ export function AISearchBar() {
                   ref={inputRef}
                   type="text"
                   placeholder="Search our collection..."
-                  value={searchQuery}
+                  value={query}
                   onChange={(e) => handleInputChange(e.target.value)}
                   onKeyPress={handleKeyPress}
                   onFocus={handleInputFocus}
@@ -233,7 +150,7 @@ export function AISearchBar() {
                   {suggestions.map((suggestion, index) => (
                     <button
                       key={index}
-                      onClick={() => handleSuggestionClick(suggestion)}
+                      onClick={() => handleSuggestionClickWrapper(suggestion)}
                       className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
                     >
                       <div className="flex items-center gap-2">

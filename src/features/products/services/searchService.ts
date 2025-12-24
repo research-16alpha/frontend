@@ -60,7 +60,10 @@ export async function searchProducts(options: SearchOptions) {
     brands.forEach(b => params.append('brand', b));
   }
   if (filters.gender) {
-    params.append('gender', filters.gender);
+    const genders = Array.isArray(filters.gender) 
+      ? filters.gender 
+      : [filters.gender];
+    genders.forEach(g => params.append('gender', g));
   }
   if (filters.price_min !== undefined) {
     params.append('price_min', String(filters.price_min));
@@ -70,7 +73,6 @@ export async function searchProducts(options: SearchOptions) {
   }
 
   const url = `${API_BASE}/api/products/search?${params.toString()}`;
-  console.log("searchProducts API called:", url);
 
   const res = await fetch(url);
   if (!res.ok) {
@@ -93,7 +95,6 @@ export async function getSearchSuggestions(query: string, limit: number = 10) {
   params.append('limit', String(limit));
 
   const url = `${API_BASE}/api/products/search/suggestions?${params.toString()}`;
-  console.log("getSearchSuggestions API called:", url);
 
   const res = await fetch(url);
   if (!res.ok) {
