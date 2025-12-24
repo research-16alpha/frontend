@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { fetchFilterMetadata } from '../../features/products/services/productsService';
+import { fetchFilterMetadata } from '../../features/products/services/metadataService';
 import { CategoryGroup } from '../../features/products/components/CategoryFilter';
 import { SortOption } from '../../features/products/components/SortBy';
 

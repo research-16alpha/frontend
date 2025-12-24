@@ -74,7 +74,7 @@ export function About() {
         </div>
 
         {/* About Us Grid */}
-        <div className="mb-16">
+        <div className="mb-24 md:mb-32">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {aboutUs.map((item) => (
               <a
