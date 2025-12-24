@@ -5,17 +5,21 @@ import { searchProducts } from '../../features/products/services/searchService';
 import { getUrlParam } from '../../shared/utils/urlParams';
 
 export function ShopAll() {
-  const [searchQuery, setSearchQuery] = useState<string | null>(null);
+  // Initialize searchQuery from URL immediately (synchronously)
+  // This prevents race condition where BaseProductsPage fetches before URL is read
+  const [searchQuery, setSearchQuery] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return getUrlParam('q');
+    }
+    return null;
+  });
 
-  // Read search query from URL parameter
+  // Read search query from URL parameter (for updates after initial render)
   useEffect(() => {
     const updateSearchQuery = () => {
       const query = getUrlParam('q');
       setSearchQuery(query);
     };
-
-    // Check immediately
-    updateSearchQuery();
 
     // Listen for URL changes (browser back/forward, programmatic navigation)
     const handlePopState = () => {
