@@ -6,7 +6,8 @@ import { ProductsGrid } from './ProductsGrid';
 import { ProductFilters } from './ProductFilters';
 import { CategoryGroup } from './CategoryFilter';
 import { SortOption } from './SortBy';
-import { fetchFilteredProducts, fetchFilterMetadata } from '../services/productsService';
+import { fetchFilteredProducts } from '../services/productsService';
+import { fetchFilterMetadata } from '../services/metadataService';
 import { normalizeProducts } from '../utils/productTransform';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
 
@@ -183,8 +184,8 @@ export function ExpandedContent({
   return (
     <>
       
-      <div className="w-full">
         {/* Expanded Content Container */}
+        <div className="px-6">
       <div
         className={
           isDesktop
@@ -418,7 +419,9 @@ export function ExpandedContent({
       </div>
       </div>
       {/* Product Grid Below - Separate Section */}
+      {/* <div className="relative -mx-6 w-[calc(100%+3rem)] mt-10 md:mt-14 lg:mt-20 xl:mt-26"> */}
       <div className="w-full mt-10 md:mt-14 lg:mt-20 xl:mt-26">
+      {/* <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] mt-10 md:mt-14 lg:mt-20 xl:mt-26"> */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Title */}
           <div className="mb-6">

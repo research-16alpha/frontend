@@ -174,7 +174,7 @@ function AppWithNavigation() {
         <AISearchBar />
 
         <main className="flex-1 w-full relative">
-          <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="max-w-7xl mx-auto py-12">
             <div className="bg-white rounded-lg shadow-[0_30px_80px_rgba(0,0,0,0.15)] overflow-hidden min-h-[600px]">
               <ExpandedContent
                 product={product}

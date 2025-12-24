@@ -66,16 +66,19 @@ export function BaseProductsPage({
   };
 
   // Convert price filter values to min/max
+  // Must match backend PRICE_RANGES in filter_constants.py
   const getPriceRange = (priceValue: string): { min?: number; max?: number } => {
     switch (priceValue) {
-      case 'under-200':
-        return { max: 200 };
-      case '200-500':
-        return { min: 200, max: 500 };
+      case 'under-500':
+        return { max: 500 };
       case '500-1000':
         return { min: 500, max: 1000 };
-      case 'over-1000':
-        return { min: 1000 };
+      case '1000-5000':
+        return { min: 1000, max: 5000 };
+      case '5000-10000':
+        return { min: 5000, max: 10000 };
+      case 'over-10000':
+        return { min: 10000 };
       default:
         return {};
     }
@@ -87,23 +90,31 @@ export function BaseProductsPage({
       try {
         setLoading(true);
         
-        // Convert filters to backend format
-        const categoryFilters = selectedFilters['CATEGORY'] || [];
-        const brandFilters = selectedFilters['BRAND'] || [];
-        const occasionFilters = selectedFilters['OCCASION'] || [];
-        const priceFilter = selectedFilters['PRICE']?.[0];
-        const priceRange = priceFilter ? getPriceRange(priceFilter) : {};
-        
-        const data = await fetchFilteredProducts({
-          page,
-          limit: 20,
-          category: categoryFilters.length > 0 ? categoryFilters : undefined,
-          brand: brandFilters.length > 0 ? brandFilters : undefined,
-          occasion: occasionFilters.length > 0 ? occasionFilters : undefined,
-          price_min: priceRange.min,
-          price_max: priceRange.max,
-          gender: gender,
-        });
+        // If fetchProductsFn is provided (e.g., for search), use it directly
+        // Otherwise, use fetchFilteredProducts with filters
+        let data;
+        if (fetchProductsFn && Object.keys(selectedFilters).length === 0 && !gender) {
+          // Use the provided fetch function (e.g., for search or default product listing)
+          data = await fetchProductsFn(page, 20);
+        } else {
+          // Convert filters to backend format
+          const categoryFilters = selectedFilters['CATEGORY'] || [];
+          const brandFilters = selectedFilters['BRAND'] || [];
+          const occasionFilters = selectedFilters['OCCASION'] || [];
+          const priceFilter = selectedFilters['PRICE']?.[0];
+          const priceRange = priceFilter ? getPriceRange(priceFilter) : {};
+          
+          data = await fetchFilteredProducts({
+            page,
+            limit: 20,
+            category: categoryFilters.length > 0 ? categoryFilters : undefined,
+            brand: brandFilters.length > 0 ? brandFilters : undefined,
+            occasion: occasionFilters.length > 0 ? occasionFilters : undefined,
+            price_min: priceRange.min,
+            price_max: priceRange.max,
+            gender: gender,
+          });
+        }
         
         const backendProducts = Array.isArray(data) ? data : (data.products || []);
         const normalized = normalizeProducts(backendProducts);
@@ -124,7 +135,13 @@ export function BaseProductsPage({
       }
     }
     loadProducts();
-  }, [page, selectedFilters, sortBy, gender]);
+  }, [page, selectedFilters, sortBy, gender, fetchProductsFn]);
+
+  // Reset to page 1 when fetchProductsFn changes (e.g., new search)
+  React.useEffect(() => {
+    setPage(1);
+    setProducts([]);
+  }, [fetchProductsFn]);
 
   const handleLoadMore = () => {
     setPage(prev => prev + 1);
