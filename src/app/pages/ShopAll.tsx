@@ -1,58 +1,48 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BaseProductsPage } from './BaseProductsPage';
 import { fetchProducts } from '../../features/products/services/productsService';
 import { searchProducts } from '../../features/products/services/searchService';
+import { getUrlParam } from '../../shared/utils/urlParams';
 
 export function ShopAll() {
-  const [searchQuery, setSearchQuery] = useState<string | null>(null);
-  const lastTimestampRef = useRef<string | null>(null);
+  // Initialize searchQuery from URL immediately (synchronously)
+  // This prevents race condition where BaseProductsPage fetches before URL is read
+  const [searchQuery, setSearchQuery] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      return getUrlParam('q');
+    }
+    return null;
+  });
 
-  // Check for search query on mount and when component becomes visible
+  // Read search query from URL parameter (for updates after initial render)
   useEffect(() => {
-    const checkSearchQuery = () => {
-      if (typeof window !== 'undefined') {
-        const query = sessionStorage.getItem('searchQuery');
-        const timestamp = sessionStorage.getItem('searchTimestamp');
-        
-        // Only update if timestamp changed (new search)
-        if (query && timestamp && timestamp !== lastTimestampRef.current) {
-          setSearchQuery(query);
-          lastTimestampRef.current = timestamp;
-        } else if (!query) {
-          setSearchQuery(null);
-          lastTimestampRef.current = null;
-        }
-      }
+    const updateSearchQuery = () => {
+      const query = getUrlParam('q');
+      setSearchQuery(query);
     };
 
-    // Check immediately
-    checkSearchQuery();
-
-    // Check periodically to catch new searches (when user searches again)
-    const interval = setInterval(checkSearchQuery, 200);
-
-    // Also listen for storage events (for cross-tab communication)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'searchQuery' || e.key === 'searchTimestamp') {
-        checkSearchQuery();
-      }
+    // Listen for URL changes (browser back/forward, programmatic navigation)
+    const handlePopState = () => {
+      updateSearchQuery();
     };
 
-    window.addEventListener('storage', handleStorageChange);
+    // Also check periodically for programmatic URL changes
+    const interval = setInterval(updateSearchQuery, 100);
+
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('popstate', handlePopState);
     };
   }, []);
 
   // Use searchProducts if there's a search query, otherwise use fetchProducts
   const fetchProductsFn = React.useMemo(() => {
-    if (searchQuery) {
+    if (searchQuery && searchQuery.trim()) {
       return async (page: number, limit: number) => {
-        const skip = (page - 1) * limit;
         return await searchProducts({
-          query: searchQuery,
+          query: searchQuery.trim(),
           page,
           limit
         });

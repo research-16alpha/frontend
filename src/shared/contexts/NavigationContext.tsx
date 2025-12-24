@@ -16,7 +16,7 @@ interface NavigationContextType {
   navigateToAbout: () => void;
   navigateToCurated: () => void;
   navigateToNew: () => void;
-  navigateToShopAll: () => void;
+  navigateToShopAll: (searchQuery?: string) => void;
   navigateToWomen: () => void;
   navigateToMen: () => void;
   navigateToAccessories: () => void;
@@ -100,12 +100,25 @@ export function NavigationProvider({
     setCurrentPage('new');
   };
 
-  const navigateToShopAll = () => {
+  const navigateToShopAll = (searchQuery?: string) => {
     setProductsGender(null);
     setProductsMode(null);
     setProductId(null);
     setPreviousPage(null);
     setCurrentPage('shop-all');
+    
+    // Update URL with search query if provided
+    if (typeof window !== 'undefined') {
+      if (searchQuery && searchQuery.trim()) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('q', searchQuery.trim());
+        window.history.pushState({}, '', url.toString());
+      } else {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('q');
+        window.history.pushState({}, '', url.toString());
+      }
+    }
   };
 
   const navigateToWomen = () => {
