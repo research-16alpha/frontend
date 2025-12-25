@@ -235,3 +235,33 @@ export async function fetchFilteredProducts(options: {
   if (!res.ok) throw new Error("Failed to load filtered products");
   return res.json();
 }
+
+/**
+ * Fetch products by their product_link values.
+ * Returns products in the exact order of the provided links.
+ * 
+ * @example
+ * fetchProductsByLinks([
+ *   "https://example.com/product1",
+ *   "https://example.com/product2"
+ * ])
+ */
+export async function fetchProductsByLinks(productLinks: string[]) {
+  if (!productLinks || productLinks.length === 0) {
+    return { products: [], total: 0 };
+  }
+  
+  const res = await fetch(`${API_BASE}/api/products/by-links`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ product_links: productLinks }),
+  });
+  
+  if (!res.ok) {
+    throw new Error("Failed to load products by links");
+  }
+  
+  return res.json();
+}

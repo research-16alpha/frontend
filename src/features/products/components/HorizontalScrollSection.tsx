@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { fetchTopDeals } from '../services/productsService';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-import { useProducts } from '../hooks/useProducts';
+import { useProductsByLinks } from '../hooks/useProductsByLinks';
+import { NEW_THIS_WEEK_LINKS } from '../constants/curatedProductLinks';
 
 export function HorizontalScrollSection() {
   const { navigateToProduct } = useNavigation();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { products, loading, error } = useProducts({ fetchFn: fetchTopDeals, limit: 20 });
+  const { products, loading, error } = useProductsByLinks(NEW_THIS_WEEK_LINKS);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
