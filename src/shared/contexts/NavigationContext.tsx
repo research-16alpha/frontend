@@ -37,9 +37,16 @@ export function NavigationProvider({
   currentPage: Page;
   setCurrentPage: (page: Page) => void;
 }) {
+  // Initialize productId from URL on mount
+  const getInitialProductId = (): string | null => {
+    if (typeof window === 'undefined') return null;
+    const url = new URL(window.location.href);
+    return url.searchParams.get('product');
+  };
+
   const [productsGender, setProductsGender] = useState<string | null>(null);
   const [productsMode, setProductsMode] = useState<ProductsMode | null>(null);
-  const [productId, setProductId] = useState<string | null>(null);
+  const [productId, setProductId] = useState<string | null>(getInitialProductId());
   const [previousPage, setPreviousPage] = useState<Page | null>(null);
   const isUpdatingUrlRef = React.useRef(false);
   const isInitialMountRef = React.useRef(true);

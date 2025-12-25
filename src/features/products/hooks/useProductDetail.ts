@@ -16,6 +16,7 @@ export function useProductDetail({ productId, currentPage, navigateBack }: UsePr
   
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [isAddingToBag, setIsAddingToBag] = useState(false);
@@ -23,12 +24,16 @@ export function useProductDetail({ productId, currentPage, navigateBack }: UsePr
   // Load product when productId changes
   useEffect(() => {
     if (currentPage !== 'product' || !productId) {
+      setLoading(false);
+      setError(null);
+      setProduct(null);
       return;
     }
 
     const loadProduct = async () => {
       try {
         setLoading(true);
+        setError(null);
         const data = await fetchProductById(productId);
         const normalized = normalizeProduct(data);
         setProduct(normalized);
@@ -36,15 +41,16 @@ export function useProductDetail({ productId, currentPage, navigateBack }: UsePr
         setSelectedColor(normalized.product_color?.[0] || '');
       } catch (error) {
         console.error('Failed to load product:', error);
+        setError('Product not found');
+        setProduct(null);
         toast.error('Failed to load product');
-        navigateBack();
       } finally {
         setLoading(false);
       }
     };
 
     loadProduct();
-  }, [productId, currentPage, navigateBack]);
+  }, [productId, currentPage]);
 
   const handleAddToBag = async (e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -102,6 +108,7 @@ export function useProductDetail({ productId, currentPage, navigateBack }: UsePr
   return {
     product,
     loading,
+    error,
     selectedSize,
     selectedColor,
     isAddingToBag,
