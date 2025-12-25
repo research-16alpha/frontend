@@ -1,12 +1,20 @@
 import React from 'react';
+<<<<<<< HEAD
 import { fetchProductsWithCustomSort } from '../services/productsService';
+=======
+>>>>>>> develop
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
 import { ProductCard } from './ProductCard';
-import { useProducts } from '../hooks/useProducts';
+import { useProductsByLinks } from '../hooks/useProductsByLinks';
+import { DESIGNER_SALE_LINKS } from '../constants/curatedProductLinks';
 
 export function HeroSection() {
   const { navigateToProduct } = useNavigation();
+<<<<<<< HEAD
   const { products: saleProducts, loading } = useProducts({ fetchFn: fetchProductsWithCustomSort, limit: 10 });
+=======
+  const { products: saleProducts, loading } = useProductsByLinks(DESIGNER_SALE_LINKS);
+>>>>>>> develop
 
   return (
     <section className="w-full bg-white py-6 md:py-8 px-4 md:px-8">

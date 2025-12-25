@@ -106,10 +106,9 @@ export function ExpandedContent({
           setSortOptions(metadata.sortOptions || []);
         }
 
-        // Build filter parameters based on current product
+        // Build filter parameters based on current product - only filter by brand
         const filters: {
           brand?: string[];
-          category?: string[];
         } = {};
 
         // Add brand filter if available
@@ -123,22 +122,12 @@ export function ExpandedContent({
           filters.brand = [brandFilterValue];
         }
 
-        // Add category filter if available
-        if (product.product_category) {
-          const categoryFilterValue = product.product_category
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .replace(/&/g, '-');
-          filters.category = [categoryFilterValue];
-        }
-
-        // Fetch filtered products
+        // Fetch filtered products - only by brand (similar products from same brand)
         const limit = 20;
         const response = await fetchFilteredProducts({
           page,
           limit,
           brand: filters.brand,
-          category: filters.category,
         });
         
         if (response) {
@@ -157,7 +146,7 @@ export function ExpandedContent({
     };
 
     loadProducts();
-  }, [page, product.id, product.brand_name, product.product_category]);
+  }, [page, product.id, product.brand_name]);
 
   const handleProductClick = (clickedProduct: Product) => {
     if (onProductClick) {

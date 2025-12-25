@@ -1,12 +1,12 @@
 import React from 'react';
-import { fetchBestDeals } from '../services/productsService';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-import { useProducts } from '../hooks/useProducts';
+import { useProductsByLinks } from '../hooks/useProductsByLinks';
+import { BEST_DEALS_LINKS } from '../constants/curatedProductLinks';
 
 export function ProductMasonryGrid() {
   const { navigateToProduct } = useNavigation();
-  const { products, loading, error } = useProducts({ fetchFn: fetchBestDeals, limit: 20 });
+  const { products, loading, error } = useProductsByLinks(BEST_DEALS_LINKS);
 
   return (
     <section className="w-full bg-white py-10 md:py-16">

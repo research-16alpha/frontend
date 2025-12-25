@@ -1,11 +1,13 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { ProductCard } from './ProductCard';
-import { Product } from '../types/product';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
+import { useProductsByLinks } from '../hooks/useProductsByLinks';
+import { LUXURY_CURATED_LINKS } from '../constants/curatedProductLinks';
 
 export function FeaturedSection() {
   const { navigateToProduct, navigateToCurated } = useNavigation();
+  const { products: featuredImages, loading } = useProductsByLinks(LUXURY_CURATED_LINKS);
   
   return (
     <section className="w-full bg-[#673E1E] py-10 md:py-16">
@@ -34,56 +36,25 @@ export function FeaturedSection() {
 
           {/* Right Images Grid */}
           <div className="w-full lg:w-2/3 grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
-            {featuredImages.map((item) => (
-              <div key={item.id} className="h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px]">
-                <ProductCard
-                  product={item}
-                  onClick={() => navigateToProduct(item.id)}
-                />
+            {loading ? (
+              <div className="col-span-full grid grid-cols-2 sm:grid-cols-3 gap-4 md:gap-6">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px] animate-pulse bg-gray-300"></div>
+                ))}
               </div>
-            ))}
+            ) : (
+              featuredImages.map((item) => (
+                <div key={item.id} className="h-[320px] sm:h-[380px] md:h-[440px] lg:h-[500px] xl:h-[560px]">
+                  <ProductCard
+                    product={item}
+                    onClick={() => navigateToProduct(item.id || '')}
+                  />
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-const featuredImages: Product[] = [
-  {
-    id: '301',
-    product_name: "Editorial Collection",
-    product_image: "https://images.unsplash.com/photo-1700150662401-9b96a5fedfbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=600",
-    product_category: "Art & Fashion",
-    product_description: "Curated editorial pieces blending art and fashion. Each item tells a unique story.",
-    original_price: 280,
-    sale_price: 224,
-    currency: '$',
-    available_sizes: ['One Size'],
-    product_color: ['Original']
-  },
-  {
-    id: '302',
-    product_name: "Minimal Essentials",
-    product_image: "https://images.unsplash.com/photo-1633821879282-0c4e91f96232?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
-    product_category: "Clothing",
-    product_description: "Essential pieces designed with minimalist aesthetics. Timeless and versatile.",
-    original_price: 320,
-    sale_price: 256,
-    currency: '$',
-    available_sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    product_color: ['Beige', 'Black', 'White']
-  },
-  {
-    id: '303',
-    product_name: "Modern Classics",
-    product_image: "https://images.unsplash.com/photo-1610209740880-6ecc4b20ea78?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=400",
-    product_category: "Clothing",
-    product_description: "Contemporary takes on classic designs. Sophisticated and refined.",
-    original_price: 380,
-    sale_price: 304,
-    currency: '$',
-    available_sizes: ['XS', 'S', 'M', 'L'],
-    product_color: ['Black', 'Navy', 'Charcoal']
-  }
-];

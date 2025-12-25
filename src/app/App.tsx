@@ -27,7 +27,37 @@ import { Accessories } from './pages/Accessories';
 import { PreOwned } from './pages/PreOwned';
 
 function AppContent() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new' | 'shop-all' | 'women' | 'men' | 'accessories' | 'pre-owned'>('home');
+  // Initialize currentPage from URL
+  const getInitialPage = (): 'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new' | 'shop-all' | 'women' | 'men' | 'accessories' | 'pre-owned' => {
+    if (typeof window === 'undefined') return 'home';
+    const url = new URL(window.location.href);
+    const pathname = url.pathname;
+    
+    // Check for product query parameter first
+    if (url.searchParams.has('product')) {
+      return 'product';
+    }
+    
+    // Map paths to pages
+    const pathMap: Record<string, 'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new' | 'shop-all' | 'women' | 'men' | 'accessories' | 'pre-owned'> = {
+      '/': 'home',
+      '/home': 'home',
+      '/shop-all': 'shop-all',
+      '/curated': 'curated',
+      '/new': 'new',
+      '/women': 'women',
+      '/men': 'men',
+      '/accessories': 'accessories',
+      '/pre-owned': 'pre-owned',
+      '/account': 'account',
+      '/about': 'about',
+      '/products': 'shop-all',
+    };
+    
+    return pathMap[pathname] || 'home';
+  };
+  
+  const [currentPage, setCurrentPage] = useState<'home' | 'products' | 'account' | 'about' | 'product' | 'curated' | 'new' | 'shop-all' | 'women' | 'men' | 'accessories' | 'pre-owned'>(getInitialPage());
 
   return (
     <FilterMetadataProvider>
