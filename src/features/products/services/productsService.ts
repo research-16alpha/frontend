@@ -78,6 +78,8 @@ function buildQueryString(filters: ProductFilters): string {
  * })
  */
 export async function fetchProductsWithFilters(options: FetchProductsOptions = {}) {
+
+  console.log("fetchProductsWithFilters options", options);
   const { page = 1, limit = 40, filters = {}, sort } = options;
   const skip = (page - 1) * limit;
 
