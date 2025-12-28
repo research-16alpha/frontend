@@ -3,7 +3,7 @@ import { ImageWithFallback } from '../../../shared/components/figma/ImageWithFal
 import { ArrowRight } from 'lucide-react';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
 
-const editorialImage = new URL('../../../shared/assets/halfsy-edit.png', import.meta.url).href;
+const editorialImage = new URL('../../../shared/assets/editorial.avif', import.meta.url).href;
 export function EditorialSection() {
   const { navigateToCurated } = useNavigation();
   return (
