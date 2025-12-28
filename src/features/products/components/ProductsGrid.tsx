@@ -140,7 +140,7 @@ export function ProductsGrid({
                   <button
                     onClick={onLoadMore}
                     disabled={loading}
-                    className="px-6 py-3 bg-black text-white hover:bg-gray-800 transition-colors disabled:opacity-50"
+                    className="px-6 py-3 text-black border border-gray-500 cursor-pointer hover:bg-gray-100 transition-colors disabled:opacity-50"
                   >
                     {loading ? 'Loading...' : 'Load More'}
                   </button>

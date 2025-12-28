@@ -271,11 +271,11 @@ html {
   }
 
   .footer-text {
-    color: rgb(216, 216, 216);
+    color: rgb(56, 56, 56);
   }
 
-  .footer-text-hover:hover {
-    opacity: 0.8;
+  .footer-text-grey {
+    opacity: 0.6;
   }
 
   /* Font Weight Classes */

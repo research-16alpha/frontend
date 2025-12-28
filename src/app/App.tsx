@@ -291,9 +291,8 @@ function AppWithNavigation() {
         <FeaturedSection />
         <ProductMasonryGrid />
         <EditorialSection />
+        <Footer />
       </main>
-
-      <Footer />
     </div>
   );
 }
