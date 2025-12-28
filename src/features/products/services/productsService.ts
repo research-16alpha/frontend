@@ -1,4 +1,5 @@
 import { API_BASE } from "../../../config/api";
+import { shuffleArray } from "../utils/shuffleArray";
 
 /**
  * Filter options for product queries
@@ -145,7 +146,10 @@ export async function fetchProductsByCategory(
   return res.json();
 }
 
-export async function fetchTopDeals(limit: number = 4, skip: number = 0) {
+export async function fetchTopDeals(page: number = 1, limit: number = 20) {
+  // For Curated page: first page loads 50, subsequent pages load 20
+  // Calculate skip based on page number and variable page sizes
+  const skip = page === 1 ? 0 : 50 + (page - 2) * 20;
   const res = await fetch(`${API_BASE}/api/products/top-deals?limit=${limit}&skip=${skip}`);
   if (!res.ok) throw new Error("Failed to load top deals");
   return res.json();
@@ -163,7 +167,7 @@ export async function fetchProductsByGender(
   limit: number = 20
 ) {
   const skip = (page - 1) * limit;
-
+  console.log("api found");
   const res = await fetch(
     `${API_BASE}/api/products/gender/${encodeURIComponent(gender)}?limit=${limit}&skip=${skip}`
   );
@@ -239,6 +243,7 @@ export async function fetchFilteredProducts(options: {
 /**
  * Fetch products by their product_link values.
  * Returns products in the exact order of the provided links.
+ * The links are shuffled before being sent to provide varied ordering.
  * 
  * @example
  * fetchProductsByLinks([
@@ -251,12 +256,15 @@ export async function fetchProductsByLinks(productLinks: string[]) {
     return { products: [], total: 0 };
   }
   
+  // Shuffle the links to mix the order
+  const shuffledLinks = shuffleArray(productLinks);
+  
   const res = await fetch(`${API_BASE}/api/products/by-links`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ product_links: productLinks }),
+    body: JSON.stringify({ product_links: shuffledLinks }),
   });
   
   if (!res.ok) {

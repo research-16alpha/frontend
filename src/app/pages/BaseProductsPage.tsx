@@ -93,9 +93,14 @@ export function BaseProductsPage({
         // If fetchProductsFn is provided (e.g., for search), use it directly
         // Otherwise, use fetchFilteredProducts with filters
         let data;
-        if (fetchProductsFn && Object.keys(selectedFilters).length === 0 && !gender) {
+        // Use fetchProductsFn if provided and no filters are selected
+        // This takes precedence over gender prop since fetchProductsFn is more specific
+        if (fetchProductsFn && Object.keys(selectedFilters).length === 0) {
           // Use the provided fetch function (e.g., for search or default product listing)
-          data = await fetchProductsFn(page, 20);
+          // For Curated page: first page loads 50 products, subsequent pages load 20
+          // For other pages: consistent limit of 20 per page
+          const pageLimit = page === 1 ? 50 : 20;
+          data = await fetchProductsFn(page, pageLimit);
         } else {
           // Convert filters to backend format
           const categoryFilters = selectedFilters['CATEGORY'] || [];
@@ -125,7 +130,16 @@ export function BaseProductsPage({
           setProducts(prev => [...prev, ...normalized]);
         }
         
-        setHasMore(data.has_more !== false && normalized.length > 0);
+        // Determine if there are more products to load
+        // Trust the backend's has_more flag if present, otherwise infer from response
+        if (data.has_more !== undefined) {
+          // Backend explicitly tells us if there are more
+          setHasMore(data.has_more);
+        } else {
+          // Fallback: if we got a full page of results, assume there are more
+          const pageLimit = page === 1 ? 50 : 20;
+          setHasMore(normalized.length >= pageLimit);
+        }
         setError(null);
       } catch (err) {
         setError('Failed to load products');

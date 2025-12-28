@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { BaseProductsPage } from './BaseProductsPage';
 import { fetchProductsByGender } from '../../features/products/services/productsService';
 
