@@ -15,11 +15,11 @@ export function HeroSection() {
         {/* Top Banner */}
         <div className="mb-4 md:mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-            <h2 className="text-3xl md:text-4xl lg:text-6xl uppercase font-medium tracking-wide leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase font-medium tracking-wide leading-tight font-headline">
               <span className="text-gray-charcoal-1 font-light">Designer Sale</span>
             </h2>
             
-            <div className="text-sm md:text-base  leading-relaxed">
+            <div className="text-sm md:text-base  leading-relaxed font-body">
               <p className="font-extralight">Smarter buying starts here.</p>
               <p className="font-extralight">We track prices across the internet so you don't have to.</p>
             </div>

@@ -15,7 +15,7 @@ export function ProductMasonryGrid() {
   return (
     <section className="w-full bg-white py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-2xl md:text-3xl mb-6 md:mb-8 uppercase tracking-tight">Best Deals</h2>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl mb-6 md:mb-8 uppercase tracking-tight font-headline">Best Deals</h2>
         
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">

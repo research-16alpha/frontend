@@ -211,7 +211,7 @@ export function ExpandedContent({
             {/* Content Container - Second Column */}
             <div className="flex flex-col gap-6 w-full">
               {/* Category and Gender - one line with bullet separator */}
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-gray-600 font-body">
                 {product.product_category && <span>{product.product_category}</span>}
                 {product.product_category && product.product_gender && (
                   <span className="text-gray-400">•</span>
@@ -225,21 +225,21 @@ export function ExpandedContent({
               <div className="flex flex-col gap-1">
                 {/* Brand Name */}
                 {product.brand_name && (
-                  <div className="text-lg font-semibold uppercase tracking-wider text-gray-900">
+                  <div className="text-lg font-semibold uppercase tracking-wider text-gray-900 font-body">
                     {product.brand_name}
                   </div>
                 )}
 
                 {/* Product Name */}
                 {product.product_name && (
-                  <div className="text-base text-gray-700 font-medium">
+                  <div className="text-base text-gray-700 font-medium font-body">
                     {capitalizeWords(product.product_name)}
                   </div>
                 )}
 
                 {/* Description */}
                 {product.product_description && (
-                  <p className="text-lg text-gray-700 leading-relaxed text-base font-light">
+                  <p className="text-lg text-gray-700 leading-relaxed text-base font-light font-body">
                     {capitalizeWords(product.product_description)}
                   </p>
                 )}
@@ -248,7 +248,7 @@ export function ExpandedContent({
                 <div className="flex flex-col gap-2 pt-2">
                   {/* Sub Category */}
                   {product.product_sub_category && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 font-body">
                       <span className="font-medium">Sub Category:</span>{' '}
                       <span>{capitalizeWords(product.product_sub_category)}</span>
                     </div>
@@ -256,7 +256,7 @@ export function ExpandedContent({
 
                   {/* Occasion */}
                   {product.product_occasion && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 font-body">
                       <span className="font-medium">Occasion:</span>{' '}
                       <span>{capitalizeWords(product.product_occasion)}</span>
                     </div>
@@ -264,7 +264,7 @@ export function ExpandedContent({
 
                   {/* Material */}
                   {product.product_material && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 font-body">
                       <span className="font-medium">Material:</span>{' '}
                       <span>{capitalizeWords(product.product_material)}</span>
                     </div>
@@ -272,7 +272,7 @@ export function ExpandedContent({
 
                   {/* Color */}
                   {product.product_color && product.product_color.length > 0 && (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 font-body">
                       <span className="font-medium">Color:</span>{' '}
                       <span>{product.product_color.map(c => capitalizeWords(c)).join(', ')}</span>
                     </div>
@@ -284,33 +284,33 @@ export function ExpandedContent({
                   {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
                     <>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-lg text-red-600 font-semibold text-base">
+                        <span className="text-lg text-red-600 font-semibold text-base font-body">
                           {product.currency || '$'}{product.sale_price.toFixed(2)}
                         </span>
-                        <span className="text-lg line-through text-gray-600 font-normal">
+                        <span className="text-lg line-through text-gray-600 font-normal font-body">
                           {product.currency || '$'}{product.original_price.toFixed(2)}
                         </span>
                       </div>
                       {product.discount && (
-                        <div className="text-sm text-red-600 font-medium">
+                        <div className="text-sm text-red-600 font-medium font-body">
                           {product.discount}% OFF
                         </div>
                       )}
                     </>
                   ) : product.sale_price ? (
                     <>
-                      <span className="font-medium text-base">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                      <span className="font-medium text-base font-body">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
                       {product.discount && (
-                        <div className="text-sm text-red-600 font-medium">
+                        <div className="text-sm text-red-600 font-medium font-body">
                           {product.discount}% OFF
                         </div>
                       )}
                     </>
                   ) : product.original_price ? (
                     <>
-                      <span className="font-medium text-base">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                      <span className="font-medium text-base font-body">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
                       {product.discount && (
-                        <div className="text-sm text-red-600 font-medium">
+                        <div className="text-sm text-red-600 font-medium font-body">
                           {product.discount}% OFF
                         </div>
                       )}
@@ -325,7 +325,7 @@ export function ExpandedContent({
                   href={product.product_link}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 pt-2"
+                  className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 pt-2 font-body"
                 >
                   <span>View original product</span>
                   <span className="text-[10px]">→</span>
@@ -338,7 +338,7 @@ export function ExpandedContent({
                   onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
                   className="w-full border border-black px-4 py-3 text-left bg-white hover:bg-gray-50 transition-colors flex items-center justify-between"
                 >
-                  <span className="text-sm">
+                  <span className="text-sm font-body">
                     {selectedSize ? `Size: ${selectedSize}` : 'Select Size'}
                   </span>
                   <span className="text-gray-500">{isSizeDropdownOpen ? '▲' : '▼'}</span>
@@ -353,7 +353,7 @@ export function ExpandedContent({
                             setSelectedSize(size);
                             setIsSizeDropdownOpen(false);
                           }}
-                          className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors ${
+                          className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors font-body ${
                             selectedSize === size ? 'bg-gray-100 font-medium' : ''
                           }`}
                         >
@@ -361,7 +361,7 @@ export function ExpandedContent({
                         </button>
                       ))
                     ) : (
-                      <div className="px-4 py-2 text-sm text-gray-500">No sizes available</div>
+                      <div className="px-4 py-2 text-sm text-gray-500 font-body">No sizes available</div>
                     )}
                   </div>
                 )}
@@ -372,7 +372,7 @@ export function ExpandedContent({
                 <button
                   onClick={handleAddToBag}
                   disabled={isAddingToBag}
-                  className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)]"
+                  className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)] font-body"
                 >
                   <ShoppingCart className="w-4 h-4" />
                   Add to Bag
@@ -396,7 +396,7 @@ export function ExpandedContent({
                   e.stopPropagation();
                   onClose();
                 }}
-                className="mt-4 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer text-sm flex items-center justify-center"
+                className="mt-4 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer text-sm flex items-center justify-center font-body"
                 aria-label="Back"
               >
                 ← Back
@@ -414,17 +414,17 @@ export function ExpandedContent({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Title */}
           <div className="mb-6">
-            <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight">
+            <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight font-headline">
               <span className="text-gray-charcoal-1 font-light">
                 {product.brand_name ? `More from ${product.brand_name}` : 'You May Also Like'}
               </span>
             </h2>
             {product.brand_name ? (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 font-body">
                 Discover more products from {product.brand_name}
               </p>
             ) : (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 font-body">
                 Discover more products you might love
               </p>
             )}

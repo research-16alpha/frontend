@@ -45,8 +45,8 @@ export function HorizontalScrollSection({
 
   return (
     <section className={`w-full ${verticalPadding} relative`} style={{ backgroundColor }}>
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-6xl font-light mb-6 uppercase tracking-tight">{title}</h2>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 uppercase tracking-tight font-headline">{title}</h2>
         
         {/* Scroll Container */}
         <div className="relative group">
@@ -59,13 +59,12 @@ export function HorizontalScrollSection({
           
           <div
             ref={scrollRef}
-            className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-tiny scroll-smooth bg-white/30 rounded-lg px-2 py-2"
           >
             {loading ? (
               <div className="flex gap-4">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="flex-shrink-0 w-[280px] md:w-[320px] animate-pulse">
+                  <div key={i} className="flex-shrink-0 w-horizontal-card animate-pulse">
                     <div className="aspect-[3/4] bg-gray-200 mb-3"></div>
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-1"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -73,10 +72,10 @@ export function HorizontalScrollSection({
                 ))}
               </div>
             ) : error ? (
-              <div className="text-center text-red-500 py-8">{error}</div>
+              <div className="text-center text-red-500 py-8 font-body">{error}</div>
             ) : (
               products.map((product) => (
-                <div key={product.id} className="flex-shrink-0 w-[280px] md:w-[320px]">
+                <div key={product.id} className="flex-shrink-0 w-horizontal-card">
                   <ProductCard
                     product={product}
                     onClick={() => navigateToProduct(product.id)}

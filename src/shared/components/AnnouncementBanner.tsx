@@ -63,7 +63,7 @@ export function AnnouncementBanner() {
               WebkitBackfaceVisibility: 'hidden'
             }}
           >
-            <span className="mx-4 text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg">
+            <span className="mx-4 text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg font-body">
               {textContent}
             </span>
           </div>
@@ -78,7 +78,7 @@ export function AnnouncementBanner() {
               WebkitBackfaceVisibility: 'hidden'
             }}
           >
-            <span className="mx-4 text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg">
+            <span className="mx-4 text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg font-body">
               {textContent}
             </span>
           </div>
@@ -92,6 +92,7 @@ export function AnnouncementBanner() {
               absolute whitespace-nowrap
               text-sm md:text-sm
               transition-all duration-700 ease-in-out
+              font-body
               ${visible ? 'left-1/2 -translate-x-1/2 opacity-100' : 'left-full translate-x-0 opacity-0'}
             `}
             style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', overflowWrap: 'normal' }}

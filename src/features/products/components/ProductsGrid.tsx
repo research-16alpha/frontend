@@ -83,11 +83,11 @@ export function ProductsGrid({
       {/* Page Title - Only show if pageTitle is provided */}
       {pageTitle && (
         <div className="mb-6">
-          <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight">
+          <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight font-headline">
             <span className="text-gray-charcoal-1 font-light">{pageTitle}</span>
           </h2>
           {pageDescription && (
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 font-body">
               {pageDescription}
             </p>
           )}
@@ -98,7 +98,7 @@ export function ProductsGrid({
       <div className="w-full">
         {/* Results Count */}
         <div className="mb-6">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 font-body">
             {displayProducts.length} {displayProducts.length === 1 ? 'item' : 'items'}
             {selectedFilters && Object.keys(selectedFilters).length > 0 && 
               (Object.values(selectedFilters) as string[][]).some((arr: string[]) => arr.length > 0) && 
@@ -118,9 +118,9 @@ export function ProductsGrid({
             ))}
           </div>
         ) : error ? (
-          <div className="text-center text-red-500 py-16">{error}</div>
+          <div className="text-center text-red-500 py-16 font-body">{error}</div>
         ) : displayProducts.length === 0 ? (
-          <div className="text-center text-gray-500 py-16">No products found</div>
+          <div className="text-center text-gray-500 py-16 font-body">No products found</div>
         ) : (
           <>
             {/* Grid */}
@@ -140,7 +140,7 @@ export function ProductsGrid({
                   <button
                     onClick={onLoadMore}
                     disabled={loading}
-                    className="px-6 py-3 text-black border border-gray-500 cursor-pointer hover:bg-gray-100 transition-colors disabled:opacity-50"
+                    className="px-6 py-3 text-black border border-gray-500 cursor-pointer hover:bg-gray-100 transition-colors disabled:opacity-50 font-body"
                   >
                     {loading ? 'Loading...' : 'Load More'}
                   </button>

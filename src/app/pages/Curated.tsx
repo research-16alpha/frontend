@@ -55,10 +55,10 @@ export function Curated() {
         {/* Page Title */}
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pt-8 sm:pt-12 md:pt-16 lg:pt-20 xl:pt-24 pb-6">
           <div className="mb-6">
-            <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight">
+            <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight font-headline">
               <span className="text-gray-charcoal-1 font-light">Curated Collection</span>
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 font-body">
               Discover our curated collection of premium fashion and accessories.
             </p>
           </div>

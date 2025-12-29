@@ -11,9 +11,9 @@ export function EditorialSection() {
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-4 md:mb-6 lg:mb-8 gap-2">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl uppercase tracking-tight">The Halfsy Edit</h2>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tight font-headline">The Halfsy Edit</h2>
           <button
-            className="flex items-center gap-2 text-xs md:text-sm uppercase tracking-wide hover:gap-4 transition-all cursor-pointer"
+            className="flex items-center gap-2 text-xs md:text-sm uppercase tracking-wide hover:gap-4 transition-all cursor-pointer font-body"
             onClick={navigateToCurated}
           >
             Explore More
@@ -34,7 +34,7 @@ export function EditorialSection() {
 
         {/* Description */}
         <div className="max-w-3xl">
-          <p className="text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed">
+          <p className="text-sm md:text-base lg:text-lg text-gray-600 leading-relaxed font-body">
           An intelligent edit of the world's finest luxury brands.
           </p>
         </div>

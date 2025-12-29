@@ -72,7 +72,7 @@ export function AuthModal() {
             <div className="bg-white rounded-lg shadow-2xl w-full max-w-md pointer-events-auto">
               {/* Header */}
               <div className="flex items-center justify-between p-6 border-b">
-                <h2 className="text-2xl">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
+                <h2 className="text-2xl font-headline">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
                 <button
                   onClick={handleClose}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -84,13 +84,13 @@ export function AuthModal() {
               {/* Form */}
               <form onSubmit={handleSubmit} className="p-6 space-y-4">
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-body">
                     {error}
                   </div>
                 )}
                 {!isLogin && (
                   <div>
-                    <label htmlFor="name" className="block text-sm mb-2">
+                    <label htmlFor="name" className="block text-sm mb-2 font-body">
                       Full Name
                     </label>
                     <div className="relative">
@@ -102,7 +102,7 @@ export function AuthModal() {
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent font-body"
                         placeholder="John Doe"
                         required={!isLogin}
                       />
@@ -111,7 +111,7 @@ export function AuthModal() {
                 )}
 
                 <div>
-                  <label htmlFor="email" className="block text-sm mb-2">
+                  <label htmlFor="email" className="block text-sm mb-2 font-body">
                     Email Address
                   </label>
                   <div className="relative">
@@ -123,7 +123,7 @@ export function AuthModal() {
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent font-body"
                       placeholder="john@example.com"
                       required
                     />
@@ -131,7 +131,7 @@ export function AuthModal() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm mb-2">
+                  <label htmlFor="password" className="block text-sm mb-2 font-body">
                     Password
                   </label>
                   <div className="relative">
@@ -143,7 +143,7 @@ export function AuthModal() {
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
                       }
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent font-body"
                       placeholder="••••••••"
                       required
                     />
@@ -163,13 +163,13 @@ export function AuthModal() {
 
                 {isLogin && (
                   <div className="flex items-center justify-between text-sm">
-                    <label className="flex items-center gap-2 cursor-pointer">
+                    <label className="flex items-center gap-2 cursor-pointer font-body">
                       <input type="checkbox" className="rounded" />
-                      <span className="text-gray-600">Remember me</span>
+                      <span className="text-gray-600 font-body">Remember me</span>
                     </label>
                     <button
                       type="button"
-                      className="text-gray-600 hover:text-black transition-colors"
+                      className="text-gray-600 hover:text-black transition-colors font-body"
                     >
                       Forgot password?
                     </button>
@@ -179,7 +179,7 @@ export function AuthModal() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-body"
                 >
                   {isLoading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
                 </button>
@@ -189,7 +189,7 @@ export function AuthModal() {
                     <div className="w-full border-t border-gray-200"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500">Or continue with</span>
+                    <span className="px-4 bg-white text-gray-500 font-body">Or continue with</span>
                   </div>
                 </div>
 
@@ -201,7 +201,7 @@ export function AuthModal() {
                       loginWithGoogle();
                     }}
                     type="button"
-                    className="flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-body"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
                       <path
@@ -225,7 +225,7 @@ export function AuthModal() {
                   </button>
                   <button
                     type="button"
-                    className="flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-body"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z" />
@@ -235,12 +235,12 @@ export function AuthModal() {
                 </div>
 
                 {/* Toggle between Login and Register */}
-                <div className="text-center text-sm text-gray-600">
+                <div className="text-center text-sm text-gray-600 font-body">
                   {isLogin ? "Don't have an account? " : 'Already have an account? '}
                   <button
                     type="button"
                     onClick={() => setIsLogin(!isLogin)}
-                    className="text-black hover:underline"
+                    className="text-black hover:underline font-body"
                   >
                     {isLogin ? 'Sign up' : 'Sign in'}
                   </button>
