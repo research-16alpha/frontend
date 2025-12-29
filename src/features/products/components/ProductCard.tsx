@@ -90,11 +90,14 @@ export function ProductCard({
         >
           {/* Fixed height image container based on viewport */}
           <div className="relative w-full h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px] xl:h-[360px] overflow-hidden bg-white flex-shrink-0 p-3 sm:p-4 md:p-5">
-            <ImageWithFallback
-              src={product.product_image || ''}
-              alt={product.product_name || 'Product'}
-              className="w-full h-full object-cover"
-            />
+            <div className="w-full h-full relative overflow-hidden">
+              <ImageWithFallback
+                src={product.product_image || ''}
+                alt={product.product_name || 'Product'}
+                className="w-full h-full"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
           </div>
 
           {/* Content section with fixed height based on viewport - aligned to bottom */}

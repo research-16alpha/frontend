@@ -2,13 +2,36 @@ import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-import { useProductsByLinks } from '../hooks/useProductsByLinks';
-import { NEW_THIS_WEEK_LINKS } from '../constants/curatedProductLinks';
+import { useProductsFlexible } from '../hooks/useProductsFlexible';
 
-export function HorizontalScrollSection() {
+type FetchFunction = (page: number, limit: number) => Promise<any>;
+
+interface HorizontalScrollSectionProps {
+  title: string;
+  searchKeyword?: string;
+  fetchFunction?: FetchFunction;
+  limit?: number;
+  backgroundColor?: string;
+  verticalPadding?: string;
+}
+
+export function HorizontalScrollSection({ 
+  title, 
+  searchKeyword,
+  fetchFunction,
+  limit = 20,
+  backgroundColor = '#FBEFD9',
+  verticalPadding = 'py-8 md:py-12'
+}: HorizontalScrollSectionProps) {
   const { navigateToProduct } = useNavigation();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { products, loading, error } = useProductsByLinks(NEW_THIS_WEEK_LINKS);
+  
+  // Validate that either searchKeyword or fetchFunction is provided
+  if (!searchKeyword && !fetchFunction) {
+    console.warn('HorizontalScrollSection: Either searchKeyword or fetchFunction must be provided');
+  }
+  
+  const { products, loading, error } = useProductsFlexible(searchKeyword, fetchFunction, limit);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -21,9 +44,9 @@ export function HorizontalScrollSection() {
   };
 
   return (
-    <section className="w-full bg-[#FBEFD9] py-8 md:py-12 relative">
+    <section className={`w-full ${verticalPadding} relative`} style={{ backgroundColor }}>
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-6xl font-light mb-6 uppercase tracking-tight">New This Week</h2>
+        <h2 className="text-3xl md:text-4xl lg:text-6xl font-light mb-6 uppercase tracking-tight">{title}</h2>
         
         {/* Scroll Container */}
         <div className="relative group">
