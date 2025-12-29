@@ -8,6 +8,8 @@ import { FeaturedSection } from '../features/products/components/FeaturedSection
 import { ProductMasonryGrid } from '../features/products/components/ProductMasonryGrid';
 import { EditorialSection } from '../features/products/components/EditorialSection';
 import { Footer } from '../shared/components/Footer';
+import { fetchProductsByLinks } from '../features/products/services/productsService';
+import { NEW_THIS_WEEK_LINKS } from '../features/products/constants/curatedProductLinks';
 import { Account } from '../features/auth/pages/Account';
 import { ExpandedContent } from '../features/products/components/ProductView';
 import { useProductDetail } from '../features/products/hooks/useProductDetail';
@@ -323,7 +325,21 @@ function AppWithNavigation() {
       
       <main className="flex-1">
         <HeroSection />
-        <HorizontalScrollSection />
+        <HorizontalScrollSection 
+          title="New This Week" 
+          fetchFunction={async (page: number, limit: number) => {
+            const data = await fetchProductsByLinks(NEW_THIS_WEEK_LINKS);
+            // Limit the results to the requested limit
+            if (data.products && Array.isArray(data.products)) {
+              return {
+                ...data,
+                products: data.products.slice(0, limit)
+              };
+            }
+            return data;
+          }}
+          limit={20}
+        />
         <FeaturedSection />
         <ProductMasonryGrid />
         <EditorialSection />

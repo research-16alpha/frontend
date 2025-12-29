@@ -15,19 +15,19 @@ export function FeaturedSection() {
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-12">
           {/* Left Content */}
           <div className="w-full lg:w-1/3 space-y-4 md:space-y-6">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase font-bold tracking-wide leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase font-bold tracking-wide leading-tight font-headline">
               <span className="text-white font-light">LUXURY,</span>
               <br />
               <span className="text-gray-custom-1">CURATED.</span>
             </h2>
-            <p className="text-sm md:text-base text-white font-thin leading-relaxed">
+            <p className="text-sm md:text-base text-white font-thin leading-relaxed font-body">
               Discover unique pieces that tell your story.
               <br />
               Curated collections for the modern individual.
             </p>
             <button 
               onClick={() => navigateToCurated()}
-              className="flex items-center gap-2 text-white-soft-2 uppercase text-sm tracking-wide hover:gap-4 transition-all mt-4"
+              className="flex items-center gap-2 text-white-soft-2 uppercase text-sm tracking-wide hover:gap-4 transition-all mt-4 font-body"
             >
               Explore Now
               <ArrowRight className="w-4 h-4" />

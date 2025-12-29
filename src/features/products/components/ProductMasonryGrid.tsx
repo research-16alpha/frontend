@@ -1,17 +1,21 @@
 import React from 'react';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-import { useProductsByLinks } from '../hooks/useProductsByLinks';
-import { BEST_DEALS_LINKS } from '../constants/curatedProductLinks';
+import { useProductsFlexible } from '../hooks/useProductsFlexible';
+import { fetchTopDeals } from '../services/productsService';
 
 export function ProductMasonryGrid() {
   const { navigateToProduct } = useNavigation();
-  const { products, loading, error } = useProductsByLinks(BEST_DEALS_LINKS);
+  const { products, loading, error } = useProductsFlexible(
+    undefined, // no searchKeyword
+    fetchTopDeals, // use fetchTopDeals function
+    8 // limit to 8 products
+  );
 
   return (
     <section className="w-full bg-white py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-2xl md:text-3xl mb-6 md:mb-8 uppercase tracking-tight">Best Deals</h2>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl mb-6 md:mb-8 uppercase tracking-tight font-headline">Best Deals</h2>
         
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
@@ -28,11 +32,12 @@ export function ProductMasonryGrid() {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 auto-rows-auto">
             {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onClick={() => navigateToProduct(product.id)}
-              />
+              <div key={product.id}>
+                <ProductCard
+                  product={product}
+                  onClick={() => navigateToProduct(product.id)}
+                />
+              </div>
             ))}
           </div>
         )}

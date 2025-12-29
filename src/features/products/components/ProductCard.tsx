@@ -90,11 +90,14 @@ export function ProductCard({
         >
           {/* Fixed height image container based on viewport */}
           <div className="relative w-full h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px] xl:h-[360px] overflow-hidden bg-white flex-shrink-0 p-3 sm:p-4 md:p-5">
-            <ImageWithFallback
-              src={product.product_image || ''}
-              alt={product.product_name || 'Product'}
-              className="w-full h-full object-cover"
-            />
+            <div className="w-full h-full relative overflow-hidden">
+              <ImageWithFallback
+                src={product.product_image || ''}
+                alt={product.product_name || 'Product'}
+                className="w-full h-full"
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
           </div>
 
           {/* Content section with fixed height based on viewport - aligned to bottom */}
@@ -102,18 +105,18 @@ export function ProductCard({
             <div className="p-4 flex flex-col items-start h-full justify-between">
               <div className="flex flex-col items-start">
                 {product.brand_name && (
-                  <div className="text-base font-semibold uppercase tracking-wider mb-1 line-clamp-1">
+                  <div className="text-base font-semibold uppercase tracking-wider mb-1 line-clamp-1 font-body">
                     {product.brand_name}
                   </div>
                 )}
 
                 {product.product_name && (
-                  <div className="text-sm text-gray-700 line-clamp-1 mb-1">
+                  <div className="text-sm text-gray-700 line-clamp-1 mb-1 font-body">
                     {capitalizeWords(product.product_name)}
                   </div>
                 )}
 
-                <div className="text-sm text-gray-700 line-clamp-2 mb-1 min-h-[2.5rem]">
+                <div className="text-sm text-gray-700 line-clamp-2 mb-1 min-h-[2.5rem] font-body">
                   {capitalizeWords(product.product_description)}
                 </div>
 
@@ -127,33 +130,33 @@ export function ProductCard({
                 {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
                   <>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-red-600 font-semibold text-base">
+                      <span className="text-red-600 font-semibold text-base font-body">
                         {product.currency || '$'}{product.sale_price.toFixed(2)}
                       </span>
-                      <span className="text-base line-through text-gray-600 font-normal">
+                      <span className="text-base line-through text-gray-600 font-normal font-body">
                         {product.currency || '$'}{product.original_price.toFixed(2)}
                       </span>
                     </div>
                     {product.discount && (
-                      <div className="text-sm text-red-600 font-bold">  
+                      <div className="text-sm text-red-600 font-bold font-body">  
                         {product.discount}% OFF
                       </div>
                     )}
                   </>
                 ) : product.sale_price ? (
                   <>
-                    <span className="font-medium">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                    <span className="font-medium font-body">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
                     {product.discount && (
-                      <div className="text-sm text-red-600 font-medium">
+                      <div className="text-sm text-red-600 font-medium font-body">
                         {product.discount}% OFF
                       </div>
                     )}
                   </>
                 ) : product.original_price ? (
                   <>
-                    <span className="font-medium">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                    <span className="font-medium font-body">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
                     {product.discount && (
-                      <div className="text-sm text-red-600 font-medium">
+                      <div className="text-sm text-red-600 font-medium font-body">
                         {product.discount}% OFF
                       </div>
                     )}

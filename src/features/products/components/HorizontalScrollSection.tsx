@@ -2,13 +2,36 @@ import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ProductCard } from './ProductCard';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
-import { useProductsByLinks } from '../hooks/useProductsByLinks';
-import { NEW_THIS_WEEK_LINKS } from '../constants/curatedProductLinks';
+import { useProductsFlexible } from '../hooks/useProductsFlexible';
 
-export function HorizontalScrollSection() {
+type FetchFunction = (page: number, limit: number) => Promise<any>;
+
+interface HorizontalScrollSectionProps {
+  title: string;
+  searchKeyword?: string;
+  fetchFunction?: FetchFunction;
+  limit?: number;
+  backgroundColor?: string;
+  verticalPadding?: string;
+}
+
+export function HorizontalScrollSection({ 
+  title, 
+  searchKeyword,
+  fetchFunction,
+  limit = 20,
+  backgroundColor = '#FBEFD9',
+  verticalPadding = 'py-8 md:py-12'
+}: HorizontalScrollSectionProps) {
   const { navigateToProduct } = useNavigation();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { products, loading, error } = useProductsByLinks(NEW_THIS_WEEK_LINKS);
+  
+  // Validate that either searchKeyword or fetchFunction is provided
+  if (!searchKeyword && !fetchFunction) {
+    console.warn('HorizontalScrollSection: Either searchKeyword or fetchFunction must be provided');
+  }
+  
+  const { products, loading, error } = useProductsFlexible(searchKeyword, fetchFunction, limit);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -21,9 +44,9 @@ export function HorizontalScrollSection() {
   };
 
   return (
-    <section className="w-full bg-[#FBEFD9] py-8 md:py-12 relative">
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <h2 className="text-3xl md:text-4xl lg:text-6xl font-light mb-6 uppercase tracking-tight">New This Week</h2>
+    <section className={`w-full ${verticalPadding} relative`} style={{ backgroundColor }}>
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 uppercase tracking-tight font-headline">{title}</h2>
         
         {/* Scroll Container */}
         <div className="relative group">
@@ -36,13 +59,12 @@ export function HorizontalScrollSection() {
           
           <div
             ref={scrollRef}
-            className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide scroll-smooth"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-tiny scroll-smooth bg-white/30 rounded-lg px-2 py-2"
           >
             {loading ? (
               <div className="flex gap-4">
                 {[...Array(6)].map((_, i) => (
-                  <div key={i} className="flex-shrink-0 w-[280px] md:w-[320px] animate-pulse">
+                  <div key={i} className="flex-shrink-0 w-horizontal-card animate-pulse">
                     <div className="aspect-[3/4] bg-gray-200 mb-3"></div>
                     <div className="h-4 bg-gray-200 rounded w-3/4 mb-1"></div>
                     <div className="h-4 bg-gray-200 rounded w-1/2"></div>
@@ -50,10 +72,10 @@ export function HorizontalScrollSection() {
                 ))}
               </div>
             ) : error ? (
-              <div className="text-center text-red-500 py-8">{error}</div>
+              <div className="text-center text-red-500 py-8 font-body">{error}</div>
             ) : (
               products.map((product) => (
-                <div key={product.id} className="flex-shrink-0 w-[280px] md:w-[320px]">
+                <div key={product.id} className="flex-shrink-0 w-horizontal-card">
                   <ProductCard
                     product={product}
                     onClick={() => navigateToProduct(product.id)}

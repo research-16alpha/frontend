@@ -194,6 +194,7 @@ export function ExpandedContent({
           <div className="sticky top-0 z-[5] shrink-0 bg-white/95 backdrop-blur-xl shadow-sm px-8 py-5 relative">
           </div>
 
+<<<<<<< HEAD
         <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 md:px-10 py-6 pb-8">
           <div className="mx-auto max-w-7xl w-full">
             {/* Single column for mobile, 2 columns from md breakpoint */}
@@ -217,11 +218,95 @@ export function ExpandedContent({
                   )}
                   {product.product_gender && (
                     <span className="uppercase">{product.product_gender}</span>
+=======
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-4 md:px-10 py-6 pb-8">
+        <div className="mx-auto max-w-7xl w-full">
+          {/* Single column for mobile, 2 columns from md breakpoint */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 md:items-start">
+            {/* Image - First Column */}
+            <div className="relative w-full max-w-full md:max-w-[400px] lg:max-w-[450px] xl:max-w-[500px] aspect-[4/5] md:aspect-auto md:h-full md:max-h-[600px] lg:max-h-[650px] xl:max-h-[700px] bg-neutral-100 rounded-xl overflow-hidden shadow-xl md:sticky md:top-10 md:self-start">
+              <ImageWithFallback
+                src={product.product_image || ''}
+                alt={product.product_name || 'Product'}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            {/* Content Container - Second Column */}
+            <div className="flex flex-col gap-6 w-full">
+              {/* Category and Gender - one line with bullet separator */}
+              <div className="flex items-center gap-2 text-sm text-gray-600 font-body">
+                {product.product_category && <span>{product.product_category}</span>}
+                {product.product_category && product.product_gender && (
+                  <span className="text-gray-400">•</span>
+                )}
+                {product.product_gender && (
+                  <span className="uppercase">{product.product_gender}</span>
+                )}
+              </div>
+
+              {/* Brand Name, Product Name, Description, and Price */}
+              <div className="flex flex-col gap-1">
+                {/* Brand Name */}
+                {product.brand_name && (
+                  <div className="text-lg font-semibold uppercase tracking-wider text-gray-900 font-body">
+                    {product.brand_name}
+                  </div>
+                )}
+
+                {/* Product Name */}
+                {product.product_name && (
+                  <div className="text-base text-gray-700 font-medium font-body">
+                    {capitalizeWords(product.product_name)}
+                  </div>
+                )}
+
+                {/* Description */}
+                {product.product_description && (
+                  <p className="text-lg text-gray-700 leading-relaxed text-base font-light font-body">
+                    {capitalizeWords(product.product_description)}
+                  </p>
+                )}
+
+                {/* Product Details */}
+                <div className="flex flex-col gap-2 pt-2">
+                  {/* Sub Category */}
+                  {product.product_sub_category && (
+                    <div className="text-sm text-gray-600 font-body">
+                      <span className="font-medium">Sub Category:</span>{' '}
+                      <span>{capitalizeWords(product.product_sub_category)}</span>
+                    </div>
+                  )}
+
+                  {/* Occasion */}
+                  {product.product_occasion && (
+                    <div className="text-sm text-gray-600 font-body">
+                      <span className="font-medium">Occasion:</span>{' '}
+                      <span>{capitalizeWords(product.product_occasion)}</span>
+                    </div>
+                  )}
+
+                  {/* Material */}
+                  {product.product_material && (
+                    <div className="text-sm text-gray-600 font-body">
+                      <span className="font-medium">Material:</span>{' '}
+                      <span>{capitalizeWords(product.product_material)}</span>
+                    </div>
+                  )}
+
+                  {/* Color */}
+                  {product.product_color && product.product_color.length > 0 && (
+                    <div className="text-sm text-gray-600 font-body">
+                      <span className="font-medium">Color:</span>{' '}
+                      <span>{product.product_color.map(c => capitalizeWords(c)).join(', ')}</span>
+                    </div>
+>>>>>>> develop
                   )}
                 </div>
 
                 {/* Brand Name, Product Name, Description, and Price */}
                 <div className="flex flex-col gap-1">
+<<<<<<< HEAD
                   {/* Brand Name */}
                   {product.brand_name && (
                     <div className="text-lg font-semibold uppercase tracking-wider text-gray-900">
@@ -275,6 +360,89 @@ export function ExpandedContent({
                         <span className="font-medium">Color:</span>{' '}
                         <span>{product.product_color.map(c => capitalizeWords(c)).join(', ')}</span>
                       </div>
+=======
+                  {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
+                    <>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-lg text-red-600 font-semibold text-base font-body">
+                          {product.currency || '$'}{product.sale_price.toFixed(2)}
+                        </span>
+                        <span className="text-lg line-through text-gray-600 font-normal font-body">
+                          {product.currency || '$'}{product.original_price.toFixed(2)}
+                        </span>
+                      </div>
+                      {product.discount && (
+                        <div className="text-sm text-red-600 font-medium font-body">
+                          {product.discount}% OFF
+                        </div>
+                      )}
+                    </>
+                  ) : product.sale_price ? (
+                    <>
+                      <span className="font-medium text-base font-body">{product.currency || '$'}{product.sale_price.toFixed(2)}</span>
+                      {product.discount && (
+                        <div className="text-sm text-red-600 font-medium font-body">
+                          {product.discount}% OFF
+                        </div>
+                      )}
+                    </>
+                  ) : product.original_price ? (
+                    <>
+                      <span className="font-medium text-base font-body">{product.currency || '$'}{product.original_price.toFixed(2)}</span>
+                      {product.discount && (
+                        <div className="text-sm text-red-600 font-medium font-body">
+                          {product.discount}% OFF
+                        </div>
+                      )}
+                    </>
+                  ) : null}
+                </div>
+              </div>
+
+              {/* Link to original product */}
+              {product.product_link && (
+                <a
+                  href={product.product_link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 pt-2 font-body"
+                >
+                  <span>View original product</span>
+                  <span className="text-[10px]">→</span>
+                </a>
+              )}
+
+              {/* Select Size Dropdown */}
+              <div className="relative pt-2">
+                <button
+                  onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
+                  className="w-full border border-black px-4 py-3 text-left bg-white hover:bg-gray-50 transition-colors flex items-center justify-between"
+                >
+                  <span className="text-sm font-body">
+                    {selectedSize ? `Size: ${selectedSize}` : 'Select Size'}
+                  </span>
+                  <span className="text-gray-500">{isSizeDropdownOpen ? '▲' : '▼'}</span>
+                </button>
+                {isSizeDropdownOpen && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-black shadow-lg">
+                    {product.available_sizes && product.available_sizes.length > 0 ? (
+                      product.available_sizes.map((size: string) => (
+                        <button
+                          key={size}
+                          onClick={() => {
+                            setSelectedSize(size);
+                            setIsSizeDropdownOpen(false);
+                          }}
+                          className={`w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition-colors font-body ${
+                            selectedSize === size ? 'bg-gray-100 font-medium' : ''
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-2 text-sm text-gray-500 font-body">No sizes available</div>
+>>>>>>> develop
                     )}
                   </div>
 
@@ -331,6 +499,7 @@ export function ExpandedContent({
                   </a>
                 )}
 
+<<<<<<< HEAD
                 {/* Select Size Dropdown */}
                 <div className="relative pt-2">
                   <button
@@ -365,6 +534,18 @@ export function ExpandedContent({
                     </div>
                   )}
                 </div>
+=======
+              {/* Add to Bag and Add to Favorites buttons - same line */}
+              <div className="flex gap-4 pt-2">
+                <button
+                  onClick={handleAddToBag}
+                  disabled={isAddingToBag}
+                  className="flex-1 bg-black text-white py-4 rounded-xl flex items-center justify-center gap-2.5 font-medium text-sm tracking-wide transition-all duration-200 hover:bg-gray-800 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)] disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_30px_80px_rgba(0,0,0,0.25)] font-body"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Add to Bag
+                </button>
+>>>>>>> develop
 
                 {/* Add to Bag and Add to Favorites buttons - same line */}
                 <div className="flex gap-4 pt-2">
@@ -401,6 +582,21 @@ export function ExpandedContent({
                   ← Back
                 </button>
               </div>
+<<<<<<< HEAD
+=======
+
+              {/* Back Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClose();
+                }}
+                className="mt-4 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer text-sm flex items-center justify-center font-body"
+                aria-label="Back"
+              >
+                ← Back
+              </button>
+>>>>>>> develop
             </div>
           </div>
         </div>
@@ -413,17 +609,17 @@ export function ExpandedContent({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Title */}
           <div className="mb-6">
-            <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight">
+            <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight font-headline">
               <span className="text-gray-charcoal-1 font-light">
                 {product.brand_name ? `More from ${product.brand_name}` : 'You May Also Like'}
               </span>
             </h2>
             {product.brand_name ? (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 font-body">
                 Discover more products from {product.brand_name}
               </p>
             ) : (
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 font-body">
                 Discover more products you might love
               </p>
             )}

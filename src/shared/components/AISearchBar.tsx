@@ -130,12 +130,12 @@ export function AISearchBar() {
                   autoCapitalize="off"
                   spellCheck="false"
                   data-form-type="other"
-                  className="flex-1 bg-transparent outline-none placeholder:text-gray-400"
+                  className="flex-1 bg-transparent outline-none placeholder:text-gray-400 font-body"
                 />
                 <button
                   onClick={handleSearchClick}
                   disabled={isSearching}
-                  className="flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed font-body"
                 >
                   <Search className="w-4 h-4" />
                 </button>
@@ -151,7 +151,7 @@ export function AISearchBar() {
                     <button
                       key={index}
                       onClick={() => handleSuggestionClickWrapper(suggestion)}
-                      className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                      className="w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 font-body"
                     >
                       <div className="flex items-center gap-2">
                         <Search className="w-4 h-4 text-gray-400 flex-shrink-0" />

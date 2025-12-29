@@ -37,8 +37,8 @@ export function BagSidebar() {
             <div className="flex items-center justify-between p-6 border-b">
               <div className="flex items-center gap-2">
                 <ShoppingBag className="w-5 h-5" />
-                <h2 className="text-xl">Bag</h2>
-                <span className="text-sm text-gray-500">({bag.length})</span>
+                <h2 className="text-xl font-headline">Bag</h2>
+                <span className="text-sm text-gray-500 font-body">({bag.length})</span>
               </div>
               <button
                 onClick={() => setIsCartOpen(false)}
@@ -53,8 +53,8 @@ export function BagSidebar() {
               {bag.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center">
                   <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
-                  <p className="text-gray-500 mb-2">Your bag is empty</p>
-                  <p className="text-sm text-gray-400">Add some products to get started</p>
+                  <p className="text-gray-500 mb-2 font-body">Your bag is empty</p>
+                  <p className="text-sm text-gray-400 font-body">Add some products to get started</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -78,8 +78,8 @@ export function BagSidebar() {
 
                       {/* Product Details */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm mb-1 truncate">{item.name}</h3>
-                        <div className="text-xs text-gray-500 mb-2">
+                        <h3 className="text-sm mb-1 truncate font-body">{item.name}</h3>
+                        <div className="text-xs text-gray-500 mb-2 font-body">
                           {item.size} / {item.color}
                         </div>
                         <div className="flex items-center gap-2">
@@ -96,7 +96,7 @@ export function BagSidebar() {
                           >
                             <Minus className="w-3 h-3" />
                           </button>
-                          <span className="text-sm w-8 text-center">{item.quantity}</span>
+                          <span className="text-sm w-8 text-center font-body">{item.quantity}</span>
                           <button
                             onClick={() =>
                               updateBagQuantity(
@@ -121,7 +121,7 @@ export function BagSidebar() {
                         >
                           <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-500" />
                         </button>
-                        <div className="text-sm">
+                        <div className="text-sm font-body">
                           ${(item.price * item.quantity).toFixed(2)}
                         </div>
                       </div>
@@ -135,7 +135,7 @@ export function BagSidebar() {
             {bag.length > 0 && (
               <div className="border-t p-6 space-y-4">
                 {/* Totals */}
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-sm font-body">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Subtotal</span>
                     <span>${subtotal.toFixed(2)}</span>
@@ -156,19 +156,19 @@ export function BagSidebar() {
 
                 {/* Free Shipping Banner */}
                 {subtotal < 100 && (
-                  <div className="bg-gray-50 p-3 rounded-lg text-sm text-center">
+                  <div className="bg-gray-50 p-3 rounded-lg text-sm text-center font-body">
                     Add ${(100 - subtotal).toFixed(2)} more for free shipping!
                   </div>
                 )}
 
                 {/* Checkout Button */}
-                <button className="w-full bg-black text-white py-4 hover:bg-gray-800 transition-colors">
+                <button className="w-full bg-black text-white py-4 hover:bg-gray-800 transition-colors font-body">
                   Proceed to Checkout
                 </button>
 
                 <button
                   onClick={() => setIsCartOpen(false)}
-                  className="w-full border-2 border-gray-300 py-3 hover:bg-gray-50 transition-colors"
+                  className="w-full border-2 border-gray-300 py-3 hover:bg-gray-50 transition-colors font-body"
                 >
                   Continue Shopping
                 </button>

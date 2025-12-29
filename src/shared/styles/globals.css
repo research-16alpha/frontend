@@ -235,9 +235,43 @@ html {
   scrollbar-width: none;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom width classes for horizontal scroll sections */
+  .w-horizontal-card {
+    width: 240px;
+  }
+
+  @media (min-width: 768px) {
+    .w-horizontal-card {
+      width: 280px;
+    }
+  }
+
+  /* Tiny scrollbar for horizontal scroll sections */
+  .scrollbar-tiny {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+  }
+
+  .scrollbar-tiny::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .scrollbar-tiny::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-tiny::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+  }
+
+  .scrollbar-tiny::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+  }
 
 
 @layer utilities {
@@ -469,6 +503,10 @@ html {
     margin-top: 0.375rem; /* 6px */
   }
 
+  .mt-1\.25 {
+    margin-top: 0.3rem; /* 5px - 1.25 * 0.25rem */
+  }
+
   /* Filter and Sort Button Border */
   .filter-button-border {
     border: 1px solid #d1d5db; /* Grey border initially (gray-300) */
@@ -478,6 +516,398 @@ html {
 
   .filter-button-border:hover {
     border-color: #000000; /* Black border on hover */
+  }
+
+  /* ============================================
+     CORMORANT GARAMOND - Headline Font Classes
+     ============================================ */
+  
+  /* Cormorant Garamond - All Text Sizes */
+  .font-headline-xxs {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-xxs);
+    line-height: var(--text-xxs--line-height);
+  }
+
+  .font-headline-xs {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+  }
+
+  .font-headline-sm {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+  }
+
+  .font-headline-base {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+
+  .font-headline-lg {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+  }
+
+  .font-headline-xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+  }
+
+  .font-headline-2xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+  }
+
+  .font-headline-3xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+
+  .font-headline-4xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-4xl);
+    line-height: var(--text-4xl--line-height);
+  }
+
+  .font-headline-5xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-5xl);
+    line-height: var(--text-5xl--line-height);
+  }
+
+  .font-headline-6xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-6xl);
+    line-height: var(--text-6xl--line-height);
+  }
+
+  /* Cormorant Garamond Italic Variants */
+  .font-headline-xxs-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-xxs);
+    line-height: var(--text-xxs--line-height);
+  }
+
+  .font-headline-xs-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+  }
+
+  .font-headline-sm-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+  }
+
+  .font-headline-base-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+
+  .font-headline-lg-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+  }
+
+  .font-headline-xl-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+  }
+
+  .font-headline-2xl-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+  }
+
+  .font-headline-3xl-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+
+  .font-headline-4xl-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-4xl);
+    line-height: var(--text-4xl--line-height);
+  }
+
+  .font-headline-5xl-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-5xl);
+    line-height: var(--text-5xl--line-height);
+  }
+
+  .font-headline-6xl-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-6xl);
+    line-height: var(--text-6xl--line-height);
+  }
+
+  /* ============================================
+     MONTSERRAT - Body/UI Font Classes
+     ============================================ */
+  
+  /* Montserrat - All Text Sizes */
+  .font-body-xxs {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-xxs);
+    line-height: var(--text-xxs--line-height);
+  }
+
+  .font-body-xs {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+  }
+
+  .font-body-sm {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+  }
+
+  .font-body-base {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+
+  .font-body-lg {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+  }
+
+  .font-body-xl {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+  }
+
+  .font-body-2xl {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+  }
+
+  .font-body-3xl {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+
+  .font-body-4xl {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-4xl);
+    line-height: var(--text-4xl--line-height);
+  }
+
+  .font-body-5xl {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-5xl);
+    line-height: var(--text-5xl--line-height);
+  }
+
+  .font-body-6xl {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-6xl);
+    line-height: var(--text-6xl--line-height);
+  }
+
+  /* Montserrat Italic Variants */
+  .font-body-xxs-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-xxs);
+    line-height: var(--text-xxs--line-height);
+  }
+
+  .font-body-xs-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-xs);
+    line-height: var(--text-xs--line-height);
+  }
+
+  .font-body-sm-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+  }
+
+  .font-body-base-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+  }
+
+  .font-body-lg-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-lg);
+    line-height: var(--text-lg--line-height);
+  }
+
+  .font-body-xl-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-xl);
+    line-height: var(--text-xl--line-height);
+  }
+
+  .font-body-2xl-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-2xl);
+    line-height: var(--text-2xl--line-height);
+  }
+
+  .font-body-3xl-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-3xl);
+    line-height: var(--text-3xl--line-height);
+  }
+
+  .font-body-4xl-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-4xl);
+    line-height: var(--text-4xl--line-height);
+  }
+
+  .font-body-5xl-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-5xl);
+    line-height: var(--text-5xl--line-height);
+  }
+
+  .font-body-6xl-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-size: var(--text-6xl);
+    line-height: var(--text-6xl--line-height);
+  }
+
+  /* ============================================
+     Base Font Family Classes (for use with existing text-* and font-* classes)
+     ============================================ */
+  
+  .font-headline {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+  .font-headline-italic {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: italic;
+  }
+
+  .font-body {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+  }
+
+  .font-body-italic {
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: italic;
   }
   }
 

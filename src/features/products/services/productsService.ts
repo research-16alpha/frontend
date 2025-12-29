@@ -1,120 +1,6 @@
 import { API_BASE } from "../../../config/api";
 import { shuffleArray } from "../utils/shuffleArray";
 
-/**
- * Filter options for product queries
- */
-export interface ProductFilters {
-  category?: string | string[];
-  brand?: string | string[];
-  gender?: string | string[];
-  price_min?: number;
-  price_max?: number;
-  [key: string]: string | string[] | number | undefined;
-}
-
-/**
- * Options for fetching products with filters
- */
-export interface FetchProductsOptions {
-  page?: number;
-  limit?: number;
-  filters?: ProductFilters;
-  sort?: string;
-}
-
-/**
- * Build query string from filter object
- * Supports multiple values per filter (comma-separated or array format)
- */
-function buildQueryString(filters: ProductFilters): string {
-  const params = new URLSearchParams();
-
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value === undefined || value === null || value === '') {
-      return;
-    }
-
-    if (Array.isArray(value)) {
-      // Multiple values: use array format or comma-separated
-      if (value.length > 0) {
-        // Option 1: Comma-separated values (e.g., ?category=electronics,clothing)
-        params.append(key, value.join('%'));
-        // Option 2: Array format (e.g., ?category[]=electronics&category[]=clothing)
-        // Uncomment below if backend expects array format:
-        // value.forEach(v => params.append(`${key}[]`, String(v)));
-      }
-    } else {
-      params.append(key, String(value));
-    }
-  });
-
-  return params.toString();
-}
-
-/**
- * Fetch products with flexible filtering using query parameters
- * Supports multiple filters and multiple values per filter
- * 
- * @example
- * // Single filter
- * fetchProductsWithFilters({ filters: { category: 'electronics' } })
- * 
- * @example
- * // Multiple values in one filter
- * fetchProductsWithFilters({ filters: { category: ['electronics', 'clothing'] } })
- * 
- * @example
- * // Multiple filters
- * fetchProductsWithFilters({ 
- *   filters: { 
- *     category: 'electronics',
- *     brand: ['nike', 'adidas'],
- *     price_min: 100,
- *     price_max: 500
- *   },
- *   page: 1,
- *   limit: 20
- * })
- */
-export async function fetchProductsWithFilters(options: FetchProductsOptions = {}) {
-
-  console.log("fetchProductsWithFilters options", options);
-  const { page = 1, limit = 40, filters = {}, sort } = options;
-  const skip = (page - 1) * limit;
-
-  // Build query string
-  const queryParams = new URLSearchParams();
-  
-  // Add pagination
-  queryParams.append('limit', String(limit));
-  queryParams.append('skip', String(skip));
-
-  // Add sorting if provided
-  if (sort) {
-    queryParams.append('sort', sort);
-  }
-
-  // Add filters
-  const filterQuery = buildQueryString(filters);
-  if (filterQuery) {
-    // Merge filter params with existing params
-    const filterParams = new URLSearchParams(filterQuery);
-    filterParams.forEach((value, key) => {
-      queryParams.append(key, value);
-    });
-  }
-
-  const url = `${API_BASE}/api/products?${queryParams.toString()}`;
-  console.log("fetchProductsWithFilters API called:", url);
-
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Failed to load products: ${res.statusText}`);
-  }
-  return res.json();
-}
-
 export async function fetchProducts(page: number = 1, limit: number = 20) {
   console.log("fetchProducts API called");
   const skip = (page - 1) * limit;
@@ -159,21 +45,6 @@ export async function fetchProductById(id: string | number) {
   return res.json();
 }
 
-export async function fetchProductsByCategory(
-  category: string,
-  page: number = 1,
-  limit: number = 20
-) {
-  const skip = (page - 1) * limit;
-
-  const res = await fetch(
-    `${API_BASE}/api/products/category/${encodeURIComponent(category)}?limit=${limit}&skip=${skip}`
-  );
-
-  if (!res.ok) throw new Error("Failed to load products by category");
-  return res.json();
-}
-
 export async function fetchTopDeals(page: number = 1, limit: number = 20) {
   // For Curated page: first page loads 50, subsequent pages load 20
   // Calculate skip based on page number and variable page sizes
@@ -183,38 +54,6 @@ export async function fetchTopDeals(page: number = 1, limit: number = 20) {
   return res.json();
 }
 
-export async function fetchBestDeals(limit: number = 20) {
-  const res = await fetch(`${API_BASE}/api/products/best-deals?limit=${limit}`);
-  if (!res.ok) throw new Error("Failed to load best deals");
-  return res.json();
-}
-
-export async function fetchProductsByGender(
-  gender: string,
-  page: number = 1,
-  limit: number = 20
-) {
-  const skip = (page - 1) * limit;
-  console.log("api found");
-  const res = await fetch(
-    `${API_BASE}/api/products/gender/${encodeURIComponent(gender)}?limit=${limit}&skip=${skip}`
-  );
-
-  if (!res.ok) throw new Error("Failed to load products by gender");
-  return res.json();
-}
-
-// Note: Brand filtering endpoint not available in backend router
-// Use fetchProductsWithFilters with brand filter instead
-// export async function fetchProductsByBrand(brand: string, page: number = 1, limit: number = 20) {
-//   const skip = (page - 1) * limit;
-//   const res = await fetch(
-//     `${API_BASE}/api/products/brand/${encodeURIComponent(brand)}?limit=${limit}&skip=${skip}`
-//   );
-//   if (!res.ok) throw new Error("Failed to load products by brand");
-//   return res.json();
-// }
-
 export async function fetchLatestProducts(page: number = 1, limit: number = 20) {
   const skip = (page - 1) * limit;
   const res = await fetch(`${API_BASE}/api/products/latest?limit=${limit}&skip=${skip}`);
@@ -222,6 +61,17 @@ export async function fetchLatestProducts(page: number = 1, limit: number = 20) 
   const data = await res.json();
   console.log("Latest products response:", data);
   return data;
+}
+
+/**
+ * Fetch products filtered by gender
+ * Uses the dedicated gender endpoint which applies get_products logic with gender filtering
+ */
+export async function get_products_by_gender(gender: string, page: number = 1, limit: number = 20) {
+  const skip = (page - 1) * limit;
+  const res = await fetch(`${API_BASE}/api/products/gender/${encodeURIComponent(gender)}?limit=${limit}&skip=${skip}`);
+  if (!res.ok) throw new Error("Failed to load products by gender");
+  return res.json();
 }
 
 /**
@@ -297,6 +147,41 @@ export async function fetchProductsByLinks(productLinks: string[]) {
   
   if (!res.ok) {
     throw new Error("Failed to load products by links");
+  }
+  
+  return res.json();
+}
+
+/**
+ * Fetch curated products based on brand_name and keyword pairs.
+ * For each tuple [brand_name, keyword], finds products that:
+ * - Have the specified brand_name
+ * - Have the keyword in product_name OR product_description
+ * Returns the union of all products from all tuples.
+ * 
+ * @example
+ * fetchCurated([
+ *   { brand_name: "Gucci", keyword: "handbag" },
+ *   { brand_name: "Prada", keyword: "shoes" }
+ * ])
+ */
+export async function fetchCurated(brandKeywordPairs: Array<{ brand_name: string; keyword: string }>) {
+  if (!brandKeywordPairs || brandKeywordPairs.length === 0) {
+    return { products: [], total: 0 };
+  }
+  
+  const res = await fetch(`${API_BASE}/api/products/curated`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ 
+      brand_keyword_pairs: brandKeywordPairs 
+    }),
+  });
+  
+  if (!res.ok) {
+    throw new Error("Failed to load curated products");
   }
   
   return res.json();

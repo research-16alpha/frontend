@@ -11,7 +11,7 @@ export function Footer({ show = true }: FooterProps) {
   return (
     <footer>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 py-4 md:py-6">
-        <div className="flex flex-row md:flex-row justify-between items-center gap-1 md:gap-0 text-xs sm:text-sm md:text-base lg:text-lg footer-text">
+        <div className="flex flex-row md:flex-row justify-between items-center gap-1 md:gap-0 text-xs sm:text-sm md:text-base lg:text-lg footer-text font-body">
           {/* Copyright */}
           <div>
             halfsy.shop © {new Date().getFullYear()}

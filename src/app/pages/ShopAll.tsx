@@ -3,6 +3,7 @@ import { BaseProductsPage } from './BaseProductsPage';
 import { fetchProducts } from '../../features/products/services/productsService';
 import { searchProducts } from '../../features/products/services/searchService';
 import { getUrlParam } from '../../shared/utils/urlParams';
+import { shuffleArray } from '../../features/products/utils/shuffleArray';
 
 export function ShopAll() {
   // Initialize searchQuery from URL immediately (synchronously)
@@ -37,7 +38,7 @@ export function ShopAll() {
     };
   }, []);
 
-  // Use searchProducts if there's a search query, otherwise use fetchProducts
+  // Use searchProducts if there's a search query, otherwise use fetchProducts with shuffling
   const fetchProductsFn = React.useMemo(() => {
     if (searchQuery && searchQuery.trim()) {
       return async (page: number, limit: number) => {
@@ -48,7 +49,31 @@ export function ShopAll() {
         });
       };
     }
-    return fetchProducts;
+    // Wrap fetchProducts to shuffle the products array
+    return async (page: number, limit: number) => {
+      const data = await fetchProducts(page, limit);
+      
+      // Handle different response formats: array or object with products property
+      if (Array.isArray(data)) {
+        // If response is directly an array, shuffle it
+        return shuffleArray(data);
+      } else if (data.products && Array.isArray(data.products)) {
+        // If response has a products property, shuffle the products array
+        return {
+          ...data,
+          products: shuffleArray(data.products)
+        };
+      } else if (data.items && Array.isArray(data.items)) {
+        // If response has an items property, shuffle the items array
+        return {
+          ...data,
+          items: shuffleArray(data.items)
+        };
+      }
+      
+      // Fallback: return data as-is if structure is unexpected
+      return data;
+    };
   }, [searchQuery]);
 
   const pageTitle = searchQuery ? `Search Results for "${searchQuery}"` : 'Shop All';

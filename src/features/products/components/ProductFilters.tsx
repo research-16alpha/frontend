@@ -37,7 +37,7 @@ export function ProductFilters({
               <div className="relative inline-block w-full">
                 <button
                   onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
-                  className="px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer"
+                  className="px-3 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center w-full cursor-pointer font-body"
                 >
                   Filters
                 </button>
@@ -56,7 +56,11 @@ export function ProductFilters({
                           className="p-4"
                         />
                       ) : (
+<<<<<<< HEAD
                         <div className="text-sm text-gray-500 p-4">Loading filters...</div>
+=======
+                        <div className="text-sm text-gray-500 p-2 font-body">Loading filters...</div>
+>>>>>>> develop
                       )}
                     </div>
                   </>
@@ -79,7 +83,7 @@ export function ProductFilters({
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'CATEGORY' ? null : 'CATEGORY')}
-              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors font-body ${
                 selectedFilters['CATEGORY'] && selectedFilters['CATEGORY'].length > 0
                   ? 'bg-gray-100'
                   : ''
@@ -87,7 +91,7 @@ export function ProductFilters({
             >
               Category
               {selectedFilters['CATEGORY'] && selectedFilters['CATEGORY'].length > 0 && (
-                <span className="ml-2 text-xs">({selectedFilters['CATEGORY'].length})</span>
+                <span className="ml-2 text-xs font-body">({selectedFilters['CATEGORY'].length})</span>
               )}
             </button>
             {desktopFilterOpen === 'CATEGORY' && (
@@ -119,7 +123,7 @@ export function ProductFilters({
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'BRAND' ? null : 'BRAND')}
-              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors font-body ${
                 selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0
                   ? 'bg-gray-100'
                   : ''
@@ -127,7 +131,7 @@ export function ProductFilters({
             >
               Brand
               {selectedFilters['BRAND'] && selectedFilters['BRAND'].length > 0 && (
-                <span className="ml-2 text-xs">({selectedFilters['BRAND'].length})</span>
+                <span className="ml-2 text-xs font-body">({selectedFilters['BRAND'].length})</span>
               )}
             </button>
             {desktopFilterOpen === 'BRAND' && (
@@ -159,7 +163,7 @@ export function ProductFilters({
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'OCCASION' ? null : 'OCCASION')}
-              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors font-body ${
                 selectedFilters['OCCASION'] && selectedFilters['OCCASION'].length > 0
                   ? 'bg-gray-100'
                   : ''
@@ -167,7 +171,7 @@ export function ProductFilters({
             >
               Occasion
               {selectedFilters['OCCASION'] && selectedFilters['OCCASION'].length > 0 && (
-                <span className="ml-2 text-xs">({selectedFilters['OCCASION'].length})</span>
+                <span className="ml-2 text-xs font-body">({selectedFilters['OCCASION'].length})</span>
               )}
             </button>
             {desktopFilterOpen === 'OCCASION' && (
@@ -199,7 +203,7 @@ export function ProductFilters({
           <div className="relative flex-1">
             <button
               onClick={() => setDesktopFilterOpen(desktopFilterOpen === 'PRICE' ? null : 'PRICE')}
-              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors ${
+              className={`w-full px-4 py-3 filter-button-border bg-white text-sm uppercase tracking-wide h-[42px] flex items-center justify-center cursor-pointer transition-colors font-body ${
                 selectedFilters['PRICE'] && selectedFilters['PRICE'].length > 0
                   ? 'bg-gray-100'
                   : ''
@@ -207,7 +211,7 @@ export function ProductFilters({
             >
               Price
               {selectedFilters['PRICE'] && selectedFilters['PRICE'].length > 0 && (
-                <span className="ml-2 text-xs">({selectedFilters['PRICE'].length})</span>
+                <span className="ml-2 text-xs font-body">({selectedFilters['PRICE'].length})</span>
               )}
             </button>
             {desktopFilterOpen === 'PRICE' && (

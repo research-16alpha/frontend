@@ -100,62 +100,62 @@ export function Navbar({
                   alt="Halfsy logo"
                   className="w-5 h-5 object-contain"
                 />
-                <span className="text-xl font-thintext-gray-900 hover:text-black transition-colors tracking-wide cursor-pointer">halfsy</span>
+                <span className="text-xl font-semibold text-gray-900 hover:text-black transition-colors tracking-wide cursor-pointer font-headline">halfsy</span>
               </button>
             </div>
             {/* Navigation Items - Hidden on mobile */}
-            <div className="hidden lg:flex items-center gap-6 xl:gap-6 mt-1.5">
+            <div className="hidden lg:flex items-center gap-3 xl:gap-6 mt-1.25">
               <button
                 onClick={onLogoClick}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Home
               </button>
               <button
                 onClick={() => onProductsClick?.()}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Shop All
               </button>
               <button
                 onClick={() => onCuratedClick?.()}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Curated
               </button>
               <button 
                 onClick={onNewArrivalsClick || (() => {})}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 New
               </button>
               <button
                 onClick={() => (onCategoryClick ? onCategoryClick('women') : undefined)}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Women
               </button>
               <button
                 onClick={() => (onCategoryClick ? onCategoryClick('men') : undefined)}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Men
               </button>
               <button
                 onClick={() => (onCategoryClick ? onCategoryClick('accessories') : undefined)}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Accessories
               </button>
               <button
                 onClick={onPreOwnedClick || (() => {})}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Pre-Owned
               </button>
               <button
                 onClick={onAboutClick || (() => {})}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center"
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 About
               </button>
@@ -217,7 +217,7 @@ export function Navbar({
             >
               {/* Header */}
               <div className="flex items-center p-6 border-b relative">
-                <h2 className="flex-1 text-center text-sm text-gray-700 uppercase tracking-wide">
+                <h2 className="flex-1 text-center text-sm text-gray-700 uppercase tracking-wide font-body">
                   Menu
                 </h2>
                 <button
@@ -232,55 +232,55 @@ export function Navbar({
               <div className="flex flex-col mt-8 px-6 flex-1 overflow-y-auto pb-6">
                 <button
                   onClick={() => handleNavClick(onLogoClick || (() => {}))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Home
                 </button>
                 <button
                   onClick={() => handleNavClick(() => onProductsClick?.())}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Shop All
                 </button>
                 <button
                   onClick={() => handleNavClick(() => onCuratedClick?.())}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Curated
                 </button>
                 <button
                   onClick={() => handleNavClick(onNewArrivalsClick || (() => {}))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   New
                 </button>
                 <button
                   onClick={() => handleNavClick(() => onCategoryClick?.('women'))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Women
                 </button>
                 <button
                   onClick={() => handleNavClick(() => onCategoryClick?.('men'))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Men
                 </button>
                 <button
                   onClick={() => handleNavClick(() => onCategoryClick?.('accessories'))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Accessories
                 </button>
                 <button
                   onClick={() => handleNavClick(onPreOwnedClick || (() => {}))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Pre-Owned
                 </button>
                 <button
                   onClick={() => handleNavClick(onAboutClick || (() => {}))}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100"
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   About
                 </button>

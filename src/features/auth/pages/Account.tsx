@@ -160,8 +160,8 @@ export function Account() {
                     </div>
                   )}
                 </div>
-                <h3 className="mb-1">{user.name}</h3>
-                <p className="text-sm text-gray-500">{user.email}</p>
+                <h3 className="mb-1 font-headline">{user.name}</h3>
+                <p className="text-sm text-gray-500 font-body">{user.email}</p>
               </div>
 
               {/* Navigation */}
@@ -177,7 +177,7 @@ export function Account() {
                     }`}
                   >
                     <tab.icon className="w-5 h-5" />
-                    <span>{tab.label}</span>
+                    <span className="font-body">{tab.label}</span>
                   </button>
                 ))}
                 <button
@@ -195,7 +195,7 @@ export function Account() {
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <LogOut className="w-5 h-5" />
-                  <span>Logout</span>
+                  <span className="font-body">Logout</span>
                 </button>
               </nav>
             </div>
@@ -207,7 +207,7 @@ export function Account() {
               {/* Orders Tab */}
               {activeTab === 'orders' && (
                 <div>
-                  <h2 className="text-2xl mb-6">My Orders</h2>
+                  <h2 className="text-2xl mb-6 font-headline">My Orders</h2>
                   <div className="space-y-4">
                     {orders.map((order) => (
                       <div
@@ -216,15 +216,15 @@ export function Account() {
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div>
-                            <div className="text-sm text-gray-500 mb-1">
+                            <div className="text-sm text-gray-500 mb-1 font-body">
                               Order #{order.id}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 font-body">
                               Placed on {new Date(order.date).toLocaleDateString()}
                             </div>
                           </div>
                           <span
-                            className={`px-3 py-1 rounded-full text-xs ${getStatusColor(
+                            className={`px-3 py-1 rounded-full text-xs font-body ${getStatusColor(
                               order.status
                             )}`}
                           >
@@ -243,26 +243,26 @@ export function Account() {
                                 />
                               </div>
                               <div className="flex-1">
-                                <div className="text-sm mb-1">{item.name}</div>
-                                <div className="text-xs text-gray-500">
+                                <div className="text-sm mb-1 font-body">{item.name}</div>
+                                <div className="text-xs text-gray-500 font-body">
                                   Qty: {item.quantity} | Size: {item.size} | Color:{' '}
                                   {item.color}
                                 </div>
                               </div>
-                              <div className="text-sm">${item.price.toFixed(2)}</div>
+                              <div className="text-sm font-body">${item.price.toFixed(2)}</div>
                             </div>
                           ))}
                         </div>
 
                         <div className="flex items-center justify-between pt-4 border-t">
-                          <div className="text-sm">
-                            Total: <span className="text-lg">${order.total.toFixed(2)}</span>
+                          <div className="text-sm font-body">
+                            Total: <span className="text-lg font-body">${order.total.toFixed(2)}</span>
                           </div>
                           <div className="flex gap-2">
-                            <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-sm transition-colors">
+                            <button className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 text-sm transition-colors font-body">
                               Track Order
                             </button>
-                            <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 text-sm transition-colors">
+                            <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 text-sm transition-colors font-body">
                               View Details
                             </button>
                           </div>
@@ -276,16 +276,16 @@ export function Account() {
               {/* Favorites Tab */}
               {activeTab === 'favorites' && (
                 <div>
-                  <h2 className="text-2xl mb-6">My Favorites</h2>
+                  <h2 className="text-2xl mb-6 font-headline">My Favorites</h2>
                   {isLoadingFavorites ? (
-                    <div className="text-center py-12 text-gray-500">
+                    <div className="text-center py-12 text-gray-500 font-body">
                       Loading your favorites...
                     </div>
                   ) : favoriteProducts.length === 0 ? (
                     <div className="text-center py-12">
                       <Heart className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                      <p className="text-gray-500">No favorites yet</p>
-                      <p className="text-sm text-gray-400 mt-2">
+                      <p className="text-gray-500 font-body">No favorites yet</p>
+                      <p className="text-sm text-gray-400 mt-2 font-body">
                         Start adding products to your favorites!
                       </p>
                     </div>
@@ -305,17 +305,17 @@ export function Account() {
                           </div>
                           <div className="flex-1 space-y-1">
                             {product.brand_name && (
-                              <div className="text-[11px] uppercase tracking-wide text-gray-500">
+                              <div className="text-[11px] uppercase tracking-wide text-gray-500 font-body">
                                 {product.brand_name}
                               </div>
                             )}
-                            <div className="text-sm font-medium text-gray-800 line-clamp-2">
+                            <div className="text-sm font-medium text-gray-800 line-clamp-2 font-body">
                               {product.product_name}
                             </div>
-                            <div className="text-xs text-gray-500 line-clamp-2">
+                            <div className="text-xs text-gray-500 line-clamp-2 font-body">
                               {product.product_description || 'No description available.'}
                             </div>
-                            <div className="text-sm font-semibold">
+                            <div className="text-sm font-semibold font-body">
                               {product.original_price && product.sale_price && product.original_price > product.sale_price ? (
                                 <>
                                   <span className="text-red-600">
@@ -332,7 +332,7 @@ export function Account() {
                           </div>
                           <button
                             onClick={() => toggleFavorite(product.id)}
-                            className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm transition-colors"
+                            className="mt-2 inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm transition-colors font-body"
                           >
                             <Heart className="w-4 h-4 text-red-500" />
                             Remove
@@ -348,14 +348,14 @@ export function Account() {
               {activeTab === 'profile' && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl">Profile Information</h2>
+                    <h2 className="text-2xl font-headline">Profile Information</h2>
                     {!isEditing ? (
                       <button
                         onClick={() => {
                           setIsEditing(true);
                           setEditedProfile(user);
                         }}
-                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors font-body"
                       >
                         <Edit2 className="w-4 h-4" />
                         Edit
@@ -364,14 +364,14 @@ export function Account() {
                       <div className="flex gap-2">
                         <button
                           onClick={() => setIsEditing(false)}
-                          className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors font-body"
                         >
                           <X className="w-4 h-4" />
                           Cancel
                         </button>
                         <button
                           onClick={handleSaveProfile}
-                          className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors font-body"
                         >
                           <Save className="w-4 h-4" />
                           Save
@@ -383,7 +383,7 @@ export function Account() {
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm mb-2">Full Name</label>
+                        <label className="block text-sm mb-2 font-body">Full Name</label>
                         <input
                           type="text"
                           value={editedProfile?.name || ''}
@@ -391,11 +391,11 @@ export function Account() {
                             setEditedProfile({ ...editedProfile!, name: e.target.value })
                           }
                           disabled={!isEditing}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black disabled:bg-gray-50"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black disabled:bg-gray-50 font-body"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm mb-2">Email Address</label>
+                        <label className="block text-sm mb-2 font-body">Email Address</label>
                         <input
                           type="email"
                           value={editedProfile?.email || ''}
@@ -403,11 +403,11 @@ export function Account() {
                             setEditedProfile({ ...editedProfile!, email: e.target.value })
                           }
                           disabled={!isEditing}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black disabled:bg-gray-50"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black disabled:bg-gray-50 font-body"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm mb-2">Phone Number</label>
+                        <label className="block text-sm mb-2 font-body">Phone Number</label>
                         <input
                           type="tel"
                           value={editedProfile?.phone || ''}
@@ -415,7 +415,7 @@ export function Account() {
                             setEditedProfile({ ...editedProfile!, phone: e.target.value })
                           }
                           disabled={!isEditing}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black disabled:bg-gray-50"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black disabled:bg-gray-50 font-body"
                         />
                       </div>
                     </div>
@@ -427,8 +427,8 @@ export function Account() {
               {activeTab === 'addresses' && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl">Shipping Addresses</h2>
-                    <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">
+                    <h2 className="text-2xl font-headline">Shipping Addresses</h2>
+                    <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors font-body">
                       Add New Address
                     </button>
                   </div>
@@ -437,8 +437,8 @@ export function Account() {
                     <div className="border border-gray-200 rounded-lg p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div>
-                          <div className="mb-2">Default Address</div>
-                          <div className="text-gray-600">
+                          <div className="mb-2 font-body">Default Address</div>
+                          <div className="text-gray-600 font-body">
                             <p>{user.address.street}</p>
                             <p>
                               {user.address.city}, {user.address.state} {user.address.zip}
@@ -446,7 +446,7 @@ export function Account() {
                             <p>{user.address.country}</p>
                           </div>
                         </div>
-                        <button className="text-sm text-gray-600 hover:text-black">
+                        <button className="text-sm text-gray-600 hover:text-black font-body">
                           Edit
                         </button>
                       </div>
@@ -454,7 +454,7 @@ export function Account() {
                   ) : (
                     <div className="text-center py-12 border border-gray-200 rounded-lg">
                       <MapPin className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                      <p className="text-gray-500">No addresses saved</p>
+                      <p className="text-gray-500 font-body">No addresses saved</p>
                     </div>
                   )}
                 </div>
@@ -464,16 +464,16 @@ export function Account() {
               {activeTab === 'payment' && (
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl">Payment Methods</h2>
-                    <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors">
+                    <h2 className="text-2xl font-headline">Payment Methods</h2>
+                    <button className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors font-body">
                       Add Card
                     </button>
                   </div>
 
                   <div className="text-center py-12 border border-gray-200 rounded-lg">
                     <CreditCard className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-                    <p className="text-gray-500">No payment methods saved</p>
-                    <p className="text-sm text-gray-400 mt-2">
+                    <p className="text-gray-500 font-body">No payment methods saved</p>
+                    <p className="text-sm text-gray-400 mt-2 font-body">
                       Add a payment method for faster checkout
                     </p>
                   </div>
@@ -483,43 +483,43 @@ export function Account() {
               {/* Settings Tab */}
               {activeTab === 'settings' && (
                 <div>
-                  <h2 className="text-2xl mb-6">Account Settings</h2>
+                  <h2 className="text-2xl mb-6 font-headline">Account Settings</h2>
                   <div className="space-y-6">
                     <div className="border-b pb-6">
-                      <h3 className="mb-4">Notifications</h3>
+                      <h3 className="mb-4 font-headline">Notifications</h3>
                       <div className="space-y-3">
                         <label className="flex items-center justify-between cursor-pointer">
-                          <span className="text-gray-700">Email notifications</span>
+                          <span className="text-gray-700 font-body">Email notifications</span>
                           <input type="checkbox" defaultChecked className="rounded" />
                         </label>
                         <label className="flex items-center justify-between cursor-pointer">
-                          <span className="text-gray-700">Order updates</span>
+                          <span className="text-gray-700 font-body">Order updates</span>
                           <input type="checkbox" defaultChecked className="rounded" />
                         </label>
                         <label className="flex items-center justify-between cursor-pointer">
-                          <span className="text-gray-700">Promotional emails</span>
+                          <span className="text-gray-700 font-body">Promotional emails</span>
                           <input type="checkbox" className="rounded" />
                         </label>
                       </div>
                     </div>
 
                     <div className="border-b pb-6">
-                      <h3 className="mb-4">Privacy</h3>
+                      <h3 className="mb-4 font-headline">Privacy</h3>
                       <div className="space-y-3">
                         <label className="flex items-center justify-between cursor-pointer">
-                          <span className="text-gray-700">Make profile public</span>
+                          <span className="text-gray-700 font-body">Make profile public</span>
                           <input type="checkbox" className="rounded" />
                         </label>
                         <label className="flex items-center justify-between cursor-pointer">
-                          <span className="text-gray-700">Show order history</span>
+                          <span className="text-gray-700 font-body">Show order history</span>
                           <input type="checkbox" className="rounded" />
                         </label>
                       </div>
                     </div>
 
                     <div>
-                      <h3 className="mb-4 text-red-600">Danger Zone</h3>
-                      <button className="px-4 py-2 border border-red-300 text-red-600 rounded hover:bg-red-50 transition-colors">
+                      <h3 className="mb-4 text-red-600 font-headline">Danger Zone</h3>
+                      <button className="px-4 py-2 border border-red-300 text-red-600 rounded hover:bg-red-50 transition-colors font-body">
                         Delete Account
                       </button>
                     </div>
