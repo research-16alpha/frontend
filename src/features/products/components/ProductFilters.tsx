@@ -56,11 +56,7 @@ export function ProductFilters({
                           className="p-4"
                         />
                       ) : (
-<<<<<<< HEAD
-                        <div className="text-sm text-gray-500 p-4">Loading filters...</div>
-=======
                         <div className="text-sm text-gray-500 p-2 font-body">Loading filters...</div>
->>>>>>> develop
                       )}
                     </div>
                   </>
