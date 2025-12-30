@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronDown, ChevronUp, Search } from 'lucide-react';
 
 export interface CategoryOption {
@@ -63,18 +63,18 @@ export function CategoryFilter({
   //   }
   // }, [categories, defaultExpanded]);
 
-  // Replace the useEffect around line 57-68 with this:
-useEffect(() => {
-  if (categories && categories.length > 0) {
-    setExpandedSections(prev => {
-      const newSections = { ...prev };
-      categories.forEach(cat => {
-        // Always set the section state, even if it exists
-        newSections[cat.title] = prev[cat.title] !== undefined ? prev[cat.title] : defaultExpanded;
+  // Update expandedSections when categories change
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      setExpandedSections(prev => {
+        const newSections = { ...prev };
+        categories.forEach(cat => {
+          // Always set the section state, even if it exists
+          newSections[cat.title] = prev[cat.title] !== undefined ? prev[cat.title] : defaultExpanded;
+        });
+        return newSections;
       });
-      return newSections;
-    });
-  }
+    }
   }, [categories, defaultExpanded]);
 
   const toggleSection = (title: string) => {
@@ -199,40 +199,40 @@ useEffect(() => {
 
               {/* Use the derived isExpanded instead of just the state */}
               {isExpanded && category.options.length > 0 && (
-            <div className="mt-2 overflow-hidden">
-              <div 
-                className="space-y-2 overflow-y-auto pr-2"
-                style={{ 
-                  maxHeight: '300px',
-                  scrollbarWidth: 'thin',
-                  WebkitOverflowScrolling: 'touch'
-                }}
-              >
-                {category.options.map((option) => {
-                  const isSelected = (selectedFilters[category.title] || []).includes(option.value);
-                  
-                  return (
-                    <label
-                      key={option.value}
-                      className="flex items-center gap-x-1 sm:gap-x-3 cursor-pointer hover:text-black transition-colors py-1 min-h-[32px]"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => handleFilterChange(category.title, option.value, category.multiSelect)}
-                        className="w-4 h-4 border-gray-300 rounded cursor-pointer flex-shrink-0"
-                      />
-                      <span className="text-sm md:text-base lg:text-lg flex-1 font-thin text-gray-700"> 
-                        {toTitleCase(option.label)} 
-                        {option.count !== undefined && (
-                          <span className="text-gray-400 ml-1 px-2 font-light"> ({option.count})</span>
-                        )}
-                      </span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
+                <div className="mt-2 overflow-hidden">
+                  <div 
+                    className="space-y-2 overflow-y-auto pr-2"
+                    style={{ 
+                      maxHeight: '300px',
+                      scrollbarWidth: 'thin',
+                      WebkitOverflowScrolling: 'touch'
+                    }}
+                  >
+                    {category.options.map((option) => {
+                      const isSelected = (selectedFilters[category.title] || []).includes(option.value);
+                      
+                      return (
+                        <label
+                          key={option.value}
+                          className="flex items-center gap-x-1 sm:gap-x-3 cursor-pointer hover:text-black transition-colors py-1 min-h-[32px]"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => handleFilterChange(category.title, option.value, category.multiSelect)}
+                            className="w-4 h-4 border-gray-300 rounded cursor-pointer flex-shrink-0"
+                          />
+                          <span className="text-sm md:text-base lg:text-lg flex-1 font-thin text-gray-700"> 
+                            {toTitleCase(option.label)} 
+                            {option.count !== undefined && (
+                              <span className="text-gray-400 ml-1 px-2 font-light"> ({option.count})</span>
+                            )}
+                          </span>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </div>
           );
