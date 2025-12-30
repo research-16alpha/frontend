@@ -12,7 +12,7 @@ export function FeaturedSection() {
   return (
     <section className="w-full bg-[#673E1E] py-10 md:py-16">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-8 lg:gap-12">
+        <div className="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
           {/* Left Content */}
           <div className="w-full lg:w-1/3 space-y-4 md:space-y-6">
             <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase font-bold tracking-wide leading-tight font-headline">

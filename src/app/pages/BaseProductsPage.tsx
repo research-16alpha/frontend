@@ -110,6 +110,7 @@ export function BaseProductsPage({
         const priceRange = priceFilter ? getPriceRange(priceFilter) : {};
         
           data = await fetchFilteredProducts({
+<<<<<<< HEAD
           page,
           limit: 20,
           category: categoryFilters.length > 0 ? categoryFilters : undefined,
@@ -119,6 +120,18 @@ export function BaseProductsPage({
           price_max: priceRange.max,
           gender: gender,
         });
+=======
+            page,
+            limit: 20,
+            category: categoryFilters.length > 0 ? categoryFilters : undefined,
+            brand: brandFilters.length > 0 ? brandFilters : undefined,
+            occasion: occasionFilters.length > 0 ? occasionFilters : undefined,
+            price_min: priceRange.min,
+            price_max: priceRange.max,
+            gender: gender,
+            sortBy: sortBy !== 'featured' ? sortBy : undefined,
+          });
+>>>>>>> develop
         }
         
         const backendProducts = Array.isArray(data) ? data : (data.products || []);

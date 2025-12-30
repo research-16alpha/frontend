@@ -430,6 +430,26 @@ html {
     line-height: var(--text-6xl--line-height);
   }
 
+  .text-7xl {
+    font-size: var(--text-7xl);
+    line-height: var(--text-7xl--line-height);
+  }
+
+  .text-8xl {
+    font-size: var(--text-8xl);
+    line-height: var(--text-8xl--line-height);
+  }
+
+  .text-9xl {
+    font-size: var(--text-9xl);
+    line-height: var(--text-9xl--line-height);
+  }
+
+  .text-10xl {
+    font-size: var(--text-10xl);
+    line-height: var(--text-10xl--line-height);
+  }
+
   /* Text Color Classes - Grays and Soft Whites */
   /* Soft Whites (equally spaced from white to light gray) */
   .text-white-soft-1 {
@@ -609,6 +629,38 @@ html {
     font-style: normal;
     font-size: var(--text-6xl);
     line-height: var(--text-6xl--line-height);
+  }
+
+  .font-headline-7xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-7xl);
+    line-height: var(--text-7xl--line-height);
+  }
+
+  .font-headline-8xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-8xl);
+    line-height: var(--text-8xl--line-height);
+  }
+
+  .font-headline-9xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-9xl);
+    line-height: var(--text-9xl--line-height);
+  }
+
+  .font-headline-10xl {
+    font-family: "Cormorant Garamond", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: var(--text-10xl);
+    line-height: var(--text-10xl--line-height);
   }
 
   /* Cormorant Garamond Italic Variants */

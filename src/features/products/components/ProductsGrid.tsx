@@ -28,55 +28,9 @@ export function ProductsGrid({
   selectedFilters = {},
 }: ProductsGridProps) {
 
-  // Products are filtered by backend, but sorted on frontend
-  const sortedProducts = React.useMemo(() => {
-    const sorted = [...products];
-    
-    switch (sortBy) {
-      case 'price-asc':
-        sorted.sort((a, b) => (a.sale_price || a.original_price || 0) - (b.sale_price || b.original_price || 0));
-        break;
-      case 'price-desc':
-        sorted.sort((a, b) => (b.sale_price || b.original_price || 0) - (a.sale_price || a.original_price || 0));
-        break;
-      case 'discount-desc':
-        sorted.sort((a, b) => {
-          const getDiscountPercent = (product: Product): number => {
-            if (product.original_price && product.sale_price && product.original_price > product.sale_price) {
-              return ((product.original_price - product.sale_price) / product.original_price) * 100;
-            }
-            return 0;
-          };
-          const discountA = getDiscountPercent(a);
-          const discountB = getDiscountPercent(b);
-          return discountB - discountA;
-        });
-        break;
-      case 'name-asc':
-        sorted.sort((a, b) => (a.product_name || '').localeCompare(b.product_name || ''));
-        break;
-      case 'name-desc':
-        sorted.sort((a, b) => (b.product_name || '').localeCompare(a.product_name || ''));
-        break;
-      case 'newest':
-        // Sort by scraped_at if available, otherwise by id
-        sorted.sort((a, b) => {
-          if (a.scraped_at && b.scraped_at) {
-            return new Date(b.scraped_at).getTime() - new Date(a.scraped_at).getTime();
-          }
-          return 0;
-        });
-        break;
-      case 'featured':
-      default:
-        // Keep original order
-        break;
-    }
-    
-    return sorted;
-  }, [products, sortBy]);
-
-  const displayProducts = sortedProducts;
+  // Products are filtered and sorted by backend
+  // No frontend sorting needed - products come pre-sorted from backend
+  const displayProducts = products;
 
   return (
     <>

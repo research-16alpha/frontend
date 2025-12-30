@@ -182,15 +182,17 @@ export function Account() {
                 ))}
                 <button
                   onClick={async () => {
-                    try {
-                      await logout();
-                      // Redirect to home page after logout
-                      navigateToHome();
-                    } catch (error) {
-                      console.error('Logout failed:', error);
-                      // Still redirect even if logout fails
-                      navigateToHome();
-                    }
+                    // Navigate to home first, before logout clears user state
+                    // This prevents the component from trying to navigate after unmounting
+                    navigateToHome();
+                    // Use setTimeout to ensure navigation state updates propagate before logout
+                    setTimeout(async () => {
+                      try {
+                        await logout();
+                      } catch (error) {
+                        console.error('Logout failed:', error);
+                      }
+                    }, 0);
                   }}
                   className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition-colors"
                 >

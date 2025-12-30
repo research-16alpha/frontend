@@ -15,8 +15,8 @@ export function HeroSection() {
         {/* Top Banner */}
         <div className="mb-4 md:mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase font-medium tracking-wide leading-tight font-headline">
-              <span className="text-gray-charcoal-1 font-light">Designer Sale</span>
+            <h2 className=" font-bold tracking-wide leading-tight font-headline">
+              <span className=" text-4xl md:text-5xl lg:text-6xl text-gray-charcoal-1 font-light">Designer Sale</span>
             </h2>
             
             <div className="text-sm md:text-base  leading-relaxed font-body">

@@ -21,10 +21,14 @@ export interface CategoryFilterProps {
   defaultExpanded?: boolean;
 }
 
-// Helper function to capitalize first letter
-const capitalizeFirstLetter = (str: string | undefined | null): string => {
+// Helper function to convert to Title Case (Normal Case)
+const toTitleCase = (str: string | undefined | null): string => {
   if (!str) return '';
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 };
 
 export function CategoryFilter({ 
@@ -45,18 +49,32 @@ export function CategoryFilter({
   });
 
   // Update expandedSections when categories change
-  useEffect(() => {
-    if (categories && categories.length > 0) {
-      setExpandedSections(prev => {
-        const newSections = { ...prev };
-        categories.forEach(cat => {
-          if (!(cat.title in newSections)) {
-            newSections[cat.title] = defaultExpanded;
-          }
-        });
-        return newSections;
+  // useEffect(() => {
+  //   if (categories && categories.length > 0) {
+  //     setExpandedSections(prev => {
+  //       const newSections = { ...prev };
+  //       categories.forEach(cat => {
+  //         if (!(cat.title in newSections)) {
+  //           newSections[cat.title] = defaultExpanded;
+  //         }
+  //       });
+  //       return newSections;
+  //     });
+  //   }
+  // }, [categories, defaultExpanded]);
+
+  // Replace the useEffect around line 57-68 with this:
+useEffect(() => {
+  if (categories && categories.length > 0) {
+    setExpandedSections(prev => {
+      const newSections = { ...prev };
+      categories.forEach(cat => {
+        // Always set the section state, even if it exists
+        newSections[cat.title] = prev[cat.title] !== undefined ? prev[cat.title] : defaultExpanded;
       });
-    }
+      return newSections;
+    });
+  }
   }, [categories, defaultExpanded]);
 
   const toggleSection = (title: string) => {
@@ -129,36 +147,6 @@ export function CategoryFilter({
     return result;
   }, [categories, searchQuery]);
 
-  // Auto-expand categories when searching
-  // Reset expansion when search is cleared
-  // Use useLayoutEffect for synchronous updates before browser paint
-  // This fixes the issue where first keystroke doesn't show results for large arrays (2000+ brands)
-  useLayoutEffect(() => {
-    const trimmedQuery = searchQuery.trim();
-    
-    if (trimmedQuery && filteredCategories.length > 0) {
-      // Expand all categories that have matching results synchronously (before paint)
-      setExpandedSections(prev => {
-        const newSections = { ...prev };
-        let hasChanges = false;
-        
-        filteredCategories.forEach(cat => {
-          if (!newSections[cat.title]) {
-            newSections[cat.title] = true;
-            hasChanges = true;
-          }
-        });
-        
-        // Only update if there are actual changes to prevent unnecessary re-renders
-        return hasChanges ? newSections : prev;
-      });
-    } else if (!trimmedQuery) {
-      // Reset to default expanded state when search is cleared
-      const defaultSections = (categories || []).reduce((acc, cat) => ({ ...acc, [cat.title]: defaultExpanded }), {});
-      setExpandedSections(defaultSections);
-    }
-  }, [searchQuery, filteredCategories, categories, defaultExpanded]);
-
   // Don't render if no categories
   if (!categories || categories.length === 0) {
     return null;
@@ -185,21 +173,32 @@ export function CategoryFilter({
           No filters found matching "{searchQuery}"
         </div>
       ) : (
-        filteredCategories.map((category) => (
-        <div key={category.title} className="border-b border-gray-200 pb-4">
-          <button
-            onClick={() => toggleSection(category.title)}
-            className="flex items-center justify-between w-full text-left mb-3"
-          >
-            <span className="uppercase tracking-wide text-sm">{category.title}</span>
-            {expandedSections[category.title] ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
-          </button>
+        filteredCategories.map((category) => {
+          // If there is a search query, we should ALWAYS show the options
+          
+          const isSearching = searchQuery.trim().length > 0;
+          // const isExpanded = isSearching || (expandedSections[category.title] ?? false);
+          //  const isExpanded = isSearching || expandedSections[category.title];
+          // Use ?? to handle undefined case properly
+          const isExpanded = isSearching || (expandedSections[category.title] ?? defaultExpanded);
+          
 
-          {expandedSections[category.title] && category.options.length > 0 && (
+          return (
+            <div key={category.title} className="border-b border-gray-200 pb-4">
+              <button
+                onClick={() => toggleSection(category.title)}
+                className="flex items-center justify-between w-full text-left mb-3"
+              >
+                <span className="uppercase tracking-wide text-sm">{category.title}</span>
+                {isExpanded ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
+              </button>
+
+              {/* Use the derived isExpanded instead of just the state */}
+              {isExpanded && category.options.length > 0 && (
             <div className="mt-2 overflow-hidden">
               <div 
                 className="space-y-2 overflow-y-auto pr-2"
@@ -215,7 +214,7 @@ export function CategoryFilter({
                   return (
                     <label
                       key={option.value}
-                      className="flex items-center gap-x-10 cursor-pointer hover:text-black transition-colors py-1 min-h-[32px]"
+                      className="flex items-center gap-x-1 sm:gap-x-3 cursor-pointer hover:text-black transition-colors py-1 min-h-[32px]"
                     >
                       <input
                         type="checkbox"
@@ -224,7 +223,7 @@ export function CategoryFilter({
                         className="w-4 h-4 border-gray-300 rounded cursor-pointer flex-shrink-0"
                       />
                       <span className="text-sm md:text-base lg:text-lg flex-1 font-thin text-gray-700"> 
-                        {capitalizeFirstLetter(option.label)} 
+                        {toTitleCase(option.label)} 
                         {option.count !== undefined && (
                           <span className="text-gray-400 ml-1 px-2 font-light"> ({option.count})</span>
                         )}
@@ -234,9 +233,10 @@ export function CategoryFilter({
                 })}
               </div>
             </div>
-          )}
-        </div>
-        ))
+              )}
+            </div>
+          );
+        })
       )}
     </div>
   );

@@ -86,6 +86,7 @@ export async function fetchFilteredProducts(options: {
   price_min?: number;
   price_max?: number;
   gender?: string;
+  sortBy?: string;
 }) {
   const { page = 1, limit = 40, ...filters } = options;
   const skip = (page - 1) * limit;
@@ -111,6 +112,9 @@ export async function fetchFilteredProducts(options: {
   }
   if (filters.gender) {
     params.append('gender', filters.gender);
+  }
+  if (filters.sortBy) {
+    params.append('sort_by', filters.sortBy);
   }
   
   const res = await fetch(`${API_BASE}/api/products/filter/products?${params.toString()}`);
