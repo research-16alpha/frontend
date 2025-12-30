@@ -118,6 +118,7 @@ export function BaseProductsPage({
             price_min: priceRange.min,
             price_max: priceRange.max,
             gender: gender,
+            sortBy: sortBy !== 'featured' ? sortBy : undefined,
           });
         }
         

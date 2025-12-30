@@ -46,7 +46,7 @@ export function HorizontalScrollSection({
   return (
     <section className={`w-full ${verticalPadding} relative`} style={{ backgroundColor }}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12">
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 uppercase tracking-tight font-headline">{title}</h2>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 tracking-tight font-headline">{title}</h2>
         
         {/* Scroll Container */}
         <div className="relative group">
