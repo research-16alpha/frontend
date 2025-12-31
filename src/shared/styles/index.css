@@ -594,6 +594,26 @@
     margin-bottom: calc(var(--spacing) * 12);
   }
 
+  .-mb-8 {
+    margin-bottom: calc(var(--spacing) * -8);
+  }
+
+  .-mb-12 {
+    margin-bottom: calc(var(--spacing) * -12);
+  }
+
+  .-mb-16 {
+    margin-bottom: calc(var(--spacing) * -16);
+  }
+
+  .-mb-20 {
+    margin-bottom: calc(var(--spacing) * -20);
+  }
+
+  .-mb-24 {
+    margin-bottom: calc(var(--spacing) * -24);
+  }
+
   .block {
     display: block;
   }
@@ -1727,6 +1747,13 @@
     }
   }
 
+  @media (width >= 40rem) {
+    .sm\:text-sm {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+  }
+
   @media (width >= 48rem) {
     .md\:bottom-6 {
       bottom: calc(var(--spacing) * 6);
@@ -1754,6 +1781,30 @@
   @media (width >= 48rem) {
     .md\:mb-8 {
       margin-bottom: calc(var(--spacing) * 8);
+    }
+  }
+
+  @media (width >= 40rem) {
+    .sm\:-mb-12 {
+      margin-bottom: calc(var(--spacing) * -12);
+    }
+  }
+
+  @media (width >= 48rem) {
+    .md\:-mb-16 {
+      margin-bottom: calc(var(--spacing) * -16);
+    }
+  }
+
+  @media (width >= 64rem) {
+    .lg\:-mb-20 {
+      margin-bottom: calc(var(--spacing) * -20);
+    }
+  }
+
+  @media (width >= 80rem) {
+    .xl\:-mb-24 {
+      margin-bottom: calc(var(--spacing) * -24);
     }
   }
 
@@ -1910,6 +1961,13 @@
   }
 
   @media (width >= 48rem) {
+    .md\:text-base {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+  }
+
+  @media (width >= 48rem) {
     .md\:text-2xl {
       font-size: var(--text-2xl);
       line-height: var(--tw-leading, var(--text-2xl--line-height));
@@ -1927,13 +1985,6 @@
     .md\:text-5xl {
       font-size: var(--text-5xl);
       line-height: var(--tw-leading, var(--text-5xl--line-height));
-    }
-  }
-
-  @media (width >= 48rem) {
-    .md\:text-base {
-      font-size: var(--text-base);
-      line-height: var(--tw-leading, var(--text-base--line-height));
     }
   }
 
@@ -2045,6 +2096,13 @@
     }
   }
 
+  @media (width >= 64rem) {
+    .lg\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+    }
+  }
+
   @media (width >= 80rem) {
     .xl\:col-span-4 {
       grid-column: span 4 / span 4;
@@ -2060,6 +2118,13 @@
   @media (width >= 80rem) {
     .xl\:gap-8 {
       gap: calc(var(--spacing) * 8);
+    }
+  }
+
+  @media (width >= 80rem) {
+    .xl\:text-xl {
+      font-size: var(--text-xl);
+      line-height: var(--tw-leading, var(--text-xl--line-height));
     }
   }
 }

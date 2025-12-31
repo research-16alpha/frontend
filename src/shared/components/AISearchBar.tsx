@@ -103,20 +103,27 @@ export function AISearchBar() {
   };
 
   return (
-    <div className="w-full bg-white ">
+    <div className="w-full bg-white">
       <div className="max-w-[1400px] mx-auto px-4 md:px-8">
         <div className="w-full py-4 md:py-6">
           <div className="max-w-2xl mx-auto">
             <div className="relative w-full">
-              <div 
-                className={`relative flex items-center gap-3 px-5 py-3 bg-gray-50 rounded-full border transition-colors cursor-pointer ${
-                  isHovered ? 'border-black' : 'border-gray-200'
-                }`}
+                <div 
+                  className={`relative flex items-center py-3 border-b border-black transition-colors cursor-pointer`}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 onClick={() => inputRef.current?.focus()}
               >
-                <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSearchInternal();
+                  }}
+                  className="absolute right-0 w-5 h-5 text-black flex-shrink-0 cursor-pointer hover:opacity-70 transition-opacity"
+                >
+                  <Search className="w-5 h-5" strokeWidth={1.5}/>
+                </button>
                 <input
                   ref={inputRef}
                   type="text"
@@ -130,15 +137,15 @@ export function AISearchBar() {
                   autoCapitalize="off"
                   spellCheck="false"
                   data-form-type="other"
-                  className="flex-1 bg-transparent outline-none placeholder:text-gray-400 font-body"
+                  className="w-full pl-7 bg-transparent outline-none placeholder:text-gray-400 font-body"
                 />
-                <button
+                {/* <button
                   onClick={handleSearchClick}
                   disabled={isSearching}
                   className="flex items-center gap-2 px-4 md:px-5 py-2 md:py-2.5 bg-black text-white rounded-full hover:bg-gray-800 transition-colors flex-shrink-0 disabled:opacity-50 disabled:cursor-not-allowed font-body"
                 >
                   <Search className="w-4 h-4" />
-                </button>
+                </button> */}
               </div>
               
               {/* Suggestions Dropdown */}

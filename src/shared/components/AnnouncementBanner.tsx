@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 export function AnnouncementBanner() {
   const textContent =
-    " The Halfsy Ship is sailing soon • A refined journey through modern luxury • Navigating the world's finest brands with care and intention • Buy better, Sail smarter • Join our waitlist to get top brand deals •";
-  const textContentMobile = "The Halfsy Ship is sailing soon • A refined journey through Modern Luxury • Navigating the world's finest brands with care and intention • Sourced from Sales across the Web • Buy Better, Sail Smarter • Join our Waitlist now • Get Top Brand Deals First •";
+    " The Halfsy Ship is sailing soon • A refined journey through Modern Luxury • Navigating the world's finest brands with care and intention • Buy better, Sail smarter • Join our waitlist to get top brand deals •";
+  const textContentMobile = "The Halfsy Ship is sailing soon • A refined journey through Modern Luxury • Navigating the world's finest brands with care • Sourced from Sales across the Web • Buy Better, Sail Smarter • Join our Waitlist now • Get Top Brand Deals First •";
   // Break text into sentences for mobile animation
   const sentences = textContentMobile
     .split('•')
@@ -63,7 +63,7 @@ export function AnnouncementBanner() {
               WebkitBackfaceVisibility: 'hidden'
             }}
           >
-            <span className="mx-4 text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg font-body">
+            <span className="mx-4 text-xxs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg font-body">
               {textContent}
             </span>
           </div>

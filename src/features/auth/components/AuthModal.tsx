@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
+import { X, Eye, EyeOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useApp } from '../../bag/contexts/AppContext';
 import { loginWithGoogle } from '../api/auth';
@@ -17,6 +17,7 @@ export function AuthModal() {
     email: '',
     password: '',
   });
+  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,6 +47,7 @@ export function AuthModal() {
     setShowPassword(false);
     setError(null);
     setIsLoading(false);
+    setFocusedField(null);
   };
 
   return (
@@ -58,7 +60,7 @@ export function AuthModal() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={handleClose}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center"
           />
 
           {/* Modal */}
@@ -67,111 +69,143 @@ export function AuthModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+            className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
           >
-            <div className="bg-white rounded-lg shadow-2xl w-full max-w-md pointer-events-auto">
+            <div className="bg-white shadow-2xl w-full max-w-md pointer-events-auto">
               {/* Header */}
-              <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex items-center justify-between py-2 sm:py-6 px-4 sm:px-6 border-b">
                 <h2 className="text-2xl font-headline">{isLogin ? 'Welcome Back' : 'Create Account'}</h2>
                 <button
                   onClick={handleClose}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                  className="p-2 hover:opacity-70 rounded-full transition-colors cursor-pointer"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-8 h-8" strokeWidth={1} />
                 </button>
               </div>
 
               {/* Form */}
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-1 sm:space-y-4">
                 {error && (
                   <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm font-body">
                     {error}
                   </div>
                 )}
                 {!isLogin && (
-                  <div>
-                    <label htmlFor="name" className="block text-sm mb-2 font-body">
-                      Full Name
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
-                        }
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent font-body"
-                        placeholder="John Doe"
-                        required={!isLogin}
-                      />
-                    </div>
+                  <div className="relative">
+                    <motion.label
+                      htmlFor="name"
+                      initial={false}
+                      animate={{
+                        y: focusedField === 'name' || formData.name ? 5 : 20,
+                      }}
+                      transition={{ duration: 0.2 }}
+                      className={`absolute left-0 top-6 pointer-events-none font-body ${
+                        focusedField === 'name' || formData.name
+                          ? 'text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg'
+                          : 'text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl'
+                      }`}
+                    >
+                      Name
+                    </motion.label>
+                    <input
+                      type="text"
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      onFocus={() => setFocusedField('name')}
+                      onBlur={() => setFocusedField(null)}
+                      className="w-full pt-6 pb-3 border-0 border-b border-black rounded-none focus:outline-none focus:border-black font-body bg-transparent"
+                      required={!isLogin}
+                    />
                   </div>
                 )}
 
-                <div>
-                  <label htmlFor="email" className="block text-sm mb-2 font-body">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent font-body"
-                      placeholder="john@example.com"
-                      required
-                    />
-                  </div>
+                <div className="relative">
+                  <motion.label
+                    htmlFor="email"
+                    initial={false}
+                    animate={{
+                      y: focusedField === 'email' || formData.email ? 5 : 20,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className={`absolute left-0 top-6 pointer-events-none font-body ${
+                      focusedField === 'email' || formData.email
+                        ? 'text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg'
+                        : 'text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl'
+                    }`}
+                  >
+                    Email
+                  </motion.label>
+                  <input
+                    type="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    onFocus={() => setFocusedField('email')}
+                    onBlur={() => setFocusedField(null)}
+                    className="w-full pt-6 pb-3 border-0 border-b border-black rounded-none focus:outline-none focus:border-black font-body bg-transparent"
+                    required
+                  />
                 </div>
 
-                <div>
-                  <label htmlFor="password" className="block text-sm mb-2 font-body">
+                <div className="relative">
+                  <motion.label
+                    htmlFor="password"
+                    initial={false}
+                    animate={{
+                      y: focusedField === 'password' || formData.password ? 5 : 20,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className={`absolute left-0 top-6 pointer-events-none font-body ${
+                      focusedField === 'password' || formData.password
+                        ? 'text-gray-600 text-xs sm:text-sm md:text-base lg:text-lg'
+                        : 'text-gray-600 text-sm sm:text-base md:text-lg lg:text-xl'
+                    }`}
+                  >
                     Password
-                  </label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      id="password"
-                      value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
-                      className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent font-body"
-                      placeholder="••••••••"
-                      required
-                    />
+                  </motion.label>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    onFocus={() => setFocusedField('password')}
+                    onBlur={() => setFocusedField(null)}
+                    className="w-full pt-6 pb-3 pr-12 border-0 border-b border-black rounded-none focus:outline-none focus:border-black font-body bg-transparent"
+                    required
+                  />
+                  {(focusedField === 'password' || formData.password) && (
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-0 top-1/2 text-gray-600 hover:text-gray-800"
                     >
                       {showPassword ? (
-                        <EyeOff className="w-5 h-5" />
+                        <EyeOff className="w-4 h-4" />
                       ) : (
-                        <Eye className="w-5 h-5" />
+                        <Eye className="w-4 h-4" />
                       )}
                     </button>
-                  </div>
+                  )}
                 </div>
 
                 {isLogin && (
-                  <div className="flex items-center justify-between text-sm">
+                  <div className="flex items-center justify-between text-xs sm:text-sm md:text-base lg:text-lg">
                     <label className="flex items-center gap-2 cursor-pointer font-body">
-                      <input type="checkbox" className="rounded" />
-                      <span className="text-gray-600 font-body">Remember me</span>
+                      <input type="checkbox" className="rounded cursor-pointer appearance-none border border-gray-300 checked:bg-black checked:border-black" />
+                      <span className="text-gray-600 font-body text-xs sm:text-sm md:text-base lg:text-lg">Remember Me</span>
                     </label>
                     <button
                       type="button"
-                      className="text-gray-600 hover:text-black transition-colors font-body"
+                      className="text-gray-600 hover:text-black transition-colors font-body cursor-pointer"
                     >
-                      Forgot password?
+                      Forgot Password?
                     </button>
                   </div>
                 )}
@@ -179,22 +213,22 @@ export function AuthModal() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-body"
+                  className="w-full bg-black text-white py-2 sm:py-3 mt-4 sm:mt-6 hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-body"
                 >
                   {isLoading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
                 </button>
 
-                <div className="relative my-6">
+                {/* <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-200"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
                     <span className="px-4 bg-white text-gray-500 font-body">Or continue with</span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Social Login */}
-                <div className="grid grid-cols-2 gap-3">
+                {/* <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -232,7 +266,7 @@ export function AuthModal() {
                     </svg>
                     Facebook
                   </button>
-                </div>
+                </div> */}
 
                 {/* Toggle between Login and Register */}
                 <div className="text-center text-sm text-gray-600 font-body">
@@ -240,7 +274,7 @@ export function AuthModal() {
                   <button
                     type="button"
                     onClick={() => setIsLogin(!isLogin)}
-                    className="text-black hover:underline font-body"
+                    className="text-black hover:underline text-smfont-body"
                   >
                     {isLogin ? 'Sign up' : 'Sign in'}
                   </button>

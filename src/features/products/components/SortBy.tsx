@@ -52,9 +52,6 @@ export function SortBy({
         className={buttonClasses}
       >
         {label}
-        {(!options || options.length === 0) && (
-          <span className="ml-2 text-xs opacity-75">(Loading...)</span>
-        )}
       </button>
 
       {isOpen && options && options.length > 0 && (

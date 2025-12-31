@@ -79,7 +79,7 @@ export function ShopAll() {
   const pageTitle = searchQuery ? `Search Results for "${searchQuery}"` : 'Shop All';
   const pageDescription = searchQuery 
     ? `Search results for "${searchQuery}"`
-    : 'Discover our curated collection of premium fashion and accessories and get up to 50% Off';
+    : 'Discover our curated collection of premium fashion and accessories from the best brands in the world.';
 
   return (
     <BaseProductsPage

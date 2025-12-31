@@ -193,7 +193,7 @@ export function BaseProductsPage({
       <AISearchBar />
       
       <main className="flex-1 w-full">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 pt-4 sm:pt-6 md:pt-8 lg:pt-10 xl:pt-12 pb-8 sm:pb-12 md:pb-16 lg:pb-20 xl:pb-24">
         {/* Page Title */}
         <div className="mb-6">
             <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight font-headline">
