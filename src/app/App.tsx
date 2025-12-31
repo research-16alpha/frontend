@@ -288,25 +288,27 @@ function AppWithNavigation() {
       <AISearchBar />
       
       <main className="flex-1">
-        <HeroSection />
-        <HorizontalScrollSection 
-          title="New This Week" 
-          fetchFunction={async (page: number, limit: number) => {
-            const data = await fetchProductsByLinks(NEW_THIS_WEEK_LINKS);
-            // Limit the results to the requested limit
-            if (data.products && Array.isArray(data.products)) {
-              return {
-                ...data,
-                products: data.products.slice(0, limit)
-              };
-            }
-            return data;
-          }}
-          limit={20}
-        />
-        <FeaturedSection />
-        <ProductMasonryGrid />
-        <EditorialSection />
+        <div className="">
+          <HeroSection />
+          <HorizontalScrollSection 
+            title="New This Week" 
+            fetchFunction={async (page: number, limit: number) => {
+              const data = await fetchProductsByLinks(NEW_THIS_WEEK_LINKS);
+              // Limit the results to the requested limit
+              if (data.products && Array.isArray(data.products)) {
+                return {
+                  ...data,
+                  products: data.products.slice(0, limit)
+                };
+              }
+              return data;
+            }}
+            limit={20}
+          />
+          <FeaturedSection />
+          <ProductMasonryGrid />
+          <EditorialSection />
+        </div>
         <Footer />
       </main>
     </div>

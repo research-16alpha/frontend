@@ -53,16 +53,14 @@ export function About() {
           navigateToProducts();
         }}
       />
-      <AISearchBar />
-
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 w-full">
         <div className="text-xs text-gray-600 font-body">
           <button onClick={navigateToHome} className="hover:underline">Home</button>
           <span className="mx-2">/</span>
           <span>{pageTitle}</span>
-            </div>
-          </div>
+        </div>
+      </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 flex-1 w-full">
         {/* Page Title */}
@@ -98,17 +96,17 @@ export function About() {
 
         {/* Contact Form */}
         
-        <div className="max-w-xl mx-auto my-20 px-4">
-  <h3 className="text-2xl md:text-3xl font-medium mb-4 text-center tracking-tight font-headline">
+        <div className="max-w-xl mx-auto px-4 mt-12 sm:mt-16 md:mt-20 lg:mt-24 xl:mt-28">
+  <h3 className="text-2xl md:text-3xl mb-2 font-medium text-center tracking-tight font-headline">
     Get in Touch
   </h3>
 
-  <p className="text-gray-500 text-sm text-center mb-10 max-w-md mx-auto font-body">
+  <p className="text-gray-500 text-sm text-center max-w-md mx-auto font-body">
     Have a question or feedback? We'd love to hear from you.
   </p>
 
-  <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] px-8 py-8">
-    <form onSubmit={handleSubmit} className="space-y-5">
+  <div className=" px-8 py-6">
+    <form onSubmit={handleSubmit} className="space-y-4">
       
       {/* Email */}
       <div>
@@ -119,8 +117,8 @@ export function About() {
           Email
         </label>
         <div className="relative">
-          {!isEmailFocused && (
-            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          {!email && (
+            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" strokeWidth={1}/>
           )}
           <input
             type="email"
@@ -133,13 +131,12 @@ export function About() {
             className={`
               w-full px-4 py-3
               rounded-xl
-              bg-gray-50
+              border border-black
               text-sm
-              focus:outline-none
-              focus:ring-2 focus:ring-black/10
               transition
               font-body
-              ${isEmailFocused ? 'pl-4' : 'pl-11'}
+              focus:outline-none
+              focus:border-black
             `}
           />
         </div>
@@ -163,20 +160,20 @@ export function About() {
           className="
             w-full px-4 py-3
             rounded-xl
-            bg-gray-50
+            border border-black
             text-sm
             placeholder:text-gray-400
-            focus:outline-none
-            focus:ring-2 focus:ring-black/10
             resize-none
             transition
             font-body
+            focus:outline-none
+            focus:border-black
           "
         />
       </div>
 
       {/* Submit */}
-      <div className="pt-4">
+      <div className="">
         <button
           type="submit"
           disabled={isSubmitting}
@@ -209,7 +206,7 @@ export function About() {
 
     </form>
   </div>
-</div>
+        </div>
 
       </main>
 

@@ -73,7 +73,7 @@ export function Navbar({
   return (
     <>
       <nav className={`border-b border-gray-200 bg-white sticky top-0 shadow-sm z-50 ${mobileMenuOpen ? 'hidden lg:block' : 'block'}`}>
-        <div className="max-w-[1400px] mx-auto md:px-8 py-3 md:py-4">
+        <div className="max-w-[1400px] mx-auto px-3 sm:px-6 md:px-8 py-3 md:py-4">
           <div className="flex items-center justify-between">
             
 
@@ -83,11 +83,11 @@ export function Navbar({
                 onClick={() => {
                   setMobileMenuOpen(true);
                 }}
-                className="lg:hidden mb-1.5 p-2 hover:bg-gray-50 rounded-full transition-colors flex-shrink-0 relative z-[65] cursor-pointer flex items-center justify-center"
+                className="lg:hidden mb-1.5 p-2 hover:opacity-70 transition-colors flex-shrink-0 relative z-[65] cursor-pointer flex items-center justify-center"
                 aria-label="Open menu"
                 type="button"
               >
-                <Menu className="w-8 h-8 text-gray-700" />
+                <Menu className="w-6 h-6 text-black" strokeWidth={1} />
               </button>
 
               {/* Logo */}
@@ -112,16 +112,16 @@ export function Navbar({
                 Home
               </button>
               <button
-                onClick={() => onProductsClick?.()}
-                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
-              >
-                Shop All
-              </button>
-              <button
                 onClick={() => onCuratedClick?.()}
                 className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
               >
                 Curated
+              </button>
+              <button
+                onClick={() => onProductsClick?.()}
+                className="text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide cursor-pointer flex items-center font-body"
+              >
+                Shop All
               </button>
               <button 
                 onClick={onNewArrivalsClick || (() => {})}
@@ -168,21 +168,21 @@ export function Navbar({
                 className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer flex items-center justify-center"
                 aria-label="Account"
               >
-                <User className="w-5 h-5" />
+                <User className="w-5 h-5" strokeWidth={1.5} />
               </button>
               <button
                 onClick={handleFavoritesClick}
                 className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer flex items-center justify-center"
                 aria-label="Favorites"
               >
-                <Heart className="w-5 h-5" />
+                <Heart className="w-5 h-5" strokeWidth={1.5}/>
               </button>
               <button 
                 onClick={() => setIsCartOpen(true)}
                 className="p-2 hover:bg-gray-50 rounded-full transition-colors relative cursor-pointer flex items-center justify-center"
                 aria-label="Bag"
               >
-                <ShoppingBag className="w-5 h-5" />
+                <ShoppingBag className="w-5 h-5" strokeWidth={1.5} />
                 {cartItemCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-black text-white rounded-full text-xs flex items-center justify-center cursor-pointer">
                     {cartItemCount}
@@ -224,7 +224,7 @@ export function Navbar({
                   onClick={() => setMobileMenuOpen(false)}
                   className="p-2 hover:bg-gray-100 rounded-full transition-colors absolute right-6"
                 >
-                  <X className="w-5 h-5" />
+                  <X className="w-8 h-8" strokeWidth={1.5} />
                 </button>
               </div>
 
@@ -237,16 +237,16 @@ export function Navbar({
                   Home
                 </button>
                 <button
-                  onClick={() => handleNavClick(() => onProductsClick?.())}
-                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
-                >
-                  Shop All
-                </button>
-                <button
                   onClick={() => handleNavClick(() => onCuratedClick?.())}
                   className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
                 >
                   Curated
+                </button>
+                <button
+                  onClick={() => handleNavClick(() => onProductsClick?.())}
+                  className="w-full text-left text-sm text-gray-700 hover:text-black transition-colors uppercase tracking-wide py-4 border-b border-gray-100 font-body"
+                >
+                  Shop All
                 </button>
                 <button
                   onClick={() => handleNavClick(onNewArrivalsClick || (() => {}))}

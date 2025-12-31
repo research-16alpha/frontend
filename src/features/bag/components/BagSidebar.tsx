@@ -34,17 +34,17 @@ export function BagSidebar() {
             className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b">
+            <div className="flex items-center justify-between py-2 sm:py-6 px-4 sm:px-6 border-b">
               <div className="flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5" />
+                <ShoppingBag className="w-5 h-5" strokeWidth={1.5}/>
                 <h2 className="text-xl font-headline">Bag</h2>
                 <span className="text-sm text-gray-500 font-body">({bag.length})</span>
               </div>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                className="p-2 hover:opacity-70 rounded-full transition-colors cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-8 h-8" strokeWidth={1}/>
               </button>
             </div>
 
@@ -52,7 +52,7 @@ export function BagSidebar() {
             <div className="flex-1 overflow-y-auto p-6">
               {bag.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center">
-                  <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
+                  <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" strokeWidth={1}/>
                   <p className="text-gray-500 mb-2 font-body">Your bag is empty</p>
                   <p className="text-sm text-gray-400 font-body">Add some products to get started</p>
                 </div>
