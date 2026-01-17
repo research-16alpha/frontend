@@ -822,7 +822,7 @@ export const LUXURY_CURATED_LINKS = [
   // 'https://www.bergdorfgoodman.com/p/brunello-cucinelli-stretch-silk-satin-track-trousers-prod193920101',
   // 'https://www.farfetch.com/in/shopping/men/canali-checked-wool-jacket-item-31093268.aspx',
   // 'https://www.neimanmarcus.com/p/ralph-lauren-purple-label-mens-merino-wool-maxi-check-overshirt-prod285600513',
-  'https://www.bergdorfgoodman.com/p/ralph-lauren-purple-label-mens-alligator-leather-buckle-belt-prod195480010',
+  'https://www.bergdorfgoodman.com/p/ralph-lauren-purple-label-mens-alligator-leather-buckle-belt-prod195480010', 
   // 'https://www.bergdorfgoodman.com/p/ralph-lauren-purple-label-mens-merino-wool-maxi-check-overshirt-prod196680053',
   // 'https://www.farfetch.com/in/shopping/men/brunello-cucinelli-tassel-detail-loafers-item-23689667.aspx',
   // 'https://www.bergdorfgoodman.com/p/brunello-cucinelli-crispy-silk-chiffon-tie-blouse-prod193920006',
@@ -906,5 +906,5 @@ export const BEST_DEALS_LINKS = (() => {
 // Randomly select 10 links from DESIGNER_SALE_LINKS_SET
 export const DESIGNER_SALE_LINKS = (() => {
   const activeLinks = filterActiveLinks(DESIGNER_SALE_LINKS_SET);
-  return selectRandomItems(activeLinks, 10);
+  return selectRandomItems(activeLinks, 8);
 })();

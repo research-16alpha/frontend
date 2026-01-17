@@ -63,7 +63,7 @@ export function AnnouncementBanner() {
               WebkitBackfaceVisibility: 'hidden'
             }}
           >
-            <span className="mx-4 text-xxs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg font-body">
+            <span className="mx-4 text-xs sm:text-xs md:text-sm lg:text-base xl:text-base 2xl:text-lg font-body">
               {textContent}
             </span>
           </div>

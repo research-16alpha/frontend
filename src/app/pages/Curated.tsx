@@ -88,19 +88,20 @@ export function Curated() {
         />
         <HorizontalScrollSection 
           title="Eyewears" 
-          fetchFunction={async (page: number, limit: number) => {
-            const data = await fetchCurated([
-              { brand_name: "loewe", keyword: "glasses" }
-            ]);
-            // Limit the results to the requested limit
-            if (data.products && Array.isArray(data.products)) {
-              return {
-                ...data,
-                products: data.products.slice(0, limit)
-              };
-            }
-            return data;
-          }}
+          // fetchFunction={async (page: number, limit: number) => {
+          //   const data = await fetchCurated([
+          //     { brand_name: "loewe", keyword: "glasses" }
+          //   ]);
+          //   // Limit the results to the requested limit
+          //   if (data.products && Array.isArray(data.products)) {
+          //     return {
+          //       ...data,
+          //       products: data.products.slice(0, limit)
+          //     };
+          //   }
+          //   return data;
+          // }}
+          searchKeyword="loewe eyewear"
           limit={20}
           backgroundColor="#FFFFFF"
           verticalPadding="py-4 md:py-6"

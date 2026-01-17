@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, ShoppingCart } from 'lucide-react';
+import { FaLink } from 'react-icons/fa';
 import { ImageWithFallback } from '../../../shared/components/figma/ImageWithFallback';
 import { Product } from '../types/product';
 import { ProductsGrid } from './ProductsGrid';
@@ -10,6 +11,7 @@ import { fetchFilteredProducts } from '../services/productsService';
 import { fetchFilterMetadata } from '../services/metadataService';
 import { normalizeProducts } from '../utils/productTransform';
 import { useNavigation } from '../../../shared/contexts/NavigationContext';
+import { extractBrandFromLink } from '../utils/extractBrandFromLink';
 
 // Helper function to capitalize first letter of each word
 export const capitalizeWords = (str: string | undefined | null): string => {
@@ -320,20 +322,25 @@ export function ExpandedContent({
               </div>
 
               {/* Link to original product */}
-              {product.product_link && (
-                <a
-                  href={product.product_link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-700 transition-colors duration-200 pt-2 font-body"
-                >
-                  <span>View original product</span>
-                  <span className="text-[10px]">→</span>
-                </a>
-              )}
+              {product.product_link && (() => {
+                const brandName = extractBrandFromLink(product.product_link) || 'original site';
+                const capitalizedBrand = capitalizeWords(brandName);
+                return (
+                  <a
+                    href={product.product_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 hover:text-black underline flex items-center gap-1 mt-0.5 sm:mt-1 font-body transition-colors pt-2"
+                  >
+                    {/* @ts-ignore - react-icons accepts className but types may be outdated */}
+                    <FaLink className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span>view on <span className="font-bold">{capitalizedBrand}</span></span>
+                  </a>
+                );
+              })()}
 
               {/* Select Size Dropdown */}
-              <div className="relative pt-2">
+              {/* <div className="relative pt-2">
                 <button
                   onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
                   className="w-full border border-black px-4 py-3 text-left bg-white hover:bg-gray-50 transition-colors flex items-center justify-between"
@@ -365,7 +372,7 @@ export function ExpandedContent({
                     )}
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* Add to Bag and Add to Favorites buttons - same line */}
               <div className="flex gap-4 pt-2">
@@ -391,7 +398,7 @@ export function ExpandedContent({
               </div>
 
               {/* Back Button */}
-              <button
+              {/* <button
                 onClick={(e) => {
                   e.stopPropagation();
                   onClose();
@@ -400,7 +407,7 @@ export function ExpandedContent({
                 aria-label="Back"
               >
                 ← Back
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
