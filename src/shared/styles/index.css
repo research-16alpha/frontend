@@ -646,6 +646,10 @@
     aspect-ratio: 3 / 5;
   }
 
+  .aspect-\[4\/5\] {
+    aspect-ratio: 4 / 5;
+  }
+
   .aspect-\[16\/10\] {
     aspect-ratio: 16 / 10;
   }

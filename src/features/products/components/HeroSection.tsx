@@ -28,7 +28,7 @@ export function HeroSection() {
 
         {/* Product Grid */}
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">
             {[...Array(10)].map((_, i) => (
               <div key={i} className="animate-pulse bg-white border border-gray-200 overflow-hidden">
                 <div className="aspect-[3/4] bg-gray-200"></div>
@@ -42,7 +42,7 @@ export function HeroSection() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">
             {saleProducts.map(product => {
               return (
                 <div key={product.id} className="h-full">

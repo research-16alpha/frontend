@@ -1,3 +1,113 @@
+// import * as React from 'react';
+// import { ProductCard } from './ProductCard';
+// import { Product } from '../types/product';
+
+// interface ProductsGridProps {
+//   products: Product[];
+//   loading: boolean;
+//   error: string | null;
+//   pageTitle: string;
+//   pageDescription?: string;
+//   hasMore: boolean;
+//   onLoadMore: () => void;
+//   onProductClick: (product: Product) => void;
+//   sortBy?: string;
+//   selectedFilters?: Record<string, string[]>;
+// }
+
+// export function ProductsGrid({
+//   products,
+//   loading,
+//   error,
+//   pageTitle,
+//   pageDescription,
+//   hasMore,
+//   onLoadMore,
+//   onProductClick,
+//   sortBy = 'featured',
+//   selectedFilters = {},
+// }: ProductsGridProps) {
+
+//   // Products are filtered and sorted by backend
+//   // No frontend sorting needed - products come pre-sorted from backend
+//   const displayProducts = products;
+
+//   return (
+//     <>
+//       {/* Page Title - Only show if pageTitle is provided */}
+//       {pageTitle && (
+//         <div className="mb-6">
+//           <h2 className="mb-2 text-4xl md:text-5xl lg:text-6xl font-medium tracking-wide leading-tight font-headline">
+//             <span className="text-gray-charcoal-1 font-light">{pageTitle}</span>
+//           </h2>
+//           {pageDescription && (
+//             <p className="text-sm text-gray-600 font-body">
+//               {pageDescription}
+//             </p>
+//           )}
+//         </div>
+//       )}
+
+//       {/* Product Grid */}
+//       <div className="w-full">
+//         {/* Results Count */}
+//         <div className="mb-6">
+//           <p className="text-sm text-gray-600 font-body">
+//             {displayProducts.length} {displayProducts.length === 1 ? 'item' : 'items'}
+//             {selectedFilters && Object.keys(selectedFilters).length > 0 && 
+//               (Object.values(selectedFilters) as string[][]).some((arr: string[]) => arr.length > 0) && 
+//               ' (filtered)'
+//             }
+//           </p>
+//         </div>
+
+//         {loading && products.length === 0 ? (
+//           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 items-stretch">
+//             {[...Array(6)].map((_, i) => (
+//               <div key={i} className="animate-pulse h-full">
+//                 <div className="bg-gray-200 aspect-[3/4] mb-3"></div>
+//                 <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+//                 <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+//               </div>
+//             ))}
+//           </div>
+//         ) : error ? (
+//           <div className="text-center text-red-500 py-16 font-body">{error}</div>
+//         ) : displayProducts.length === 0 ? (
+//           <div className="text-center text-gray-500 py-16 font-body">No products found</div>
+//         ) : (
+//           <>
+//             {/* Grid */}
+//             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 items-stretch">
+//               {displayProducts.map((product) => (
+//                 <div key={product.id} className="h-full">
+//                   <ProductCard
+//                     product={product}
+//                     onClick={() => onProductClick(product)}
+//                   />
+//                 </div>
+//               ))}
+//             </div>
+//             {hasMore && (
+//               <div className="flex justify-center pt-6 sm:pt-8 md:pt-12 lg:pt-18 xl:pt-18">
+//                 <div className="text-center mt-[4vh] sm:mt-[5vh] md:mt-[6vh] lg:mt-[7vh] xl:mt-[8vh] mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+//                   <button
+//                     onClick={onLoadMore}
+//                     disabled={loading}
+//                     className="px-6 py-3 text-black border border-gray-500 cursor-pointer hover:bg-gray-100 transition-colors disabled:opacity-50 font-body"
+//                   >
+//                     {loading ? 'Loading...' : 'Load More'}
+//                   </button>
+//                 </div>
+//               </div>
+//             )}
+//           </>
+//         )}
+//       </div>
+//     </>
+//   );
+// }
+
 import * as React from 'react';
 import { ProductCard } from './ProductCard';
 import { Product } from '../types/product';
@@ -51,7 +161,7 @@ export function ProductsGrid({
       {/* Product Grid */}
       <div className="w-full">
         {/* Results Count */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <p className="text-sm text-gray-600 font-body">
             {displayProducts.length} {displayProducts.length === 1 ? 'item' : 'items'}
             {selectedFilters && Object.keys(selectedFilters).length > 0 && 
@@ -62,12 +172,19 @@ export function ProductsGrid({
         </div>
 
         {loading && products.length === 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 items-stretch">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="animate-pulse h-full">
-                <div className="bg-gray-200 aspect-[3/4] mb-3"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+          // Loading skeleton with consistent aspect ratio matching ProductCard
+          // <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+            {[...Array(10)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                {/* Skeleton image container with same 4:5 aspect ratio */}
+                <div className="bg-gray-200 aspect-[4/5] mb-3"></div>
+                {/* Skeleton content area */}
+                <div className="space-y-2 p-3">
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-200 rounded w-full"></div>
+                  <div className="h-3 bg-gray-200 rounded w-1/2"></div>
+                </div>
               </div>
             ))}
           </div>
@@ -77,8 +194,13 @@ export function ProductsGrid({
           <div className="text-center text-gray-500 py-16 font-body">No products found</div>
         ) : (
           <>
-            {/* Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 items-stretch">
+            {/* 
+              Grid with consistent column widths.
+              Each grid item takes equal width, and ProductCard fills that width.
+              The aspect-[4/5] in ProductCard ensures consistent image heights.
+            */}
+            {/* <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-5"> */}
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
               {displayProducts.map((product) => (
                 <div key={product.id} className="h-full">
                   <ProductCard
@@ -89,16 +211,14 @@ export function ProductsGrid({
               ))}
             </div>
             {hasMore && (
-              <div className="flex justify-center pt-6 sm:pt-8 md:pt-12 lg:pt-18 xl:pt-18">
-                <div className="text-center mt-[4vh] sm:mt-[5vh] md:mt-[6vh] lg:mt-[7vh] xl:mt-[8vh] mb-8 sm:mb-12 md:mb-16 lg:mb-20">
-                  <button
-                    onClick={onLoadMore}
-                    disabled={loading}
-                    className="px-6 py-3 text-black border border-gray-500 cursor-pointer hover:bg-gray-100 transition-colors disabled:opacity-50 font-body"
-                  >
-                    {loading ? 'Loading...' : 'Load More'}
-                  </button>
-                </div>
+              <div className="flex justify-center pt-8 sm:pt-10 md:pt-12 lg:pt-16">
+                <button
+                  onClick={onLoadMore}
+                  disabled={loading}
+                  className="px-6 py-3 text-black border border-gray-500 cursor-pointer hover:bg-gray-100 transition-colors disabled:opacity-50 font-body"
+                >
+                  {loading ? 'Loading...' : 'Load More'}
+                </button>
               </div>
             )}
           </>
@@ -107,4 +227,3 @@ export function ProductsGrid({
     </>
   );
 }
-
