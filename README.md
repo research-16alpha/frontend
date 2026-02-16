@@ -1,7 +1,5 @@
 
-  # E-commerce Website Design
-
-  This is a code bundle for E-commerce Website Design. The original project is available at https://www.figma.com/design/YFBiunxjJlGZb83ODEqsqU/E-commerce-Website-Design.
+  # halfsy
 
   ## Running the code
 
